@@ -1,6 +1,6 @@
 import React from 'react';
-import BoardingScreen from '../screens/BoardingScreen/BoardingScreen';
-import LoginScreen from '../screens/LoginScreen/LoginScreen';
+import {BoardingScreen} from '../screens/BoardingScreen/BoardingScreen';
+import {LoginScreen} from '../screens/LoginScreen/LoginScreen';
 
 const allScreens = (Stack: any) => {
   return (

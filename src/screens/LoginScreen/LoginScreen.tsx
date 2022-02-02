@@ -13,17 +13,15 @@ import {
 import {TextInput} from 'react-native-paper';
 import size from '../../config/size';
 
-export default class LoginScreen extends Component {
-  render() {
-    const {containerStyle} = styles;
-
+export const LoginScreen = () => {
+  
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: '#ffffff'}}>
         <KeyboardAvoidingView
           behavior="position"
           keyboardVerticalOffset={Platform.OS === 'android' ? -200 : 0}
-          contentContainerStyle={containerStyle}
-          style={containerStyle}>
+          contentContainerStyle={styles.containerStyle}
+          style={styles.containerStyle}>
           <TouchableWithoutFeedback
             onPress={Keyboard.dismiss}
             accessible={false}>
@@ -114,109 +112,7 @@ export default class LoginScreen extends Component {
                     }}>
                     OR
                   </Text>
-                  <View style={{width: '100%'}}>
-                    <TouchableOpacity
-                      style={{
-                        width: '100%',
-                        alignSelf: 'center',
-                        justifyContent: 'center',
-                        height: 40,
-                        borderRadius: 4,
-                        backgroundColor: '#ffffff',
-                        borderColor: '#212121',
-                        borderWidth: 2,
-                      }}
-                      onPress={() => console.log('')}>
-                      <View
-                        style={{ flexDirection:'row',alignItems: 'center', justifyContent: 'center'}}>
-                        <Image
-                          style={{
-                            width: 27,
-                            marginRight: 5,
-                          }}
-                          resizeMode="contain"
-                          source={require('../../assets/images/GoogleIcon.png')}
-                        />
-                        <Text
-                          style={{
-                            fontFamily: 'NunitoSans-Regular',
-                            fontSize: 16,
-                            textAlign: 'center',
-                            color: '#212121',
-                          }}>
-                          COUNTINUE WITH GOOGLE
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={{
-                        width: '100%',
-                        alignSelf: 'center',
-                        justifyContent: 'center',
-                        height: 40,
-                        borderRadius: 4,
-                        backgroundColor: '#ffffff',
-                        borderColor: '#212121',
-                        borderWidth: 2,
-                        marginTop: 10,
-                      }}
-                      onPress={() => console.log('')}>
-                      <View
-                        style={{ flexDirection:'row',alignItems: 'center', justifyContent: 'center'}}>
-                        <Image
-                          style={{
-                            width: 40,
-                            marginRight: 5,
-                          }}
-                          resizeMode="contain"
-                          source={require('../../assets/images/FacebookIcon.png')}
-                        />
-                        <Text
-                          style={{
-                            fontFamily: 'NunitoSans-Regular',
-                            fontSize: 16,
-                            textAlign: 'center',
-                            color: '#212121',
-                          }}>
-                          COUNTINUE WITH FACEBOOK
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={{
-                        width: '100%',
-                        alignSelf: 'center',
-                        justifyContent: 'center',
-                        height: 40,
-                        borderRadius: 4,
-                        backgroundColor: '#ffffff',
-                        borderColor: '#212121',
-                        borderWidth: 2,
-                        marginTop: 10,
-                      }}
-                      onPress={() => console.log('')}>
-                      <View
-                        style={{ flexDirection:'row',alignItems: 'center', justifyContent: 'center'}}>
-                        <Image
-                          style={{
-                            width: 36,
-                            marginRight: 5,
-                          }}
-                          resizeMode="contain"
-                          source={require('../../assets/images/TwitterIcon.jpeg')}
-                        />
-                        <Text
-                          style={{
-                            fontFamily: 'NunitoSans-Regular',
-                            fontSize: 16,
-                            textAlign: 'center',
-                            color: '#212121',
-                          }}>
-                          COUNTINUE WITH TWITTER
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
+                  
                 </View>
               </View>
             </View>
@@ -224,12 +120,11 @@ export default class LoginScreen extends Component {
         </KeyboardAvoidingView>
       </SafeAreaView>
     );
-  }
 }
 
-const styles = {
+const styles =  StyleSheet.create({
   containerStyle: {
     backgroundColor: 'white',
     flex: 1,
   },
-};
+});
