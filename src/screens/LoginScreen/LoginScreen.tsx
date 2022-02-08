@@ -12,9 +12,12 @@ import {
 } from 'react-native';
 import {TextInput} from 'react-native-paper';
 import size from '../../config/size';
+import { useNavigation } from '@react-navigation/native'
 
 export const LoginScreen = () => {
-  
+
+  const navigation = useNavigation();
+
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: '#ffffff'}}>
         <KeyboardAvoidingView
@@ -93,7 +96,7 @@ export const LoginScreen = () => {
                       borderRadius: 4,
                       backgroundColor: '#212121',
                     }}
-                    onPress={() => console.log('')}>
+                    onPress={() => navigation.navigate('tabNavigation')}>
                     <Text
                       style={{
                         fontFamily: 'NunitoSans-Regular',
