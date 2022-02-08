@@ -22,6 +22,7 @@ export const allScreens = (Stack: any) => {
         component={LoginScreen}
         options={{
           headerShown: false,
+          gestureEnabled: false
         }}
       />
       <Stack.Screen
