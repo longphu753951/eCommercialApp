@@ -23,6 +23,7 @@
     "expo-facebook": "~12.1.0",
     "expo-font": "~10.0.4",
     "expo-google-sign-in": "~10.1.0",
+    "expo-local-authentication": "~12.1.0",
     "expo-status-bar": "~1.2.0",
     "final-form": "^4.20.4",
     "firebase": "^9.6.3",
