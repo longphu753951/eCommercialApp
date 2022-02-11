@@ -87,7 +87,7 @@ export const LoginScreen = () => {
                   mode="outlined"
                   activeOutlineColor={"#303030"}
                   label="Password"
-                  autoCapitalize={"false"}
+                  autoCapitalize={"none"}
                   secureTextEntry={true}
                   onChangeText={(text) => console.log(text)}
                 />
