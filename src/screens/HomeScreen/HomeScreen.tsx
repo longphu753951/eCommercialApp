@@ -37,7 +37,6 @@ export const HomeScreen = () => {
         style={{
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: 'blue',
             marginRight: 12,
         }}
     >
@@ -67,7 +66,6 @@ export const HomeScreen = () => {
         data={categoryList}
         renderItem={categoryItem}
         keyExtractor={(category) => category.name}
-        style={{ backgroundColor: "red", height: 50 }}
         horizontal={true}
       />
       <Text>Home</Text>
