@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { Button } from "react-native-paper";
 import { useNavigation } from '@react-navigation/native';
-import size from "../../config/size";
+import size from "config/size";
 
 export const BoardingScreen = () => {
 
@@ -16,7 +16,7 @@ export const BoardingScreen = () => {
 
   return (
     <ImageBackground
-      source={require("../../assets/images/boarding.png")}
+      source={require("assets/images/boarding.png")}
       resizeMode="cover"
       style={{ flex: 1, width: "100%" }}
     >
@@ -24,6 +24,7 @@ export const BoardingScreen = () => {
         <View style={{ marginLeft: size.h52, marginTop: size.s200 * 2.04 }}>
           <Text
             style={{
+              fontFamily: "Gelasio-Bold",
               fontSize: 24,
               color: "#606060",
             }}
@@ -33,6 +34,7 @@ export const BoardingScreen = () => {
           <Text
             style={{
               fontSize: 30,
+              fontFamily: "Gelasio-Bold",
               color: "#303030",
               marginTop: size.h26,
             }}
@@ -48,6 +50,7 @@ export const BoardingScreen = () => {
             <Text
               style={{
                 color: "#808080",
+                fontFamily: "NunitoSans-Regular",
                 fontSize: 18,
                 lineHeight: size.s60 * 1.03,
               }}
@@ -73,6 +76,7 @@ export const BoardingScreen = () => {
             <Text
               style={{
                 fontSize: 18,
+                fontFamily: "NunitoSans-Regular",
                 width: "100%",
                 textAlign: "center",
                 color: "#ffffff",

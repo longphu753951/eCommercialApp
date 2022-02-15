@@ -12,7 +12,7 @@ import {
   Platform,
 } from "react-native";
 import { TextInput } from "react-native-paper";
-import size from "../../config/size";
+import size from "config/size";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -25,6 +25,8 @@ export const LoginScreen = () => {
     const time = curHr < 12 ? 'morning': curHr < 18 ? 'afternoon': 'evening';
     return time;
   }
+
+  
 
   return (
     <SafeAreaView style={styles.containerStyle}>
@@ -45,7 +47,7 @@ export const LoginScreen = () => {
                 <Image
                   style={{ width: 315 }}
                   resizeMode={"contain"}
-                  source={require("../../assets/images/icon.png")}
+                  source={require("assets/images/icon.png")}
                 />
               </View>
               <View style={{ marginLeft: size.h52, marginTop: 40 }}>
@@ -98,7 +100,7 @@ export const LoginScreen = () => {
                     <Text
                       style={{
                         fontSize: 18,
-                        fontFamily: "NunitoSans-Regular",
+                        fontFamily: "NunitoSans-SemiBold",
                       }}
                     >
                       Forgot Password ?
@@ -168,7 +170,7 @@ export const LoginScreen = () => {
                     style={styles.signInWithButton}
                     onPress={() => navigation.navigate("tabNavigation")}
                   >
-                    <Image resizeMode="contain" style={{width: 18, height: 18, marginRight: 10}} source={require('../../assets/images/google-logo.png')}/>
+                    <Image resizeMode="contain" style={{width: 18, height: 18, marginRight: 10}} source={require('assets/images/google-logo.png')}/>
                     <Text
                       style={{
                         fontFamily: "NunitoSans-Regular",
@@ -183,7 +185,7 @@ export const LoginScreen = () => {
                     style={styles.signInWithButton}
                     onPress={() => navigation.navigate("tabNavigation")}
                   >
-                    <Image resizeMode="contain" style={{width: 18, height: 18, marginRight: 10}} source={require('../../assets/images/apple-logo.png')}/>
+                    <Image resizeMode="contain" style={{width: 18, height: 18, marginRight: 10}} source={require('assets/images/apple-logo.png')}/>
                     <Text
                       style={{
                         fontFamily: "NunitoSans-Regular",
@@ -199,7 +201,7 @@ export const LoginScreen = () => {
                     style={styles.signInWithButton}
                     onPress={() => navigation.navigate("tabNavigation")}
                   >
-                    <Image resizeMode="contain" style={{width: 23, height: 23, marginRight: 10}} source={require('../../assets/images/facebook-logo.png')}/>
+                    <Image resizeMode="contain" style={{width: 23, height: 23, marginRight: 10}} source={require('assets/images/facebook-logo.png')}/>
                     <Text
                       style={{
                         fontFamily: "NunitoSans-Regular",

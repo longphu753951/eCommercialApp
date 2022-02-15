@@ -1,8 +1,8 @@
 import React from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { BoardingScreen } from "../screens/BoardingScreen/BoardingScreen";
-import { LoginScreen } from "../screens/LoginScreen/LoginScreen";
-import { HomeScreen } from "../screens/HomeScreen/HomeScreen";
+import { BoardingScreen } from "screens/BoardingScreen/BoardingScreen";
+import { LoginScreen } from "screens/LoginScreen/LoginScreen";
+import { HomeScreen } from "screens/HomeScreen/HomeScreen";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 const Tab = createMaterialTopTabNavigator();
