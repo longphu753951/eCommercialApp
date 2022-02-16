@@ -3,6 +3,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { BoardingScreen } from "screens/BoardingScreen/BoardingScreen";
 import { LoginScreen } from "screens/LoginScreen/LoginScreen";
 import { HomeScreen } from "screens/HomeScreen/HomeScreen";
+import { FavoriteScreen } from "screens/FavoriteScreen/FavoriteScreen";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Dimensions } from "react-native";
 
@@ -40,7 +41,6 @@ export const allScreens = (Stack: any) => {
 const allTabScreens = (Tab: any) => {
   return (
     <>
-      {}
       <Tab.Screen
         name="home"
         component={HomeScreen}
@@ -53,7 +53,7 @@ const allTabScreens = (Tab: any) => {
       />
       <Tab.Screen
         name="favorite"
-        component={HomeScreen}
+        component={FavoriteScreen}
         options={{
           tabBarIcon: ({ focused, color }) => {
             let iconName = focused ? "bookmark" : "bookmark-outline";
