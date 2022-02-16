@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import {
   SafeAreaView,
-  ScrollView,
   Text,
   View,
   FlatList,
@@ -10,35 +9,41 @@ import {
   Image,
   RefreshControl,
 } from "react-native";
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faStar} from '@fortawesome/free-regular-svg-icons'
-import {  } from '@fortawesome/fontawesome-svg-core';
-
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faStar } from "@fortawesome/free-regular-svg-icons";
+import { faCouch } from "@fortawesome/free-solid-svg-icons";
+import { Fontisto } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 const categoryList = [
   {
     name: "Popular",
-    outline: faStar,
+    outline: require("assets/images/category-item/star-outline.png"),
+    solid: require("assets/images/category-item/star-solid.png"),
   },
   {
     name: "Chair",
-    outline: faStar,
+    outline: require("assets/images/category-item/chair-outline.png"),
+    solid: require("assets/images/category-item/chair-solid.png"),
   },
   {
     name: "Table",
-    outline: faStar,
+    outline: require("assets/images/category-item/desk-outline.png"),
+    solid: require("assets/images/category-item/desk-solid.png"),
   },
   {
     name: "Armchair",
-    outline: faStar,
+    outline: require("assets/images/category-item/couch-outline.png"),
+    solid: require("assets/images/category-item/couch-solid.png"),
   },
   {
     name: "Bed",
-    outline: faStar,
+    outline: require("assets/images/category-item/bed-outline.png"),
+    solid: require("assets/images/category-item/bed-solid.png"),
   },
   {
     name: "Lamb",
-    outline: faStar,
+    outline: require("assets/images/category-item/lamp-outline.png"),
+    solid: require("assets/images/category-item/lamp-solid.png"),
   },
 ];
 const itemList = [
@@ -61,74 +66,78 @@ const itemList = [
     name: "Simple Desk",
     price: "50.00",
     image: require("assets/images/demo-item/desk.png"),
-  },{
-    name: "Black Simple Lamp",
-    price: "12.00",
-    image: require("assets/images/demo-item/lamb.png"),
   },
   {
-    name: "Minimal Stand",
-    price: "25.00",
-    image: require("assets/images/demo-item/stand.png"),
-  },
-  {
-    name: "Coffee Chair",
-    price: "20.00",
-    image: require("assets/images/demo-item/chair.png"),
-  },
-  {
-    name: "Simple Desk",
+    name: "Coffee Table",
     price: "50.00",
-    image: require("assets/images/demo-item/desk.png"),
-  }
+    image: require("assets/images/demo-item/table.png"),
+  },
 ];
 const wait = (timeout: number) => {
-  return new Promise(resolve => setTimeout(resolve, timeout));
-}
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
 
 export const HomeScreen = () => {
-  const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [chooseCat, setChooseCat] = useState("Popular");
 
-  const onRefresh = React.useCallback(() => {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     wait(2000).then(() => setRefreshing(false));
   }, []);
-  const categoryItem = (category: any): JSX.Element => (
-    <TouchableOpacity
-      onPress={() => {
-        console.log(category.item.name);
-      }}
-      style={{
-        alignItems: "center",
-        justifyContent: "center",
-        marginRight: (Dimensions.get("window").width * 6.66) / 100,
-      }}
-    >
-      <View
+
+  const categoryItem = (category: any): JSX.Element => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          setChooseCat(category.item.name);
+          setRefreshing(true);
+          wait(2000).then(() => setRefreshing(false));
+        }}
         style={{
-          width: (Dimensions.get("window").width * 11.73) / 100,
-          height: (Dimensions.get("window").width * 11.73) / 100,
-          backgroundColor: "#F0F0F0",
-          borderRadius: 12,
-          justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: "center",
+          justifyContent: "center",
+          marginRight: (Dimensions.get("window").width * 6.66) / 100,
         }}
       >
-        <FontAwesomeIcon size={(Dimensions.get("window").width * 6) / 100} icon={ category.item.outline } />
-      </View>
-      <Text
-        style={{
-          marginTop: 5,
-          textAlign: "center",
-          color: "#808080",
-          fontFamily: "NunitoSans-Regular",
-          fontSize: (Dimensions.get("window").width * 3.73) / 100,
-        }}
-      >
-        {category.item.name}
-      </Text>
-    </TouchableOpacity>
-  );
+        <View
+          style={{
+            width: (Dimensions.get("window").width * 11.73) / 100,
+            height: (Dimensions.get("window").width * 11.73) / 100,
+            backgroundColor:
+              category.item.name === chooseCat ? "#303030" : "#F0F0F0",
+            borderRadius: 12,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Image
+            resizeMode="contain"
+            style={{
+              width: (Dimensions.get("window").width * 6) / 100,
+              tintColor: category.item.name === chooseCat ? "white" : "#909090",
+            }}
+            source={
+              category.item.name === chooseCat
+                ? category.item.solid
+                : category.item.outline
+            }
+          />
+        </View>
+        <Text
+          style={{
+            marginTop: 5,
+            textAlign: "center",
+            color: "#808080",
+            fontFamily: "NunitoSans-Regular",
+            fontSize: (Dimensions.get("window").width * 3.73) / 100,
+          }}
+        >
+          {category.item.name}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
 
   const item = (item: any): JSX.Element => (
     <TouchableOpacity
@@ -141,14 +150,31 @@ export const HomeScreen = () => {
         marginBottom: 15,
       }}
     >
-      <Image
-        source={item.item.image}
-        style={{
-          width: "100%",
-          height: (Dimensions.get("window").height * 24.63) / 100,
-          borderRadius: 10,
-        }}
-      />
+      <View>
+        <Image
+          source={item.item.image}
+          style={{
+            width: "100%",
+            height: (Dimensions.get("window").height * 24.63) / 100,
+            borderRadius: 10,
+          }}
+        />
+        <View
+          style={{
+            width: 30,
+            height: 30,
+            backgroundColor: "rgba(96, 96, 96, 0.4)",
+            position: "absolute",
+            justifyContent: "center",
+            alignItems: "center",
+            top: (Dimensions.get("window").height * 19.7) / 100,
+            left: (Dimensions.get("window").width * 31.2) / 100,
+            borderRadius: 8,
+          }}
+        >
+          <Fontisto name="shopping-bag" size={16} color="white" />
+        </View>
+      </View>
       <View>
         <Text
           style={{
@@ -175,10 +201,30 @@ export const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.flatListContainer}>
-        <View style={{height: (Dimensions.get("window").height * 6.15) / 100, width: '100%'}}>
-          <View style={{alignItems: 'center'}}>
-            <Text style={{fontSize: (Dimensions.get("window").width * 4.8) / 100, fontFamily: 'Gelasio-Medium', color: '#909090'}}>Make home</Text>
-            <Text style={{fontSize: (Dimensions.get("window").width * 4.8) / 100, fontFamily: 'Gelasio-Medium'}}>BEAUTIFUL</Text>
+        <View
+          style={{
+            height: (Dimensions.get("window").height * 6.15) / 100,
+            width: "100%",
+          }}
+        >
+          <View style={{ alignItems: "center" }}>
+            <Text
+              style={{
+                fontSize: (Dimensions.get("window").width * 4.8) / 100,
+                fontFamily: "Gelasio-Medium",
+                color: "#909090",
+              }}
+            >
+              Make home
+            </Text>
+            <Text
+              style={{
+                fontSize: (Dimensions.get("window").width * 4.8) / 100,
+                fontFamily: "Gelasio-Medium",
+              }}
+            >
+              BEAUTIFUL
+            </Text>
           </View>
         </View>
         <FlatList
@@ -191,6 +237,7 @@ export const HomeScreen = () => {
         />
         <FlatList
           numColumns={2}
+          showsVerticalScrollIndicator={false}
           data={itemList}
           style={styles.itemContainer}
           columnWrapperStyle={{ justifyContent: "space-between" }}

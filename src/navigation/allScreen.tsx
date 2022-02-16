@@ -60,24 +60,24 @@ const allTabScreens = (Tab: any) => {
           },
         }}
       />
-      <Tab.Screen 
-        name="notification" 
+      <Tab.Screen
+        name="notification"
         component={HomeScreen}
         options={{
-          tabBarIcon: ( {focused, color} ) => {
+          tabBarIcon: ({ focused, color }) => {
             let iconName = focused ? "notifications" : "notifications-outline";
             return <Ionicons size={24} name={iconName} color={color} />;
-          }
+          },
         }}
       />
-      <Tab.Screen 
-        name="profile" 
+      <Tab.Screen
+        name="profile"
         component={HomeScreen}
         options={{
-          tabBarIcon: ( {focused, color} ) => {
+          tabBarIcon: ({ focused, color }) => {
             let iconName = focused ? "person" : "person-outline";
             return <Ionicons size={24} name={iconName} color={color} />;
-          }
+          },
         }}
       />
     </>
@@ -91,7 +91,20 @@ export const tabNavigation = () => {
         showIcon: true,
         showLabel: false,
         indicatorStyle: { backgroundColor: "white" },
-        style: { paddingBottom: 31, paddingHorizontal: 42, height: 75 },
+        style: {
+          paddingBottom: 31,
+          paddingHorizontal: 42,
+          height: 75,
+          shadowColor: "#000",
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.23,
+          shadowRadius: 2.62,
+          
+          elevation: 4,
+        },
       }}
       activeTintColor="black"
       inactiveColor="gray"
