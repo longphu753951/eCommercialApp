@@ -4,6 +4,7 @@ import { BoardingScreen } from "screens/BoardingScreen/BoardingScreen";
 import { LoginScreen } from "screens/LoginScreen/LoginScreen";
 import { HomeScreen } from "screens/HomeScreen/HomeScreen";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { Dimensions } from "react-native";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -92,9 +93,8 @@ export const tabNavigation = () => {
         showLabel: false,
         indicatorStyle: { backgroundColor: "white" },
         style: {
-          paddingBottom: 31,
           paddingHorizontal: 42,
-          height: 75,
+          height: (Dimensions.get("window").height * 8.61) / 100,
           shadowColor: "#000",
           shadowOffset: {
             width: 0,

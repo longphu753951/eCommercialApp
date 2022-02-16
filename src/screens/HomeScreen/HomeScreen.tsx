@@ -9,70 +9,9 @@ import {
   Image,
   RefreshControl,
 } from "react-native";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faStar } from "@fortawesome/free-regular-svg-icons";
-import { faCouch } from "@fortawesome/free-solid-svg-icons";
 import { Fontisto } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
-const categoryList = [
-  {
-    name: "Popular",
-    outline: require("assets/images/category-item/star-outline.png"),
-    solid: require("assets/images/category-item/star-solid.png"),
-  },
-  {
-    name: "Chair",
-    outline: require("assets/images/category-item/chair-outline.png"),
-    solid: require("assets/images/category-item/chair-solid.png"),
-  },
-  {
-    name: "Table",
-    outline: require("assets/images/category-item/desk-outline.png"),
-    solid: require("assets/images/category-item/desk-solid.png"),
-  },
-  {
-    name: "Armchair",
-    outline: require("assets/images/category-item/couch-outline.png"),
-    solid: require("assets/images/category-item/couch-solid.png"),
-  },
-  {
-    name: "Bed",
-    outline: require("assets/images/category-item/bed-outline.png"),
-    solid: require("assets/images/category-item/bed-solid.png"),
-  },
-  {
-    name: "Lamb",
-    outline: require("assets/images/category-item/lamp-outline.png"),
-    solid: require("assets/images/category-item/lamp-solid.png"),
-  },
-];
-const itemList = [
-  {
-    name: "Black Simple Lamp",
-    price: "12.00",
-    image: require("assets/images/demo-item/lamb.png"),
-  },
-  {
-    name: "Minimal Stand",
-    price: "25.00",
-    image: require("assets/images/demo-item/stand.png"),
-  },
-  {
-    name: "Coffee Chair",
-    price: "20.00",
-    image: require("assets/images/demo-item/chair.png"),
-  },
-  {
-    name: "Simple Desk",
-    price: "50.00",
-    image: require("assets/images/demo-item/desk.png"),
-  },
-  {
-    name: "Coffee Table",
-    price: "50.00",
-    image: require("assets/images/demo-item/table.png"),
-  },
-];
+import { categoryList, itemList } from 'config/mockData';
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -94,16 +33,12 @@ export const HomeScreen = () => {
           setRefreshing(true);
           wait(2000).then(() => setRefreshing(false));
         }}
-        style={{
-          alignItems: "center",
-          justifyContent: "center",
-          marginRight: (Dimensions.get("window").width * 6.66) / 100,
-        }}
+        style={styles.categoryButtonContainer}
       >
         <View
           style={{
-            width: (Dimensions.get("window").width * 11.73) / 100,
-            height: (Dimensions.get("window").width * 11.73) / 100,
+            width: (Dimensions.get("window").height * 5.42) / 100,
+            height: (Dimensions.get("window").height * 5.42) / 100,
             backgroundColor:
               category.item.name === chooseCat ? "#303030" : "#F0F0F0",
             borderRadius: 12,
@@ -114,7 +49,7 @@ export const HomeScreen = () => {
           <Image
             resizeMode="contain"
             style={{
-              width: (Dimensions.get("window").width * 6) / 100,
+              height: (Dimensions.get("window").height * 3.44) / 100,
               tintColor: category.item.name === chooseCat ? "white" : "#909090",
             }}
             source={
@@ -126,7 +61,7 @@ export const HomeScreen = () => {
         </View>
         <Text
           style={{
-            marginTop: 5,
+            marginTop: (Dimensions.get("window").height * 0.61) / 100,
             textAlign: "center",
             color: "#808080",
             fontFamily: "NunitoSans-Regular",
@@ -144,44 +79,28 @@ export const HomeScreen = () => {
       onPress={() => {
         console.log((Dimensions.get("window").width * 19.04) / 100);
       }}
-      style={{
-        width: (Dimensions.get("window").width * 42) / 100,
-        height: (Dimensions.get("window").height * 31) / 100,
-        marginBottom: 15,
-      }}
+      style={styles.itemButtonContainer}
     >
       <View>
         <Image
           source={item.item.image}
-          style={{
-            width: "100%",
-            height: (Dimensions.get("window").height * 24.63) / 100,
-            borderRadius: 10,
-          }}
+          style={styles.itemImage}
         />
         <View
-          style={{
-            width: 30,
-            height: 30,
-            backgroundColor: "rgba(96, 96, 96, 0.4)",
-            position: "absolute",
-            justifyContent: "center",
-            alignItems: "center",
-            top: (Dimensions.get("window").height * 19.7) / 100,
-            left: (Dimensions.get("window").width * 31.2) / 100,
-            borderRadius: 8,
-          }}
+          style={styles.shoppingIconContainer}
         >
           <Fontisto name="shopping-bag" size={16} color="white" />
         </View>
       </View>
-      <View>
+      <View style = {{flexWrap: 'wrap'}}>
         <Text
-          style={{
-            fontFamily: "NunitoSans-Light",
-            fontSize: (Dimensions.get("window").width * 3.73) / 100,
-            marginTop: (Dimensions.get("window").width * 2.66) / 100,
-          }}
+          style={[
+            {
+              fontFamily: "NunitoSans-Light",
+              fontSize: (Dimensions.get("window").width * 3.73) / 100,
+              marginTop: (Dimensions.get("window").width * 2.66) / 100,
+            },
+          ]}
         >
           {item.item.name}
         </Text>
@@ -201,30 +120,12 @@ export const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.flatListContainer}>
-        <View
-          style={{
-            height: (Dimensions.get("window").height * 6.15) / 100,
-            width: "100%",
-          }}
-        >
+        <View >
           <View style={{ alignItems: "center" }}>
-            <Text
-              style={{
-                fontSize: (Dimensions.get("window").width * 4.8) / 100,
-                fontFamily: "Gelasio-Medium",
-                color: "#909090",
-              }}
-            >
+            <Text style={[{ color: "#909090" }, styles.titleText]}>
               Make home
             </Text>
-            <Text
-              style={{
-                fontSize: (Dimensions.get("window").width * 4.8) / 100,
-                fontFamily: "Gelasio-Medium",
-              }}
-            >
-              BEAUTIFUL
-            </Text>
+            <Text style={styles.titleText}>BEAUTIFUL</Text>
           </View>
         </View>
         <FlatList
@@ -268,10 +169,40 @@ const styles = StyleSheet.create({
     paddingLeft: 2,
     width: "100%",
     marginTop: (Dimensions.get("window").height * 2.46) / 100,
-    height: (Dimensions.get("window").height * 9.6) / 100,
+    height: (Dimensions.get("window").height * 10.83) / 100,
   },
   itemContainer: {
     width: "100%",
-    marginTop: 20,
+    marginTop: (Dimensions.get("window").height * 2.46) / 100
   },
+  titleText: {
+    fontSize: (Dimensions.get("window").width * 4.8) / 100,
+    fontFamily: "Gelasio-Medium",
+  },
+  shoppingIconContainer: {
+    width: 30,
+    height: 30,
+    backgroundColor: "rgba(96, 96, 96, 0.4)",
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+    top: (Dimensions.get("window").height * 19.7) / 100,
+    left: (Dimensions.get("window").width * 31.2) / 100,
+    borderRadius: 8,
+  },
+  itemImage: {
+    width: "100%",
+    height: (Dimensions.get("window").height * 24.63) / 100,
+    borderRadius: 10,
+  },
+  itemButtonContainer: {
+    width: (Dimensions.get("window").width * 42) / 100,
+    height: (Dimensions.get("window").height * 31) / 100,
+    marginBottom: 15,
+  },
+  categoryButtonContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: (Dimensions.get("window").width * 6.66) / 100,
+  }
 });
