@@ -65,7 +65,7 @@ export const HomeScreen = () => {
             textAlign: "center",
             color: "#808080",
             fontFamily: "NunitoSans-Regular",
-            fontSize: (Dimensions.get("window").width * 3.73) / 100,
+            fontSize: (Dimensions.get("window").height * 1.724) / 100,
           }}
         >
           {category.item.name}
@@ -76,15 +76,12 @@ export const HomeScreen = () => {
 
   const item = (item: any): JSX.Element => (
     <TouchableOpacity
-      onPress={() => {
-        console.log((Dimensions.get("window").width * 19.04) / 100);
-      }}
       style={styles.itemButtonContainer}
     >
       <View>
         <Image source={item.item.image} style={styles.itemImage} />
         <View style={styles.shoppingIconContainer}>
-          <Fontisto name="shopping-bag" size={16} color="white" />
+          <Fontisto name="shopping-bag" size={(Dimensions.get("window").height * 1.97) / 100} color="white" />
         </View>
       </View>
       <View style={styles.itemContentContainer}>
@@ -92,7 +89,7 @@ export const HomeScreen = () => {
           style={[
             {
               fontFamily: "NunitoSans-Light",
-              fontSize: (Dimensions.get("window").width * 3.73) / 100,
+              fontSize: (Dimensions.get("window").height * 1.724) / 100,
               marginTop: (Dimensions.get("window").width * 2.66) / 100,
             },
           ]}
@@ -102,7 +99,7 @@ export const HomeScreen = () => {
         <Text
           style={{
             fontFamily: "NunitoSans-Bold",
-            fontSize: (Dimensions.get("window").width * 3.73) / 100,
+            fontSize: (Dimensions.get("window").height * 1.724) / 100,
             marginTop: (Dimensions.get("window").width * 1.13) / 100,
           }}
         >
@@ -155,7 +152,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginHorizontal: 20,
+    marginHorizontal: (Dimensions.get("window").width * 5.33) / 100,
   },
   categoryContainer: {
     flexGrow: 0,
@@ -173,8 +170,8 @@ const styles = StyleSheet.create({
     fontFamily: "Gelasio-Medium",
   },
   shoppingIconContainer: {
-    width: 30,
-    height: 30,
+    width: (Dimensions.get("window").height * 3.69) / 100,
+    height: (Dimensions.get("window").height * 3.69) / 100,
     backgroundColor: "rgba(96, 96, 96, 0.4)",
     position: "absolute",
     justifyContent: "center",

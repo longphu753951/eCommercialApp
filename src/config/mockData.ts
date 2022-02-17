@@ -56,4 +56,17 @@ export const itemList = [
     price: "50.00",
     image: require("assets/images/demo-item/table.png"),
   },
+  {
+    name: "Umbrella Stand",
+    price: "10.00",
+    image: require("assets/images/demo-item/umbrella-stand.png"),
+  },
 ];
+
+export const notification = [
+  {
+    title: 'Your order #123456789 has been confirmed',
+    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ',
+    status: 'New',
+  }
+]
