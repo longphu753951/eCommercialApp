@@ -76,6 +76,11 @@ export const notificationList = [
     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ',
   },
   {
+    title: 'Discover hot sale furnitures this week.',
+    content: 'Lorem ipsum dolor sit amet, consectetur asdasdasdasdadipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ',
+    status: 'HOT!',
+  },
+  {
     title: 'Your order #123456789 has been shipped successfully',
     image: require("assets/images/demo-item/table.png"),
     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ',
@@ -83,6 +88,11 @@ export const notificationList = [
   {
     title: 'Your order #125456789 has been confirmed',
     image: require("assets/images/demo-item/lamb.png"),
+    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ',
+  },
+  {
+    title: 'Your order #1254567123 has been confirmed',
+    image: require("assets/images/demo-item/desk.png"),
     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ',
   },
 ]

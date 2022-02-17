@@ -33,6 +33,7 @@ export const allScreens = (Stack: any) => {
         component={tabNavigation}
         options={{
           headerShown: false,
+          gestureEnabled: false,
         }}
       />
     </>

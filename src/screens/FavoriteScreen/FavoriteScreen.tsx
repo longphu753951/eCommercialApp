@@ -21,6 +21,13 @@ const wait = (timeout: number) => {
 };
 
 export const FavoriteScreen = () => {
+  const [refreshing, setRefreshing] = useState(false);
+  const [chooseCat, setChooseCat] = useState("Popular");
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
   const item = (item: any): JSX.Element => {
     return (
       <View style={styles.itemContainer}>
@@ -78,6 +85,9 @@ export const FavoriteScreen = () => {
           ItemSeparatorComponent={ItemDivider}
           keyExtractor={(item) => item.name}
           renderItem={item}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
         <TouchableOpacity style={styles.addAllButton}>
           <Text style={styles.addAllText}>Add all to my cart</Text>
