@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { Fontisto } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { categoryList, itemList } from 'config/mockData';
+import { categoryList, itemList } from "config/mockData";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -65,7 +65,7 @@ export const HomeScreen = () => {
             textAlign: "center",
             color: "#808080",
             fontFamily: "NunitoSans-Regular",
-            fontSize: (Dimensions.get("window").width * 3.73) / 100,
+            fontSize: (Dimensions.get("window").height * 1.724) / 100,
           }}
         >
           {category.item.name}
@@ -76,28 +76,20 @@ export const HomeScreen = () => {
 
   const item = (item: any): JSX.Element => (
     <TouchableOpacity
-      onPress={() => {
-        console.log((Dimensions.get("window").width * 19.04) / 100);
-      }}
       style={styles.itemButtonContainer}
     >
       <View>
-        <Image
-          source={item.item.image}
-          style={styles.itemImage}
-        />
-        <View
-          style={styles.shoppingIconContainer}
-        >
-          <Fontisto name="shopping-bag" size={16} color="white" />
+        <Image source={item.item.image} style={styles.itemImage} />
+        <View style={styles.shoppingIconContainer}>
+          <Fontisto name="shopping-bag" size={(Dimensions.get("window").height * 1.97) / 100} color="white" />
         </View>
       </View>
-      <View style = {{flexWrap: 'wrap'}}>
+      <View style={styles.itemContentContainer}>
         <Text
           style={[
             {
               fontFamily: "NunitoSans-Light",
-              fontSize: (Dimensions.get("window").width * 3.73) / 100,
+              fontSize: (Dimensions.get("window").height * 1.724) / 100,
               marginTop: (Dimensions.get("window").width * 2.66) / 100,
             },
           ]}
@@ -107,7 +99,7 @@ export const HomeScreen = () => {
         <Text
           style={{
             fontFamily: "NunitoSans-Bold",
-            fontSize: (Dimensions.get("window").width * 3.73) / 100,
+            fontSize: (Dimensions.get("window").height * 1.724) / 100,
             marginTop: (Dimensions.get("window").width * 1.13) / 100,
           }}
         >
@@ -119,14 +111,12 @@ export const HomeScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.flatListContainer}>
-        <View >
-          <View style={{ alignItems: "center" }}>
-            <Text style={[{ color: "#909090" }, styles.titleText]}>
-              Make home
-            </Text>
-            <Text style={styles.titleText}>BEAUTIFUL</Text>
-          </View>
+      <View style={styles.contentContainer}>
+        <View style={{ alignItems: "center" }}>
+          <Text style={[{ color: "#909090" }, styles.titleText]}>
+            Make home
+          </Text>
+          <Text style={styles.titleText}>BEAUTIFUL</Text>
         </View>
         <FlatList
           style={styles.categoryContainer}
@@ -158,11 +148,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
   },
-  flatListContainer: {
+  contentContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginHorizontal: 20,
+    marginHorizontal: (Dimensions.get("window").width * 5.33) / 100,
   },
   categoryContainer: {
     flexGrow: 0,
@@ -173,15 +163,15 @@ const styles = StyleSheet.create({
   },
   itemContainer: {
     width: "100%",
-    marginTop: (Dimensions.get("window").height * 2.46) / 100
+    marginTop: (Dimensions.get("window").height * 2.46) / 100,
   },
   titleText: {
     fontSize: (Dimensions.get("window").width * 4.8) / 100,
     fontFamily: "Gelasio-Medium",
   },
   shoppingIconContainer: {
-    width: 30,
-    height: 30,
+    width: (Dimensions.get("window").height * 3.69) / 100,
+    height: (Dimensions.get("window").height * 3.69) / 100,
     backgroundColor: "rgba(96, 96, 96, 0.4)",
     position: "absolute",
     justifyContent: "center",
@@ -204,5 +194,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginRight: (Dimensions.get("window").width * 6.66) / 100,
-  }
+  },
+  itemContentContainer: { 
+    flexDirection: "column" 
+  },
 });
