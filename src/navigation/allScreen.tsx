@@ -4,6 +4,7 @@ import { BoardingScreen } from "screens/BoardingScreen/BoardingScreen";
 import { LoginScreen } from "screens/LoginScreen/LoginScreen";
 import { HomeScreen } from "screens/HomeScreen/HomeScreen";
 import { FavoriteScreen } from "screens/FavoriteScreen/FavoriteScreen";
+import { NotificationScreen } from "screens/NotificationScreen/NotificationScreen";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Dimensions } from "react-native";
 
@@ -32,6 +33,7 @@ export const allScreens = (Stack: any) => {
         component={tabNavigation}
         options={{
           headerShown: false,
+          gestureEnabled: false,
         }}
       />
     </>
@@ -63,7 +65,7 @@ const allTabScreens = (Tab: any) => {
       />
       <Tab.Screen
         name="notification"
-        component={HomeScreen}
+        component={NotificationScreen}
         options={{
           tabBarIcon: ({ focused, color }) => {
             let iconName = focused ? "notifications" : "notifications-outline";
