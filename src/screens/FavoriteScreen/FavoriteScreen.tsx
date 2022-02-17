@@ -10,7 +10,7 @@ import {
   RefreshControl,
   Button,
 } from "react-native";
-import { Fontisto, MaterialIcons } from "@expo/vector-icons";
+import { Fontisto } from "@expo/vector-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";

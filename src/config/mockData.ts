@@ -63,10 +63,26 @@ export const itemList = [
   },
 ];
 
-export const notification = [
+export const notificationList = [
   {
     title: 'Your order #123456789 has been confirmed',
+    image: require("assets/images/demo-item/umbrella-stand.png"),
     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ',
     status: 'New',
-  }
+  },
+  {
+    title: 'Your order #123456789 has been canceled',
+    image: require("assets/images/demo-item/table.png"),
+    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ',
+  },
+  {
+    title: 'Your order #123456789 has been shipped successfully',
+    image: require("assets/images/demo-item/table.png"),
+    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ',
+  },
+  {
+    title: 'Your order #125456789 has been confirmed',
+    image: require("assets/images/demo-item/lamb.png"),
+    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ',
+  },
 ]
