@@ -4,6 +4,7 @@ import { BoardingScreen } from "screens/BoardingScreen/BoardingScreen";
 import { LoginScreen } from "screens/LoginScreen/LoginScreen";
 import { HomeScreen } from "screens/HomeScreen/HomeScreen";
 import { FavoriteScreen } from "screens/FavoriteScreen/FavoriteScreen";
+import { ProfileScreen } from "screens/ProfileScreen/ProfileScreen";
 import { NotificationScreen } from "screens/NotificationScreen/NotificationScreen";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Dimensions } from "react-native";
@@ -75,7 +76,7 @@ const allTabScreens = (Tab: any) => {
       />
       <Tab.Screen
         name="profile"
-        component={HomeScreen}
+        component={ProfileScreen}
         options={{
           tabBarIcon: ({ focused, color }) => {
             let iconName = focused ? "person" : "person-outline";
