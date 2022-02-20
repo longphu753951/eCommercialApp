@@ -96,3 +96,26 @@ export const notificationList = [
     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ',
   },
 ]
+
+export const profileCategoryList = [
+  {
+    name: "My orders",
+    title: "Already have 10 orders"
+  },
+  {
+    name: "Shipping Addresses",
+    title: "03 Addresses"
+  },
+  {
+    name: "Payment Method",
+    title: "You have 2 cards"
+  },
+  {
+    name: "My reviews",
+    title: "Reviews for 5 items"
+  },
+  {
+    name: "Setting",
+    title: "Notification, Password, FAQ, Contact"
+  },
+]
