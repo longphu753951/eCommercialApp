@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 const FONT = {
     "Gelasio-Bold": require('assets/fonts/Gelasio-Bold.ttf'),
     "Gelasio-BoldItalic": require('assets/fonts/Gelasio-BoldItalic.ttf'),
