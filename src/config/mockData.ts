@@ -100,22 +100,42 @@ export const notificationList = [
 export const profileCategoryList = [
   {
     name: "My orders",
-    title: "Already have 10 orders"
+    title: "Already have 10 orders",
+    screen: 'ShippingScreen',
   },
   {
     name: "Shipping Addresses",
-    title: "03 Addresses"
+    title: "03 Addresses",
+    screen: 'ShippingScreen',
   },
   {
     name: "Payment Method",
-    title: "You have 2 cards"
+    title: "You have 2 cards",
+    screen: 'ShippingScreen',
   },
   {
     name: "My reviews",
-    title: "Reviews for 5 items"
+    title: "Reviews for 5 items",
+    screen: 'ShippingScreen',
   },
   {
     name: "Setting",
-    title: "Notification, Password, FAQ, Contact"
+    title: "Notification, Password, FAQ, Contact",
+    screen: 'ShippingScreen',
+  },
+]
+
+export const addressList = [
+  {
+    name: 'Trần Long Phú',
+    address: '25 rue Robert Latouche, Nice, 06200, Côte D’azur, France',
+  },
+  {
+    name: 'Fu Long Tran',
+    address: '25 rue Robert Latouche, Nice, 06200, Côte D’azur, France',
+  },
+  {
+    name: 'Fu Tran Loong',
+    address: '25 rue Robert Latouche, Nice, 06200, Côte D’azur, France',
   },
 ]

@@ -3798,6 +3798,11 @@
     "path-browserify" "^1.0.0"
     "url-parse" "^1.4.4"
 
+"expo-checkbox@~2.0.0":
+  "integrity" "sha512-ZvDdpHRyyTd6P4JnqqJKyLzg8iKrvhHSXOKBK2uc/Xq5MWBj1JNtn2FCGs0oNpG9H1rt8/gV86Wzy96onxE7bw=="
+  "resolved" "https://registry.npmjs.org/expo-checkbox/-/expo-checkbox-2.0.0.tgz"
+  "version" "2.0.0"
+
 "expo-constants@~13.0.2":
   "integrity" "sha512-vGs/kI65vplPFvG8z4W1ariGEtVHHp9Avl28G0zJprt2v/q1E/BnXjwvFSBPc1GB+Zb/7crWSHWRwjaFULBjsg=="
   "resolved" "https://registry.npmjs.org/expo-constants/-/expo-constants-13.0.2.tgz"
@@ -6501,7 +6506,7 @@
   dependencies:
     "prop-types" "^15.5.6"
 
-"react-native-svg@> 7.0":
+"react-native-svg@> 7.0", "react-native-svg@12.1.1":
   "integrity" "sha512-NIAJ8jCnXGCqGWXkkJ1GTzO4a3Md5at5sagYV8Vh4MXYnL4z5Rh428Wahjhh+LIjx40EE5xM5YtwyJBqOIba2Q=="
   "resolved" "https://registry.npmjs.org/react-native-svg/-/react-native-svg-12.1.1.tgz"
   "version" "12.1.1"
