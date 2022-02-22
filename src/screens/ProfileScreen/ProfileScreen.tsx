@@ -9,15 +9,17 @@ import {
   Image,
   RefreshControl,
   Button,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import { profileCategoryList } from "config/mockData";
+import { useNavigation } from "@react-navigation/native";
 import _ from "lodash";
 import { ScrollView } from "react-native-gesture-handler";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 export const ProfileScreen = () => {
+  const navigation = useNavigation();
   const renderCategory = (): JSX.Element => {
     const listItem = profileCategoryList.map((item) => {
       return (
@@ -40,6 +42,7 @@ export const ProfileScreen = () => {
             borderColor: "white",
             marginTop: (Dimensions.get("window").height * 1.85) / 100,
           }}
+          onPress={() => navigation.navigate(item.screen)}
         >
           <View style={styles.categoryTextContainer}>
             <Text style={styles.name}>{item.name}</Text>
