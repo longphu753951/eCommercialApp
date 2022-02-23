@@ -1,0 +1,6 @@
+module Pods_eCommercialAppExpo {
+  umbrella header "Pods-eCommercialAppExpo-umbrella.h"
+
+  export *
+  module * { export * }
+}
