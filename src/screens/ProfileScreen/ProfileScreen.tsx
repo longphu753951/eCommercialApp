@@ -24,24 +24,7 @@ export const ProfileScreen = () => {
     const listItem = profileCategoryList.map((item) => {
       return (
         <TouchableOpacity
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            paddingVertical: (Dimensions.get("window").height * 2.21) / 100,
-            shadowColor: "#000",
-            shadowOffset: {
-              width: 0,
-              height: 1,
-            },
-            shadowOpacity: 0.18,
-            shadowRadius: 1.0,
-            paddingHorizontal: (Dimensions.get("window").height * 2.46) / 100,
-            elevation: 1,
-            borderWidth: 1,
-            borderColor: "white",
-            marginTop: (Dimensions.get("window").height * 1.85) / 100,
-          }}
+          style={styles.itemContainer}
           onPress={() => navigation.navigate(item.screen)}
         >
           <View style={styles.categoryTextContainer}>
@@ -69,7 +52,6 @@ export const ProfileScreen = () => {
           style={{
             width: "100%",
             flexDirection: "column",
-            // marginTop: (Dimensions.get("window").height * 3.45) / 100,
           }}
         >
           <View style={styles.profileContainer}>
@@ -86,6 +68,7 @@ export const ProfileScreen = () => {
           <View
             style={{
               marginTop: (Dimensions.get("window").height * 3.69) / 100,
+              marginHorizontal: 1,
             }}
           >
             {renderCategory()}
@@ -105,7 +88,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginHorizontal: (Dimensions.get("window").width * 5.33) / 100,
   },
   titleText: {
     fontSize: (Dimensions.get("window").width * 4.8) / 100,
@@ -119,7 +101,7 @@ const styles = StyleSheet.create({
   profileContainer: {
     justifyContent: "flex-start",
     flexDirection: "row",
-    width: "100%",
+    marginHorizontal: (Dimensions.get("window").width * 5.33) / 100,
   },
   profileTextContainer: {
     marginLeft: (Dimensions.get("window").height * 2.46) / 100,
@@ -135,5 +117,24 @@ const styles = StyleSheet.create({
   email: {
     fontFamily: "NunitoSans-Regular",
     fontSize: (Dimensions.get("window").height * 1.72) / 100,
+  },
+  itemContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: (Dimensions.get("window").height * 2.21) / 100,
+    shadowColor: "#8A959E",
+    shadowOffset: {
+      width: 2,
+      height: 3,
+    },
+    shadowOpacity: 0.21,
+    shadowRadius: 10,
+    elevation: 2,
+    borderRadius: 8,
+    paddingHorizontal: (Dimensions.get("window").height * 2.46) / 100,
+    marginHorizontal: (Dimensions.get("window").width * 5.33) / 100,
+    backgroundColor: "white",
+    marginTop: (Dimensions.get("window").height * 1.85) / 100,
   },
 });

@@ -1,3 +1,7 @@
+import {
+  Dimensions,
+} from "react-native";
+
 export const categoryList = [
   {
     name: "Popular",
@@ -111,7 +115,7 @@ export const profileCategoryList = [
   {
     name: "Payment Method",
     title: "You have 2 cards",
-    screen: 'ShippingScreen',
+    screen: 'PaymentMethodScreen',
   },
   {
     name: "My reviews",
@@ -139,3 +143,34 @@ export const addressList = [
     address: '25 rue Robert Latouche, Nice, 06200, Côte D’azur, France',
   },
 ]
+
+export const creditCard = [
+  {
+    number: '5412 4242 4242 4242',
+    name: 'Tran Long Phu',
+    expiryDate: '05/23',
+  },
+  {
+    number: '4242 4242 4242 4242',
+    name: 'Tran Long Phu',
+    expiryDate: '05/23',
+  }
+]
+
+export const card = {
+  "4": require("assets/images/visa.png"),
+  "5": require("assets/images/mastercard.png"),
+};
+
+export const cardStyle = {
+  "4": {
+    height: (Dimensions.get("window").height * 1.97) / 100,
+    width: (Dimensions.get("window").height * 6.15) / 100,
+    marginBottom: (Dimensions.get("window").height * 3.277) / 100
+  },
+  "5": {
+    height: (Dimensions.get("window").height * 3) / 100,
+    width: (Dimensions.get("window").height * 3.82) / 100,
+    marginBottom: (Dimensions.get("window").height * 2.25) / 100
+  },
+};

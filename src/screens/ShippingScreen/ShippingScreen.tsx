@@ -61,15 +61,14 @@ export const ShippingScreen = () => {
         <View
           style={{
             backgroundColor: "#fff",
-            shadowColor: "rgba(138, 149, 158)",
+            shadowColor: "#8A959E",
             shadowOffset: {
-              width: 0,
-              height: 1,
+              width: 2,
+              height: 3,
             },
-            shadowOpacity: 0.22,
-            shadowRadius: 2.22,
-            elevation: 3,
-            borderRadius: 8,
+            shadowOpacity: 0.21,
+            shadowRadius: 10,
+            elevation: 2,
           }}
         >
           <View
