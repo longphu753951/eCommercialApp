@@ -34,7 +34,6 @@ export const MyReviewScreen = () => {
   };
 
   const item = (item: any): JSX.Element => {
-    console.log(item);
     return (
       <View
         style={{ marginTop: (Dimensions.get("window").height * 2.463) / 100 }}

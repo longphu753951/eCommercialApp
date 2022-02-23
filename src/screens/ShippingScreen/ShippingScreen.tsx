@@ -38,7 +38,6 @@ export const ShippingScreen = () => {
   };
 
   const item = (item: any): JSX.Element => {
-    console.log(item);
     return (
       <View
         style={{ marginTop: (Dimensions.get("window").height * 3.69) / 100 }}
