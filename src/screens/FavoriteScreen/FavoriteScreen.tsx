@@ -20,6 +20,9 @@ const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
+const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
+
 export const FavoriteScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [chooseCat, setChooseCat] = useState("Popular");
@@ -103,8 +106,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   itemContainer: {
-    marginTop: (Dimensions.get("window").height * 1.47) / 100,
-    paddingBottom: (Dimensions.get("window").height * 1.47) / 100,
+    marginTop: (height * 1.47) / 100,
+    paddingBottom: (height * 1.47) / 100,
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -112,20 +115,20 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginHorizontal: (Dimensions.get("window").width * 5.33) / 100,
+    marginHorizontal: (width * 5.33) / 100,
   },
   itemFlatList: {
     flex: 1,
     width: "100%",
-    marginTop: (Dimensions.get("window").height * 1.72) / 100,
+    marginTop: (height * 1.72) / 100,
   },
   titleText: {
-    fontSize: (Dimensions.get("window").width * 4.8) / 100,
+    fontSize: (width * 4.8) / 100,
     fontFamily: "Gelasio-Medium",
   },
   itemImage: {
-    width: (Dimensions.get("window").height * 12.31) / 100,
-    height: (Dimensions.get("window").height * 12.31) / 100,
+    width: (height * 12.31) / 100,
+    height: (height * 12.31) / 100,
     borderRadius: 10,
   },
   itemTextContainer: {
