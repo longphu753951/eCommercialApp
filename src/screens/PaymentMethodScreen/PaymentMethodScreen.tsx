@@ -43,8 +43,6 @@ export const PaymentMethodScreen = () => {
     return number.replace(r, subst);
   };
 
-  
-
   const getImageTypeCard = (number: string): NodeRequire => {
     return card[number.charAt(0)];
   };

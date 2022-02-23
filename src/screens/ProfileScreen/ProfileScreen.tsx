@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   profileImage: {
     height: (Dimensions.get("window").height * 9.85) / 100,
     width: (Dimensions.get("window").height * 9.85) / 100,
-    borderRadius: 60,
+    borderRadius: 200,
   },
   profileContainer: {
     justifyContent: "flex-start",
