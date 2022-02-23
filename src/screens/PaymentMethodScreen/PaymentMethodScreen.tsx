@@ -34,7 +34,6 @@ export const PaymentMethodScreen = () => {
   }, []);
 
   const onChangeDefaulPayment = (number: string): void => {
-    console.log(number);
     setNumber(number);
   };
 
@@ -53,7 +52,7 @@ export const PaymentMethodScreen = () => {
   };
 
   const getSize = (): number => {
-    return Platform.OS === "android" ? 24 : (isIphoneX() ? 23: 28.5);
+    return Platform.OS === "android" ? 24 : isIphoneX() ? 23 : 28.5;
   };
 
   const item = (item: any): JSX.Element => {

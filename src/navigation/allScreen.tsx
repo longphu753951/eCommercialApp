@@ -8,6 +8,7 @@ import { ProfileScreen } from "screens/ProfileScreen/ProfileScreen";
 import { NotificationScreen } from "screens/NotificationScreen/NotificationScreen";
 import { ShippingScreen } from "screens/ShippingScreen/ShippingScreen";
 import { PaymentMethodScreen } from "screens/PaymentMethodScreen/PaymentMethodScreen";
+import { MyReviewScreen } from 'screens/MyReviewScreen/MyReviewScreen';
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Dimensions } from "react-native";
 
@@ -49,6 +50,13 @@ export const allScreens = (Stack: any) => {
       <Stack.Screen 
         name= "PaymentMethodScreen"
         component= {PaymentMethodScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen 
+        name= "MyReviewScreen"
+        component= {MyReviewScreen}
         options={{
           headerShown: false,
         }}

@@ -120,7 +120,7 @@ export const profileCategoryList = [
   {
     name: "My reviews",
     title: "Reviews for 5 items",
-    screen: 'ShippingScreen',
+    screen: 'MyReviewScreen',
   },
   {
     name: "Setting",
@@ -174,3 +174,31 @@ export const cardStyle = {
     marginBottom: (Dimensions.get("window").height * 2.25) / 100
   },
 };
+
+export const myRating = [
+  {
+    product: 'Coffee Table',
+    image: require("assets/images/demo-item/table.png"),
+    price: '50.00',
+    rating: 5,
+    date: '20/03/2020',
+    review: 'Nice Furniture with good delivery. The delivery time is very fast. Then products look like exactly the picture in the app. Besides, color is also the same and quality is very good despite very cheap price'
+  },
+  {
+    product: 'Coffee Table',
+    image: require("assets/images/demo-item/table.png"),
+    price: '50.00',
+    rating: 4.5,
+    date: '22/03/2020',
+    review: 'Nice Furniture with good delivery. The delivery time is very fast. Then products look like exactly the picture in the app. Besides, color is also the same and quality is very good despite very cheap price'
+  },
+  {
+    product: 'Coffee Table',
+    image: require("assets/images/demo-item/table.png"),
+    price: '50.00',
+    rating: 5,
+    date: '20/03/2020',
+    review: 'Nice Furniture with good delivery. The delivery time is very fast. Then products look like exactly the picture in the app. Besides, color is also the same and quality is very good despite very cheap price'
+  },
+  
+]
