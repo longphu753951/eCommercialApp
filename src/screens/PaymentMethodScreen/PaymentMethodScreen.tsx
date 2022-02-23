@@ -9,12 +9,13 @@ import {
   Image,
   RefreshControl,
   ImageBackground,
+  Platform,
 } from "react-native";
 import { FAB } from "react-native-paper";
 import Checkbox from "expo-checkbox";
 import { creditCard, card, cardStyle } from "config/mockData";
 import { Feather } from "@expo/vector-icons";
-import { ifIphoneX } from "react-native-iphone-x-helper";
+import { isIphoneX, ifIphoneX } from "react-native-iphone-x-helper";
 import _ from "lodash";
 import { ScrollView } from "react-native-gesture-handler";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -49,7 +50,11 @@ export const PaymentMethodScreen = () => {
 
   const getCardStyle = (number: string): StyleSheet => {
     return cardStyle[number.charAt(0)];
-  }
+  };
+
+  const getSize = (): number => {
+    return Platform.OS === "android" ? 24 : (isIphoneX() ? 23: 28.5);
+  };
 
   const item = (item: any): JSX.Element => {
     return (
@@ -59,7 +64,7 @@ export const PaymentMethodScreen = () => {
         <ImageBackground
           resizeMode="cover"
           style={{
-            height: (Dimensions.get("window").height * 23) / 100,
+            height: (Dimensions.get("window").height * getSize()) / 100,
           }}
           source={require("assets/images/creditCard.png")}
         >
@@ -170,6 +175,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 0,
     bottom: 0,
+    width: (Dimensions.get("window").height * 7.4) / 100,
     height: (Dimensions.get("window").height * 7.4) / 100,
     marginRight: (Dimensions.get("window").height * 2.463) / 100,
     ...ifIphoneX(
