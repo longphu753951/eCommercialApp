@@ -39,14 +39,29 @@ export const ProductScreen = () => {
           </PagerView>
           <View
             style={{
-              width: (Dimensions.get("window").height * 6.157) / 100,
-              height: (Dimensions.get("window").height * 6.157) / 100,
               backgroundColor: "green",
               position: "absolute",
-              left: (Dimensions.get("window").width * 7.2) / 100,
-              top: (Dimensions.get("window").height * 7.26) / 100
+              left: (Dimensions.get("window").width * 5.33) / 100,
+              top: (Dimensions.get("window").height * 7.26) / 100,
+              alignItems: 'center'
             }}
-          ></View>
+          >
+            <View
+              style={{
+                width: (Dimensions.get("window").height * 6.157) / 100,
+                height: (Dimensions.get("window").height * 6.157) / 100,
+                backgroundColor: 'yellow'
+              }}
+            ></View>
+            <View
+              style={{
+                backgroundColor: 'blue',
+                marginTop: (Dimensions.get("window").height * 4.92) / 100,
+                width: (Dimensions.get("window").height * 7.88) / 100,
+                height: (Dimensions.get("window").height * 23.64) / 100,
+              }}
+            ></View>
+          </View>
         </View>
       </View>
     </View>
