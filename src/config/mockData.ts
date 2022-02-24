@@ -65,41 +65,52 @@ export const itemList = [
     price: "10.00",
     image: require("assets/images/demo-item/umbrella-stand.png"),
   },
+  {
+    name: "Angolo Espresso Velvet Sofa",
+    price: "120.00",
+    image: require("assets/images/demo-item/sofa.png"),
+  },
 ];
 
 export const notificationList = [
   {
-    title: 'Your order #123456789 has been confirmed',
+    title: "Your order #123456789 has been confirmed",
     image: require("assets/images/demo-item/umbrella-stand.png"),
-    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ',
-    status: 'New',
+    content:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ",
+    status: "New",
   },
   {
-    title: 'Your order #123456789 has been canceled',
+    title: "Your order #123456789 has been canceled",
     image: require("assets/images/demo-item/table.png"),
-    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ',
+    content:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ",
   },
   {
-    title: 'Discover hot sale furnitures this week.',
-    content: 'Lorem ipsum dolor sit amet, consectetur asdasdasdasdadipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ',
-    status: 'HOT!',
+    title: "Discover hot sale furnitures this week.",
+    content:
+      "Lorem ipsum dolor sit amet, consectetur asdasdasdasdadipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ",
+    status: "HOT!",
   },
   {
-    title: 'Your order #123456789 has been shipped successfully',
+    title: "Your order #123456789 has been shipped successfully",
     image: require("assets/images/demo-item/table.png"),
-    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ',
+    content:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ",
   },
   {
-    title: 'Your order #125456789 has been confirmed',
+    title: "Your order #125456789 has been confirmed",
     image: require("assets/images/demo-item/lamb.png"),
-    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ',
+    content:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ",
   },
   {
-    title: 'Your order #1254567123 has been confirmed',
+    title: "Your order #1254567123 has been confirmed",
     image: require("assets/images/demo-item/desk.png"),
-    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ',
+    content:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Turpis pretium et in arcu adipiscing nec. Turpis pretium et in arcu adipiscing nec. ",
   },
-]
+];
 
 export const profileCategoryList = [
   {
@@ -202,3 +213,19 @@ export const myRating = [
   },
   
 ]
+
+export const product = {
+  name: "Minimal Stand",
+  price: 50,
+  rating: 4.5,
+  colors: {
+    pink: "#D8B2A7",
+    brown: "#241917",
+    orange: "#E49147",
+  },
+  images: [
+    require("assets/images/product-demo-item/sofa-red-velvet.png"),
+    require("assets/images/product-demo-item/sofa-red-velvet-2.png"),
+    require("assets/images/product-demo-item/sofa-red-velvet-3.png"),
+  ],
+};

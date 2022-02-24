@@ -8,7 +8,8 @@ import { ProfileScreen } from "screens/ProfileScreen/ProfileScreen";
 import { NotificationScreen } from "screens/NotificationScreen/NotificationScreen";
 import { ShippingScreen } from "screens/ShippingScreen/ShippingScreen";
 import { PaymentMethodScreen } from "screens/PaymentMethodScreen/PaymentMethodScreen";
-import { MyReviewScreen } from 'screens/MyReviewScreen/MyReviewScreen';
+import { MyReviewScreen } from "screens/MyReviewScreen/MyReviewScreen";
+import { ProductScreen } from "screens/ProductScreen/ProductScreen";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Dimensions } from "react-native";
 
@@ -47,16 +48,23 @@ export const allScreens = (Stack: any) => {
           headerShown: false,
         }}
       />
-      <Stack.Screen 
-        name= "PaymentMethodScreen"
-        component= {PaymentMethodScreen}
+      <Stack.Screen
+        name="PaymentMethodScreen"
+        component={PaymentMethodScreen}
         options={{
           headerShown: false,
         }}
       />
-      <Stack.Screen 
-        name= "MyReviewScreen"
-        component= {MyReviewScreen}
+      <Stack.Screen
+        name="ProductScreen"
+        component={ProductScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="MyReviewScreen"
+        component={MyReviewScreen}
         options={{
           headerShown: false,
         }}
@@ -129,7 +137,7 @@ export const tabNavigation = () => {
           },
           shadowOpacity: 0.23,
           shadowRadius: 2.62,
-          
+
           elevation: 4,
         },
       }}
