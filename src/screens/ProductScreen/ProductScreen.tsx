@@ -28,7 +28,7 @@ export const ProductScreen = () => {
               backgroundColor: "red",
             }}
             initialPage={0}
-            showPageIndicator ={true}
+            showPageIndicator={true}
           >
             <View key="1">
               <Text>First page</Text>
@@ -37,6 +37,16 @@ export const ProductScreen = () => {
               <Text>Second page</Text>
             </View>
           </PagerView>
+          <View
+            style={{
+              width: (Dimensions.get("window").height * 6.157) / 100,
+              height: (Dimensions.get("window").height * 6.157) / 100,
+              backgroundColor: "green",
+              position: "absolute",
+              left: (Dimensions.get("window").width * 7.2) / 100,
+              top: (Dimensions.get("window").height * 7.26) / 100
+            }}
+          ></View>
         </View>
       </View>
     </View>
