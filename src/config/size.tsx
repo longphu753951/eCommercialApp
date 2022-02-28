@@ -1,5 +1,5 @@
-import {Dimensions, Platform, StatusBar} from 'react-native';
-const sizeWindow = Dimensions.get('window');
+import { Dimensions, Platform, StatusBar } from "react-native";
+const sizeWindow = Dimensions.get("window");
 
 const sizeDefault = {
   width: 828,
@@ -134,8 +134,8 @@ const size = {
   s340: scale(basicSize.s340),
 
   // LiemNH7
-  widthWindow: Dimensions.get('window').width,
-  heightWindow: Dimensions.get('window').height,
+  widthWindow: Dimensions.get("window").width,
+  heightWindow: Dimensions.get("window").height,
 };
 
 export default size;
@@ -146,3 +146,8 @@ function scale(size: number): number {
     return size * scaleHoz;
   }
 }
+
+export const getDisplay = ():number => {
+  const { width, height } = Dimensions.get("window");
+  return Math.ceil(width/9) === Math.ceil(height/16) ? 1.3: 1;
+};
