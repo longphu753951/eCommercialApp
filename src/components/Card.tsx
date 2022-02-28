@@ -8,31 +8,31 @@ import {
 } from "react-native";
 
 interface Props {
-  cardType: String,
-  cardStyle: any,
+  isButton?: boolean;
+  cardStyle?: any;
+  onPress(): void;
+  children?: React.ReactNode;
 }
-
 const Card: React.FC<Props> = (props: Props) => {
-  const { cardType, cardStyle } = props;
+  const { isButton, cardStyle, children, onPress } = props;
+  console.log(cardStyle);
+  const style = cardStyle !== {} ? cardStyle: styles.cardContainer ;
+  if (isButton) {
+    return (
+      <TouchableOpacity onPress={onPress} style={style}>
+        {children}
+      </TouchableOpacity>
+    );
+  }
 
-  const CardType: React.FC = (children) => {
-    switch (cardType) {
-      case "Button":
-        return (
-          <TouchableOpacity style={[styles.cardContainer, cardStyle]}>
-            {children}
-          </TouchableOpacity>
-        );
-      default:
-        return <View style={styles.cardContainer}>{children}</View>;
-    }
-  };
+  return <View style={style}>{children}</View>;
+};
 
-  return (
-  <CardType>
-    
-  </CardType>
-  );
+Card.defaultProps = {
+  isButton: false,
+  cardStyle: {},
+  onPress: () => {},
+  children: <></>,
 };
 
 const styles = StyleSheet.create({
