@@ -15,6 +15,7 @@ import _ from "lodash";
 import { ScrollView } from "react-native-gesture-handler";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { Header } from "components";
 
 export const ProfileScreen = () => {
   const navigation = useNavigation();
@@ -40,9 +41,7 @@ export const ProfileScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
-        <View style={{ alignItems: "center" }}>
-          <Text style={styles.titleText}>PROFILE</Text>
-        </View>
+        <Header title ={'PROFILE'}/>
         <ScrollView
           style={{
             width: "100%",
