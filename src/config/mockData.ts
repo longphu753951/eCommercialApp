@@ -221,7 +221,9 @@ export const product = {
   name: "Minimal Stand",
   price: 50,
   rating: 4.5,
-  colors: ["#D8B2A7", "#241917", "#E49147"],
+  reviews: 50,
+  description: 'Minimal Stand is made of by natural wood. The design that is very simple and minimal. This is truly one of the best furnitures in any family for now. With 3 different colors, you can easily select the best match for your home. ',
+  colors: ["#ffffff", "#B4916C", "#E4CBAD"],
   images: [
     require("assets/images/demo-item/stand.png"),
     require("assets/images/demo-item/stand.png"),
