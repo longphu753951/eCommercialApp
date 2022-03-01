@@ -17,9 +17,7 @@ import { addressList } from "config/mockData";
 import { Feather } from "@expo/vector-icons";
 import { ifIphoneX } from "react-native-iphone-x-helper";
 import _ from "lodash";
-import { ScrollView } from "react-native-gesture-handler";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { Card } from "components";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -57,19 +55,7 @@ export const ShippingScreen = () => {
           />
           <Text style={styles.useAsAddText}>Use as the shipping address</Text>
         </View>
-        <View
-          style={{
-            backgroundColor: "#fff",
-            shadowColor: "#8A959E",
-            shadowOffset: {
-              width: 2,
-              height: 3,
-            },
-            shadowOpacity: 0.21,
-            shadowRadius: 10,
-            elevation: 2,
-          }}
-        >
+        <Card cardStyle={styles.card}>
           <View
             style={{
               paddingLeft: (Dimensions.get("window").height * 2.46) / 100,
@@ -101,7 +87,7 @@ export const ShippingScreen = () => {
           >
             <Text style={styles.addressText}>{item.item.address}</Text>
           </View>
-        </View>
+        </Card>
       </View>
     );
   };

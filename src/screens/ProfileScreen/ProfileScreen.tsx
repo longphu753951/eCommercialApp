@@ -21,21 +21,7 @@ export const ProfileScreen = () => {
   const renderCategory = (): JSX.Element => {
     const listItem = profileCategoryList.map((item) => {
       return (
-        // <TouchableOpacity
-        //   style={styles.itemContainer}
-        //   onPress={() => navigation.navigate(item.screen)}
-        // >
-        //   <View style={styles.categoryTextContainer}>
-        //     <Text style={styles.name}>{item.name}</Text>
-        //     <Text style={styles.email}>{item.title}</Text>
-        //   </View>
-        //   <FontAwesomeIcon
-        //     size={(Dimensions.get("window").height * 2) / 100}
-        //     icon={faAngleRight}
-        //     color={"#909090"}
-        //   />
-        // </TouchableOpacity>
-        <Card isButton={true} onPress={() => navigation.navigate(item.screen)} >
+        <Card cardStyle={styles.card} isButton={true} onPress={() => navigation.navigate(item.screen)} >
           <View style={styles.categoryTextContainer}>
             <Text style={styles.name}>{item.name}</Text>
             <Text style={styles.email}>{item.title}</Text>
@@ -89,6 +75,15 @@ export const ProfileScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  card: {
+    paddingVertical: (Dimensions.get("window").height * 2.21) / 100,
+    paddingHorizontal: (Dimensions.get("window").height * 2.46) / 100,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginHorizontal: (Dimensions.get("window").width * 5.33) / 100,
+    marginTop: (Dimensions.get("window").height * 1.85) / 100,
+  },
   container: {
     flex: 1,
     backgroundColor: "white",

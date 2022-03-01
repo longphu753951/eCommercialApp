@@ -25,7 +25,6 @@ export const NotificationScreen = () => {
     wait(2000).then(() => setRefreshing(false));
   }, []);
   const item = (item: any): JSX.Element => {
-    console.log(item.item.status);
     return (
       <View
         style={{
