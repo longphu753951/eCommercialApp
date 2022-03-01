@@ -95,44 +95,42 @@ export const ProductScreen = () => {
     <View style={styles.container}>
       <View style={styles.contentContainer}>
         <View style={{ alignItems: "flex-end" }}>
-          <FlatList
+          <View
             style={{
               width: (Dimensions.get("window").width * 86.13) / 100,
               height: (Dimensions.get("window").height * 56.03) / 100,
               borderBottomLeftRadius: 50,
+              borderWidth: 1,
               overflow: "hidden",
             }}
-            horizontal
-            pagingEnabled
-            data={product.images}
-            bounces={false}
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item, index }) => {
-              return (
-                <Image
-                  resizeMode="cover"
-                  style={{
-                    width: (Dimensions.get("window").width * 86.13) / 100,
-                    height: (Dimensions.get("window").height * 56.03) / 100,
-                  }}
-                  key={index}
-                  source={item}
-                />
-              );
-            }}
-            onScroll={Animated.event(
-              [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-              {
-                useNativeDriver: false,
-              }
-            )}
-            scrollEventThrottle={32}
-            onViewableItemsChanged={viewableItemsChanged}
-            viewabilityConfig={viewConfig}
-            ref={slidesRef}
-          />
-          <Paginator data={product.images} scrollX={scrollX} />
+          >
+            <FlatList
+              style={{
+                width: (Dimensions.get("window").width * 86.13) / 100,
+              }}
+              horizontal
+              pagingEnabled
+              data={product.images}
+              bounces={false}
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item, index }) => {
+                return (
+                  <Image
+                    resizeMode="cover"
+                    style={{
+                      width: (Dimensions.get("window").width * 86.13) / 100,
+                      height: (Dimensions.get("window").height * 56.03) / 100,
+                    }}
+                    key={index}
+                    source={item}
+                  />
+                );
+              }}
+            />
+            <Paginator data={product.images} scrollX={scrollX} />
+          </View>
+          
           <View
             style={{
               position: "absolute",
