@@ -8,13 +8,10 @@ import {
   Dimensions,
   Image,
   RefreshControl,
-  Button,
-  TouchableOpacity,
 } from "react-native";
 import { Rating, AirbnbRating } from "react-native-ratings";
-import Checkbox from "expo-checkbox";
+import { Card } from "components";
 import { myRating } from "config/mockData";
-import { Feather } from "@expo/vector-icons";
 import _ from "lodash";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -38,14 +35,11 @@ export const MyReviewScreen = () => {
       <View
         style={{ marginTop: (Dimensions.get("window").height * 2.463) / 100 }}
       >
-        <View
-          style={{
+        <Card
+          cardStyle={{
             backgroundColor: "#fff",
             shadowColor: "#8A959E",
-            shadowOffset: {
-              width: 2,
-              height: 3,
-            },
+            shadowOffset: { width: 2, height: 3 },
             shadowOpacity: 0.21,
             shadowRadius: 10,
             elevation: 2,
@@ -129,7 +123,7 @@ export const MyReviewScreen = () => {
               {item.item.review}
             </Text>
           </View>
-        </View>
+        </Card>
       </View>
     );
   };
