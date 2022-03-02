@@ -16,7 +16,7 @@ import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { itemList } from "config/mockData";
 import _ from "lodash";
-import CartItem from "src/components/CartItem";
+import {CartItem} from "components";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
