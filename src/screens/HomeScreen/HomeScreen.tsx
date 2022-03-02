@@ -9,6 +9,7 @@ import {
   Image,
   RefreshControl,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { Fontisto } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { categoryList, itemList } from "config/mockData";
@@ -18,6 +19,7 @@ const wait = (timeout: number) => {
 };
 
 export const HomeScreen = () => {
+  const navigation = useNavigation();
   const [refreshing, setRefreshing] = useState(false);
   const [chooseCat, setChooseCat] = useState("Popular");
 
@@ -78,11 +80,16 @@ export const HomeScreen = () => {
   const item = (item: any): JSX.Element => (
     <TouchableOpacity
       style={styles.itemButtonContainer}
+      onPress={() => navigation.navigate("ProductScreen")}
     >
       <View>
         <Image source={item.item.image} style={styles.itemImage} />
         <View style={styles.shoppingIconContainer}>
-          <Fontisto name="shopping-bag" size={(Dimensions.get("window").height * 1.97) / 100} color="white" />
+          <Fontisto
+            name="shopping-bag"
+            size={(Dimensions.get("window").height * 1.97) / 100}
+            color="white"
+          />
         </View>
       </View>
       <View style={styles.itemContentContainer}>
@@ -191,7 +198,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginRight: (Dimensions.get("window").width * 6.66) / 100,
   },
-  itemContentContainer: { 
-    flexDirection: "column" 
+  itemContentContainer: {
+    flexDirection: "column",
   },
 });

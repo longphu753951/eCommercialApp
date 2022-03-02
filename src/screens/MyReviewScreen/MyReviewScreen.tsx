@@ -138,7 +138,7 @@ export const MyReviewScreen = () => {
           style={styles.itemFlatList}
           data={myRating}
           showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item.name}
+          keyExtractor={(item) => item.id}
           renderItem={item}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

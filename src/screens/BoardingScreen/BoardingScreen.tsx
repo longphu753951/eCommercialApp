@@ -5,13 +5,16 @@ import {
   ImageBackground,
   SafeAreaView,
   TouchableOpacity,
+  Dimensions,
+  PixelRatio,
 } from "react-native";
 import { Button } from "react-native-paper";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 import size from "config/size";
 
 export const BoardingScreen = () => {
-
+  console.log(Dimensions.get('window'))
+  //console.log(PixelRatio.getPixelSizeForLayoutSize(844));
   const navigation = useNavigation();
 
   return (
@@ -71,7 +74,7 @@ export const BoardingScreen = () => {
               borderRadius: 4,
               backgroundColor: "#212121",
             }}
-            onPress={() => navigation.navigate('LoginScreen')}
+            onPress={() => navigation.navigate("LoginScreen")}
           >
             <Text
               style={{
