@@ -16,6 +16,7 @@ import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { itemList } from "config/mockData";
 import _ from "lodash";
+import { CartItem, Header } from "components";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -33,36 +34,76 @@ export const FavoriteScreen = () => {
   }, []);
   const item = (item: any): JSX.Element => {
     return (
-      <View style={styles.itemContainer}>
-        <View style={{ flexDirection: "row" }}>
-          <Image style={styles.itemImage} source={item.item.image} />
-          <View style={styles.itemTextContainer}>
+      <CartItem
+        image={item.item.image}
+        content={
+          <View style={{ flexDirection: "column" }}>
             <Text style={styles.nameText}>{item.item.name}</Text>
             <Text style={styles.priceText}>$ {item.item.price}</Text>
           </View>
-        </View>
-        <View
-          style={{
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <TouchableOpacity>
-            <FontAwesomeIcon
-              size={(Dimensions.get("window").height * 2.401) / 100}
-              icon={faCircleXmark}
-              color={'#BDBDBD'}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.shoppingIconContainer}>
-            <Fontisto
-              name="shopping-bag"
-              size={(Dimensions.get("window").height * 1.97) / 100}
-              color="#303030"
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
+        }
+        bottomContent={
+          <View style={{ alignItems: "flex-end" }}>
+            <TouchableOpacity style={styles.shoppingIconContainer}>
+              <Fontisto
+                name="shopping-bag"
+                size={(height * 1.97) / 100}
+                color="#303030"
+              />
+            </TouchableOpacity>
+          </View>
+        }
+      />
+      // <View style={styles.itemContainer}>
+      //   <View style={{ flexDirection: "row" }}>
+      //     <Image style={styles.itemImage} source={item.item.image} />
+      //     <View style={styles.contentItemContainer}>
+      //       <View style={styles.itemTextContainer}>
+      //         <View>
+      //           <Text style={styles.nameText}>{item.item.name}</Text>
+      //           <Text style={styles.priceText}>$ {item.item.price}</Text>
+      //         </View>
+      //         <TouchableOpacity>
+      //           <FontAwesomeIcon
+      //             size={(Dimensions.get("window").height * 2.401) / 100}
+      //             icon={faCircleXmark}
+      //             color={"#BDBDBD"}
+      //           />
+      //         </TouchableOpacity>
+      //       </View>
+      //       <View style={styles.bottomCotainer}>
+      //         <TouchableOpacity style={styles.shoppingIconContainer}>
+      //           <Fontisto
+      //             name="shopping-bag"
+      //             size={(Dimensions.get("window").height * 1.97) / 100}
+      //             color="#303030"
+      //           />
+      //         </TouchableOpacity>
+      //       </View>
+      //     </View>
+      //   </View>
+      //   {/* <View
+      //     style={{
+      //       justifyContent: "space-between",
+      //       alignItems: "center",
+      //     }}
+      //   >
+      //     <TouchableOpacity>
+      //       <FontAwesomeIcon
+      //         size={(Dimensions.get("window").height * 2.401) / 100}
+      //         icon={faCircleXmark}
+      //         color={'#BDBDBD'}
+      //       />
+      //     </TouchableOpacity>
+      //     <TouchableOpacity style={styles.shoppingIconContainer}>
+      //       <Fontisto
+      //         name="shopping-bag"
+      //         size={(Dimensions.get("window").height * 1.97) / 100}
+      //         color="#303030"
+      //       />
+      //     </TouchableOpacity>
+      //   </View> */}
+      // </View>
     );
   };
 
@@ -78,9 +119,7 @@ export const FavoriteScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
-        <View style={{ alignItems: "center" }}>
-          <Text style={styles.titleText}>FAVORITE</Text>
-        </View>
+        <Header title={"FAVORITE"} />
         <FlatList
           showsVerticalScrollIndicator={false}
           style={styles.itemFlatList}
@@ -110,6 +149,7 @@ const styles = StyleSheet.create({
     paddingBottom: (height * 1.47) / 100,
     flexDirection: "row",
     justifyContent: "space-between",
+    width: "100%",
   },
   contentContainer: {
     flex: 1,
@@ -132,7 +172,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   itemTextContainer: {
-    marginLeft: (Dimensions.get("window").width * 5.33) / 100,
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   nameText: {
     fontSize: (Dimensions.get("window").height * 1.724) / 100,
@@ -165,5 +206,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 8,
+  },
+  contentItemContainer: {
+    justifyContent: "space-between",
+    flexDirection: "column",
+    marginLeft: (Dimensions.get("window").width * 5.33) / 100,
+    backgroundColor: "blue",
+  },
+  bottomCotainer: {
+    alignContent: "flex-end",
   },
 });

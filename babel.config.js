@@ -24,6 +24,7 @@ module.exports = function (api) {
             "navigation": "./src/navigation",
             "assets": "./src/assets",
             "config": "./src/config",
+            "components": "./src/components"
           }
         },
       ],

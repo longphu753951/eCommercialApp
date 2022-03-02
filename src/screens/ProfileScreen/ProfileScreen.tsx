@@ -3,30 +3,26 @@ import {
   SafeAreaView,
   Text,
   View,
-  FlatList,
   StyleSheet,
   Dimensions,
   Image,
   RefreshControl,
-  Button,
-  TouchableOpacity,
 } from "react-native";
 import { profileCategoryList } from "config/mockData";
 import { useNavigation } from "@react-navigation/native";
+import { Card } from "components";
 import _ from "lodash";
 import { ScrollView } from "react-native-gesture-handler";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { Header } from "components";
 
 export const ProfileScreen = () => {
   const navigation = useNavigation();
   const renderCategory = (): JSX.Element => {
     const listItem = profileCategoryList.map((item) => {
       return (
-        <TouchableOpacity
-          style={styles.itemContainer}
-          onPress={() => navigation.navigate(item.screen)}
-        >
+        <Card cardStyle={styles.card} isButton={true} onPress={() => navigation.navigate(item.screen)} >
           <View style={styles.categoryTextContainer}>
             <Text style={styles.name}>{item.name}</Text>
             <Text style={styles.email}>{item.title}</Text>
@@ -36,7 +32,7 @@ export const ProfileScreen = () => {
             icon={faAngleRight}
             color={"#909090"}
           />
-        </TouchableOpacity>
+        </Card>
       );
     });
     return listItem;
@@ -45,9 +41,7 @@ export const ProfileScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
-        <View style={{ alignItems: "center" }}>
-          <Text style={styles.titleText}>PROFILE</Text>
-        </View>
+        <Header title ={'PROFILE'}/>
         <ScrollView
           style={{
             width: "100%",
@@ -80,6 +74,15 @@ export const ProfileScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  card: {
+    paddingVertical: (Dimensions.get("window").height * 2.21) / 100,
+    paddingHorizontal: (Dimensions.get("window").height * 2.46) / 100,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginHorizontal: (Dimensions.get("window").width * 5.33) / 100,
+    marginTop: (Dimensions.get("window").height * 1.85) / 100,
+  },
   container: {
     flex: 1,
     backgroundColor: "white",
@@ -117,24 +120,5 @@ const styles = StyleSheet.create({
   email: {
     fontFamily: "NunitoSans-Regular",
     fontSize: (Dimensions.get("window").height * 1.72) / 100,
-  },
-  itemContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: (Dimensions.get("window").height * 2.21) / 100,
-    shadowColor: "#8A959E",
-    shadowOffset: {
-      width: 2,
-      height: 3,
-    },
-    shadowOpacity: 0.21,
-    shadowRadius: 10,
-    elevation: 2,
-    borderRadius: 8,
-    paddingHorizontal: (Dimensions.get("window").height * 2.46) / 100,
-    marginHorizontal: (Dimensions.get("window").width * 5.33) / 100,
-    backgroundColor: "white",
-    marginTop: (Dimensions.get("window").height * 1.85) / 100,
-  },
+  }
 });
