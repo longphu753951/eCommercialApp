@@ -7,6 +7,7 @@ import {
   Dimensions,
   Image,
   RefreshControl,
+  Alert,
 } from "react-native";
 import { profileCategoryList } from "config/mockData";
 import { useNavigation } from "@react-navigation/native";
@@ -45,6 +46,17 @@ export const ProfileScreen = () => {
     return listItem;
   };
 
+  const logOut = () => {
+    Alert.alert("Log out", "Are you sure you want to log out ?", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      { text: "OK", onPress: () => navigation.navigate("LoginScreen") },
+    ]);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
@@ -53,6 +65,7 @@ export const ProfileScreen = () => {
           leftButton={"search1"}
           isBackButton={false}
           rightButton={"logout"}
+          onPressRightButton={() => logOut()}
         />
         <ScrollView
           style={{

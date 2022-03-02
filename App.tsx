@@ -16,7 +16,7 @@ const App = () => {
     if (exitApp === 0) {
       setExitApp(exitApp + 1);
 
-      ToastAndroid.show("Double tap to exit", ToastAndroid.SHORT);
+      ToastAndroid.show("Double tap to exit", ToastAndroid.LONG);
     } else if (exitApp === 1) {
       BackHandler.exitApp();
     }
@@ -29,6 +29,7 @@ const App = () => {
     );
     return () => backHandler.remove();
   });
+  
   if (!loaded) {
     return null;
   }

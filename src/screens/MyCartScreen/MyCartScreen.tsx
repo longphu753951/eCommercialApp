@@ -10,9 +10,9 @@ import {
   RefreshControl,
   Button,
   TextInput,
+  TouchableOpacity,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { myCart } from "config/mockData";
 import _ from "lodash";
 import { CartItem, Header, IncrementButton } from "components";
@@ -84,14 +84,7 @@ export const MyCartScreen = () => {
                 placeholder="Enter your promo code"
                 style={styles.PromoTextInput}
               />
-              <View
-                style={{
-                  position: "absolute",
-                  right: 0,
-                  elevation: 3,
-                  backgroundColor: "green",
-                }}
-              >
+              <View>
                 <TouchableOpacity style={styles.promoButton}>
                   <AntDesign
                     name="right"
@@ -100,6 +93,12 @@ export const MyCartScreen = () => {
                   />
                 </TouchableOpacity>
               </View>
+            </View>
+            <View style={styles.totalPriceContainer}>
+              <Text style={styles.totalText}>Total: </Text>
+              <Text style={[styles.totalText, { color: "#303030" }]}>
+                $ 95.00
+              </Text>
             </View>
             <TouchableOpacity style={styles.checkOutButton}>
               <Text style={styles.addAllText}>CHECK OUT</Text>
@@ -206,15 +205,18 @@ const styles = StyleSheet.create({
     height: (height * 5.41) / 100,
     borderRadius: 10,
     shadowColor: "#000",
+    fontFamily: 'NunitoSans-Regular',
+    fontSize: height * 1.97/100,
     shadowOffset: {
       width: 0,
-      height: 1,
+      height: 2,
     },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.1,
     shadowRadius: 1.41,
 
     elevation: 2,
     paddingLeft: (5.33 * width) / 100,
+    flexWrap: "wrap",
   },
   promoInputContainer: {
     marginBottom: (height * 2.46) / 100,
@@ -228,6 +230,20 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 8,
-    elevation: 3,
+    position: "absolute",
+    elevation: 2,
+    top: 0,
+    right: 0,
+  },
+  totalPriceContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginHorizontal: (5.066 * width) / 100,
+    marginBottom: (2.46 * height) / 100,
+  },
+  totalText: {
+    fontSize: (2.46 * height) / 100,
+    fontFamily: "NunitoSans-Bold",
+    color: "#808080",
   },
 });
