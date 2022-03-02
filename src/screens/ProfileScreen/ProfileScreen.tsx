@@ -17,12 +17,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { Header } from "components";
 
+const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
+
 export const ProfileScreen = () => {
   const navigation = useNavigation();
   const renderCategory = (): JSX.Element => {
     const listItem = profileCategoryList.map((item) => {
       return (
-        <Card cardStyle={styles.card} isButton={true} onPress={() => navigation.navigate(item.screen)} >
+        <Card
+          cardStyle={styles.card}
+          isButton={true}
+          onPress={() => navigation.navigate(item.screen)}
+        >
           <View style={styles.categoryTextContainer}>
             <Text style={styles.name}>{item.name}</Text>
             <Text style={styles.email}>{item.title}</Text>
@@ -41,11 +48,19 @@ export const ProfileScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
-        <Header title ={'PROFILE'}/>
+        <Header
+          title={"PROFILE"}
+          leftButton={"search1"}
+          isBackButton={false}
+          rightButton={"logout"}
+        />
         <ScrollView
           style={{
             width: "100%",
             flexDirection: "column",
+          }}
+          contentContainerStyle={{
+            marginHorizontal: (Dimensions.get("window").width * 5.33) / 100,
           }}
         >
           <View style={styles.profileContainer}>
@@ -80,7 +95,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginHorizontal: (Dimensions.get("window").width * 5.33) / 100,
     marginTop: (Dimensions.get("window").height * 1.85) / 100,
   },
   container: {
@@ -104,7 +118,8 @@ const styles = StyleSheet.create({
   profileContainer: {
     justifyContent: "flex-start",
     flexDirection: "row",
-    marginHorizontal: (Dimensions.get("window").width * 5.33) / 100,
+
+    marginTop: (height * 1.8) / 100,
   },
   profileTextContainer: {
     marginLeft: (Dimensions.get("window").height * 2.46) / 100,
@@ -120,5 +135,5 @@ const styles = StyleSheet.create({
   email: {
     fontFamily: "NunitoSans-Regular",
     fontSize: (Dimensions.get("window").height * 1.72) / 100,
-  }
+  },
 });

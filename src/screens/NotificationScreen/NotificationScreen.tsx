@@ -95,7 +95,11 @@ export const NotificationScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
-        <Header title={"NOTIFICATION"} />
+        <Header
+          isBackButton={false}
+          title={"NOTIFICATION"}
+          leftButton={"search1"}
+        />
         <FlatList
           data={notificationList}
           showsVerticalScrollIndicator={false}
@@ -129,7 +133,6 @@ const styles = StyleSheet.create({
   },
   itemFlatList: {
     flex: 1,
-    marginTop: (Dimensions.get("window").height * 1.72) / 100,
   },
   itemImage: {
     width: (Dimensions.get("window").height * 8.62) / 100,

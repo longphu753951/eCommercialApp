@@ -54,56 +54,6 @@ export const FavoriteScreen = () => {
           </View>
         }
       />
-      // <View style={styles.itemContainer}>
-      //   <View style={{ flexDirection: "row" }}>
-      //     <Image style={styles.itemImage} source={item.item.image} />
-      //     <View style={styles.contentItemContainer}>
-      //       <View style={styles.itemTextContainer}>
-      //         <View>
-      //           <Text style={styles.nameText}>{item.item.name}</Text>
-      //           <Text style={styles.priceText}>$ {item.item.price}</Text>
-      //         </View>
-      //         <TouchableOpacity>
-      //           <FontAwesomeIcon
-      //             size={(Dimensions.get("window").height * 2.401) / 100}
-      //             icon={faCircleXmark}
-      //             color={"#BDBDBD"}
-      //           />
-      //         </TouchableOpacity>
-      //       </View>
-      //       <View style={styles.bottomCotainer}>
-      //         <TouchableOpacity style={styles.shoppingIconContainer}>
-      //           <Fontisto
-      //             name="shopping-bag"
-      //             size={(Dimensions.get("window").height * 1.97) / 100}
-      //             color="#303030"
-      //           />
-      //         </TouchableOpacity>
-      //       </View>
-      //     </View>
-      //   </View>
-      //   {/* <View
-      //     style={{
-      //       justifyContent: "space-between",
-      //       alignItems: "center",
-      //     }}
-      //   >
-      //     <TouchableOpacity>
-      //       <FontAwesomeIcon
-      //         size={(Dimensions.get("window").height * 2.401) / 100}
-      //         icon={faCircleXmark}
-      //         color={'#BDBDBD'}
-      //       />
-      //     </TouchableOpacity>
-      //     <TouchableOpacity style={styles.shoppingIconContainer}>
-      //       <Fontisto
-      //         name="shopping-bag"
-      //         size={(Dimensions.get("window").height * 1.97) / 100}
-      //         color="#303030"
-      //       />
-      //     </TouchableOpacity>
-      //   </View> */}
-      // </View>
     );
   };
 
@@ -119,21 +69,30 @@ export const FavoriteScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
-        <Header title={"FAVORITE"} />
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          style={styles.itemFlatList}
-          data={itemList}
-          ItemSeparatorComponent={ItemDivider}
-          keyExtractor={(item) => item.name}
-          renderItem={item}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
+        <Header
+          title={"FAVORITE"}
+          leftButton={"search1"}
+          isBackButton={false}
+          rightButton={"shoppingcart"}
         />
-        <TouchableOpacity style={styles.addAllButton}>
-          <Text style={styles.addAllText}>Add all to my cart</Text>
-        </TouchableOpacity>
+        <View
+          style={styles.bodyContainer}
+        >
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            style={styles.itemFlatList}
+            data={itemList}
+            ItemSeparatorComponent={ItemDivider}
+            keyExtractor={(item) => item.name}
+            renderItem={item}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          />
+          <TouchableOpacity style={styles.addAllButton}>
+            <Text style={styles.addAllText}>Add all to my cart</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -155,12 +114,17 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginHorizontal: (width * 5.33) / 100,
+  },
+  bodyContainer: {
+    paddingHorizontal: (Dimensions.get("window").width * 5.33) / 100,
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    width: "100%",
   },
   itemFlatList: {
     flex: 1,
     width: "100%",
-    marginTop: (height * 1.72) / 100,
   },
   titleText: {
     fontSize: (width * 4.8) / 100,

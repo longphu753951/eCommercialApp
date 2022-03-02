@@ -120,27 +120,36 @@ export const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
-        <Header/>
-        <FlatList
-          style={styles.categoryContainer}
-          data={categoryList}
-          showsHorizontalScrollIndicator={false}
-          renderItem={categoryItem}
-          keyExtractor={(category) => category.name}
-          horizontal={true}
+        <Header
+          leftButton={"search1"}
+          isBackButton={false}
+          rightButton={"shoppingcart"}
         />
-        <FlatList
-          numColumns={2}
-          showsVerticalScrollIndicator={false}
-          data={itemList}
-          style={styles.itemContainer}
-          columnWrapperStyle={{ justifyContent: "space-between" }}
-          renderItem={item}
-          keyExtractor={(item) => item.name}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        />
+
+        <View
+          style={styles.bodyContainer}
+        >
+          <FlatList
+            style={styles.categoryContainer}
+            data={categoryList}
+            showsHorizontalScrollIndicator={false}
+            renderItem={categoryItem}
+            keyExtractor={(category) => category.name}
+            horizontal={true}
+          />
+          <FlatList
+            numColumns={2}
+            showsVerticalScrollIndicator={false}
+            data={itemList}
+            style={styles.itemContainer}
+            columnWrapperStyle={{ justifyContent: "space-between" }}
+            renderItem={item}
+            keyExtractor={(item) => item.name}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -155,7 +164,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginHorizontal: (Dimensions.get("window").width * 5.33) / 100,
   },
   categoryContainer: {
     flexGrow: 0,
@@ -200,5 +208,12 @@ const styles = StyleSheet.create({
   },
   itemContentContainer: {
     flexDirection: "column",
+  },
+  bodyContainer: {
+    paddingHorizontal: (Dimensions.get("window").width * 5.33) / 100,
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    width: "100%",
   },
 });
