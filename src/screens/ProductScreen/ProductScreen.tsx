@@ -209,7 +209,7 @@ export const ProductScreen = () => {
           <Text style={styles.itemName}>{product.name}</Text>
           <View style={styles.priceContainer}>
             <Text style={styles.priceText}>$ {product.price}</Text>
-            <IncrementButton onChangeValue ={(child: number) => {
+            <IncrementButton defaultCount={1} onChangeValue ={(child: number) => {
               console.log(child)
             }}/>
           </View>

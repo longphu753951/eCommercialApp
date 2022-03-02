@@ -56,7 +56,7 @@ const Header: React.FC<Props> = (props: Props) => {
 
   const RightButton: React.FC = () => {
     return (
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => onPressRightButton()}>
         <AntDesign
           name={rightButton}
           size={(height * 2.95) / 100}

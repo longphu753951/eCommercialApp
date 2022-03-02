@@ -124,6 +124,9 @@ export const HomeScreen = () => {
           leftButton={"search1"}
           isBackButton={false}
           rightButton={"shoppingcart"}
+          onPressRightButton = {() => {
+            navigation.navigate('MyCartScreen')
+          }}
         />
 
         <View
