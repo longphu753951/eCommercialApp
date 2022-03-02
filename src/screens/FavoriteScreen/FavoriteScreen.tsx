@@ -11,8 +11,7 @@ import {
   Button,
 } from "react-native";
 import { Fontisto } from "@expo/vector-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
+import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { itemList } from "config/mockData";
 import _ from "lodash";
@@ -25,6 +24,7 @@ const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 export const FavoriteScreen = () => {
+  const navigation = useNavigation();
   const [refreshing, setRefreshing] = useState(false);
   const [chooseCat, setChooseCat] = useState("Popular");
 
@@ -74,6 +74,9 @@ export const FavoriteScreen = () => {
           leftButton={"search1"}
           isBackButton={false}
           rightButton={"shoppingcart"}
+          onPressRightButton = {() => {
+            navigation.navigate('MyCartScreen')
+          }}
         />
         <View
           style={styles.bodyContainer}

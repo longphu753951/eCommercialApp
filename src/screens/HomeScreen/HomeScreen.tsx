@@ -8,10 +8,10 @@ import {
   Dimensions,
   Image,
   RefreshControl,
+  TouchableOpacity
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Fontisto } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { categoryList, itemList } from "config/mockData";
 import { Header } from "components";
 const wait = (timeout: number) => {
@@ -84,13 +84,13 @@ export const HomeScreen = () => {
     >
       <View>
         <Image source={item.item.image} style={styles.itemImage} />
-        <View style={styles.shoppingIconContainer}>
+        <TouchableOpacity style={styles.shoppingIconContainer}>
           <Fontisto
             name="shopping-bag"
             size={(Dimensions.get("window").height * 1.97) / 100}
             color="white"
           />
-        </View>
+        </TouchableOpacity>
       </View>
       <View style={styles.itemContentContainer}>
         <Text
