@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { notificationList } from "config/mockData";
 import _ from "lodash";
+import { Header } from "components";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -72,7 +73,7 @@ export const NotificationScreen = () => {
               paddingBottom: 10,
               fontFamily: "NunitoSans-ExtraBold",
               fontSize: (Dimensions.get("window").height * 1.724) / 100,
-              color: item.item.status === 'New' ? '#27AE60': '#EB5757'
+              color: item.item.status === "New" ? "#27AE60" : "#EB5757",
             }}
           >
             {item.item.status}
@@ -94,9 +95,7 @@ export const NotificationScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
-        <View style={{ alignItems: "center" }}>
-          <Text style={styles.titleText}>NOTIFICATION</Text>
-        </View>
+        <Header title={"NOTIFICATION"} />
         <FlatList
           data={notificationList}
           showsVerticalScrollIndicator={false}

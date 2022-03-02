@@ -16,7 +16,7 @@ import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { itemList } from "config/mockData";
 import _ from "lodash";
-import {CartItem} from "components";
+import { CartItem, Header } from "components";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -43,7 +43,7 @@ export const FavoriteScreen = () => {
           </View>
         }
         bottomContent={
-          <View style ={{alignItems: 'flex-end'}}>
+          <View style={{ alignItems: "flex-end" }}>
             <TouchableOpacity style={styles.shoppingIconContainer}>
               <Fontisto
                 name="shopping-bag"
@@ -119,9 +119,7 @@ export const FavoriteScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
-        <View style={{ alignItems: "center" }}>
-          <Text style={styles.titleText}>FAVORITE</Text>
-        </View>
+        <Header title={"FAVORITE"} />
         <FlatList
           showsVerticalScrollIndicator={false}
           style={styles.itemFlatList}
