@@ -187,7 +187,7 @@ export const cardStyle = {
 export const myRating = [
   {
     id: 1,
-    product: 'Coffee Table',
+    product: "Coffee Table",
     image: require("assets/images/demo-item/table.png"),
     price: "50.00",
     rating: 5,
@@ -197,7 +197,7 @@ export const myRating = [
   },
   {
     id: 2,
-    product: 'Coffee Table',
+    product: "Coffee Table",
     image: require("assets/images/demo-item/table.png"),
     price: "50.00",
     rating: 4.5,
@@ -207,7 +207,7 @@ export const myRating = [
   },
   {
     id: 3,
-    product: 'Coffee Table',
+    product: "Coffee Table",
     image: require("assets/images/demo-item/table.png"),
     price: "50.00",
     rating: 5,
@@ -220,33 +220,34 @@ export const myRating = [
 export const myCart = [
   {
     id: 1,
-    name: 'Coffee Table',
+    name: "Coffee Table",
     image: require("assets/images/demo-item/table.png"),
-    price: '50.00',
+    price: "50.00",
     quantity: 2,
   },
   {
     id: 2,
-    name: 'Umbrella Stand',
+    name: "Umbrella Stand",
     image: require("assets/images/demo-item/umbrella-stand.png"),
-    price: '10.00',
+    price: "10.00",
     quantity: 2,
   },
   {
     id: 3,
-    name: 'Black Simple Lamp',
+    name: "Black Simple Lamp",
     image: require("assets/images/demo-item/lamb.png"),
-    price: '12.00',
+    price: "12.00",
     quantity: 4,
-  }
-]
+  },
+];
 
 export const product = {
   name: "Minimal Stand",
   price: 50,
   rating: 4.5,
   reviews: 50,
-  description: 'Minimal Stand is made of by natural wood. The design that is very simple and minimal. This is truly one of the best furnitures in any family for now. With 3 different colors, you can easily select the best match for your home. ',
+  description:
+    "Minimal Stand is made of by natural wood. The design that is very simple and minimal. This is truly one of the best furnitures in any family for now. With 3 different colors, you can easily select the best match for your home. ",
   colors: ["#ffffff", "#B4916C", "#E4CBAD"],
   images: [
     require("assets/images/demo-item/stand.png"),
@@ -254,3 +255,25 @@ export const product = {
     require("assets/images/demo-item/stand.png"),
   ],
 };
+
+export const checkOutInfo = [
+  {
+    title: "Shipping Address",
+    name: "Trần Long Phú",
+    address: "25 rue Robert Latouche, Nice, 06200, Côte D’azur, France",
+  },
+  {
+    title: "Payment",
+    number: '5412 4242 4242 4242',
+  },
+  {
+    title: 'Delivery method',
+    name: 'Ahamove',
+    type: 'Fast (2-3 days)'
+  },
+  {
+    order: '95.00',
+    delivery: '5.00',
+    total: '100.00'
+  }
+];
