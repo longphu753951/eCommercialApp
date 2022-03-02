@@ -13,11 +13,12 @@ const height = Dimensions.get("window").height;
 
 interface Props {
   onChangeValue(number: number): void;
+  defaultCount: number;
 }
 
 const IncrementButton: React.FC<Props> = (props: Props) => {
-  const {onChangeValue } = props;
-  const [count, setCount] = useState(1);
+  const {onChangeValue, defaultCount } = props;
+  const [count, setCount] = useState(defaultCount);
 
   useEffect(() => {
     onChangeValue(count);
@@ -53,6 +54,11 @@ const IncrementButton: React.FC<Props> = (props: Props) => {
     </View>
   );
 };
+
+IncrementButton.defaultProps = {
+  onChangeValue: () => {},
+  defaultCount: 1,
+}
 
 const styles = StyleSheet.create({
   button: {

@@ -135,7 +135,7 @@ export const ProductScreen = () => {
           <View
             style={{
               position: "absolute",
-              left: responsiveWidth(5.33),
+              left: responsiveWidth(5.33*a),
               top: responsiveHeight(7.26 * a),
               alignItems: "center",
             }}
@@ -209,7 +209,7 @@ export const ProductScreen = () => {
           <Text style={styles.itemName}>{product.name}</Text>
           <View style={styles.priceContainer}>
             <Text style={styles.priceText}>$ {product.price}</Text>
-            <IncrementButton onChangeValue ={(child: number) => {
+            <IncrementButton defaultCount={1} onChangeValue ={(child: number) => {
               console.log(child)
             }}/>
           </View>

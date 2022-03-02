@@ -12,6 +12,7 @@ import {
 import { Rating, AirbnbRating } from "react-native-ratings";
 import { Card } from "components";
 import { myRating } from "config/mockData";
+import { Header } from "components";
 import _ from "lodash";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -131,9 +132,8 @@ export const MyReviewScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
-        <View style={{ alignItems: "center" }}>
-          <Text style={styles.titleText}>MY REVIEWS</Text>
-        </View>
+        <Header title={"MY REVIEWS"} />
+
         <FlatList
           style={styles.itemFlatList}
           data={myRating}
@@ -163,8 +163,6 @@ const styles = StyleSheet.create({
   },
   itemFlatList: {
     flex: 1,
-    marginTop: (Dimensions.get("window").height * 1.72) / 100,
-
     paddingHorizontal: (Dimensions.get("window").width * 5.33) / 100,
   },
   checkbox: {

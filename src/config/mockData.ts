@@ -64,7 +64,7 @@ export const itemList = [
     image: require("assets/images/demo-item/umbrella-stand.png"),
   },
   {
-    name: "Angolo Espresso Velvet Sofa",
+    name: "Angolo Espresso Sofa",
     price: "120.00",
     image: require("assets/images/demo-item/sofa.png"),
   },
@@ -216,6 +216,30 @@ export const myRating = [
       "Nice Furniture with good delivery. The delivery time is very fast. Then products look like exactly the picture in the app. Besides, color is also the same and quality is very good despite very cheap price",
   },
 ];
+
+export const myCart = [
+  {
+    id: 1,
+    name: 'Coffee Table',
+    image: require("assets/images/demo-item/table.png"),
+    price: '50.00',
+    quantity: 2,
+  },
+  {
+    id: 2,
+    name: 'Umbrella Stand',
+    image: require("assets/images/demo-item/umbrella-stand.png"),
+    price: '10.00',
+    quantity: 2,
+  },
+  {
+    id: 3,
+    name: 'Black Simple Lamp',
+    image: require("assets/images/demo-item/lamb.png"),
+    price: '12.00',
+    quantity: 4,
+  }
+]
 
 export const product = {
   name: "Minimal Stand",

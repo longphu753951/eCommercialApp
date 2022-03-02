@@ -17,7 +17,7 @@ import { addressList } from "config/mockData";
 import { Feather } from "@expo/vector-icons";
 import { ifIphoneX } from "react-native-iphone-x-helper";
 import _ from "lodash";
-import { Card } from "components";
+import { Card, Header } from "components";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -95,9 +95,7 @@ export const ShippingScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
-        <View style={{ alignItems: "center" }}>
-          <Text style={styles.titleText}>SHIPPING ADDRESS</Text>
-        </View>
+        <Header title = {'SHIPPING ADDRESS'}/>
         <FlatList
           style={styles.itemFlatList}
           data={addressList}
@@ -153,8 +151,6 @@ const styles = StyleSheet.create({
   },
   itemFlatList: {
     flex: 1,
-    marginTop: (Dimensions.get("window").height * 1.72) / 100,
-
     paddingHorizontal: (Dimensions.get("window").width * 5.33) / 100,
   },
   checkbox: {

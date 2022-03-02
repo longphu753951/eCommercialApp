@@ -20,6 +20,7 @@ import _ from "lodash";
 import { ScrollView } from "react-native-gesture-handler";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { Header } from "components";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -74,7 +75,7 @@ export const PaymentMethodScreen = () => {
               marginRight: (Dimensions.get("window").height * 4.92) / 100,
             }}
           >
-            <View style={{}}>
+            <View>
               <Image
                 resizeMode="contain"
                 source={getImageTypeCard(item.item.number)}
@@ -134,9 +135,7 @@ export const PaymentMethodScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
-        <View style={{ alignItems: "center" }}>
-          <Text style={styles.titleText}>PAYMENT METHOD</Text>
-        </View>
+        <Header title={"SHIPPING ADDRESS"} />
         <FlatList
           style={styles.itemFlatList}
           data={creditCard}
@@ -192,7 +191,6 @@ const styles = StyleSheet.create({
   },
   itemFlatList: {
     flex: 1,
-    marginTop: (Dimensions.get("window").height * 1.72) / 100,
   },
   checkbox: {
     height: (Dimensions.get("window").height * 2.46) / 100,

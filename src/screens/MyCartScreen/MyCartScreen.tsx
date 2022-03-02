@@ -9,14 +9,13 @@ import {
   Image,
   RefreshControl,
   Button,
+  TextInput,
+  TouchableOpacity,
 } from "react-native";
-import { Fontisto } from "@expo/vector-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { itemList } from "config/mockData";
+import { AntDesign } from "@expo/vector-icons";
+import { myCart } from "config/mockData";
 import _ from "lodash";
-import { CartItem, Header } from "components";
+import { CartItem, Header, IncrementButton } from "components";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -24,7 +23,7 @@ const wait = (timeout: number) => {
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
-export const FavoriteScreen = () => {
+export const MyCartScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [chooseCat, setChooseCat] = useState("Popular");
 
@@ -39,18 +38,15 @@ export const FavoriteScreen = () => {
         content={
           <View style={{ flexDirection: "column" }}>
             <Text style={styles.nameText}>{item.item.name}</Text>
-            <Text style={styles.priceText}>$ {item.item.price}</Text>
           </View>
         }
         bottomContent={
-          <View style={{ alignItems: "flex-end" }}>
-            <TouchableOpacity style={styles.shoppingIconContainer}>
-              <Fontisto
-                name="shopping-bag"
-                size={(height * 1.97) / 100}
-                color="#303030"
-              />
-            </TouchableOpacity>
+          <View style={styles.bottomCotainer}>
+            <IncrementButton
+              defaultCount={item.item.quantity}
+              onChangeValue={(value) => console.log(value)}
+            />
+            <Text style={styles.totalPriceItemText}>$ {item.item.price}</Text>
           </View>
         }
       />
@@ -69,19 +65,12 @@ export const FavoriteScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
-        <Header
-          title={"FAVORITE"}
-          leftButton={"search1"}
-          isBackButton={false}
-          rightButton={"shoppingcart"}
-        />
-        <View
-          style={styles.bodyContainer}
-        >
+        <Header title={"MY CART"} />
+        <View style={styles.bodyContainer}>
           <FlatList
             showsVerticalScrollIndicator={false}
             style={styles.itemFlatList}
-            data={itemList}
+            data={myCart}
             ItemSeparatorComponent={ItemDivider}
             keyExtractor={(item) => item.name}
             renderItem={item}
@@ -89,9 +78,32 @@ export const FavoriteScreen = () => {
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
           />
-          <TouchableOpacity style={styles.addAllButton}>
-            <Text style={styles.addAllText}>Add all to my cart</Text>
-          </TouchableOpacity>
+          <View>
+            <View style={styles.promoInputContainer}>
+              <TextInput
+                placeholder="Enter your promo code"
+                style={styles.PromoTextInput}
+              />
+              <View>
+                <TouchableOpacity style={styles.promoButton}>
+                  <AntDesign
+                    name="right"
+                    size={(height * 1.97) / 100}
+                    color="white"
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+            <View style={styles.totalPriceContainer}>
+              <Text style={styles.totalText}>Total: </Text>
+              <Text style={[styles.totalText, { color: "#303030" }]}>
+                $ 95.00
+              </Text>
+            </View>
+            <TouchableOpacity style={styles.checkOutButton}>
+              <Text style={styles.addAllText}>CHECK OUT</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </SafeAreaView>
@@ -149,7 +161,7 @@ const styles = StyleSheet.create({
     marginTop: (Dimensions.get("window").height * 0.615) / 100,
     fontSize: (Dimensions.get("window").height * 1.97) / 100,
   },
-  addAllButton: {
+  checkOutButton: {
     width: (Dimensions.get("window").width * 89.06) / 100,
     height: (Dimensions.get("window").height * 6.15) / 100,
     backgroundColor: "rgba(48, 48, 48, 1)",
@@ -178,6 +190,60 @@ const styles = StyleSheet.create({
     backgroundColor: "blue",
   },
   bottomCotainer: {
-    alignContent: "flex-end",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  totalPriceItemText: {
+    color: "#303030",
+    fontFamily: "NunitoSans-Bold",
+    fontSize: (height * 1.97) / 100,
+  },
+  PromoTextInput: {
+    backgroundColor: "white",
+    width: (width * 89.33) / 100,
+    height: (height * 5.41) / 100,
+    borderRadius: 10,
+    shadowColor: "#000",
+    fontFamily: 'NunitoSans-Regular',
+    fontSize: height * 1.97/100,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 1.41,
+
+    elevation: 2,
+    paddingLeft: (5.33 * width) / 100,
+    flexWrap: "wrap",
+  },
+  promoInputContainer: {
+    marginBottom: (height * 2.46) / 100,
+    flexDirection: "row",
+    width: (Dimensions.get("window").height * 3.69) / 100,
+  },
+  promoButton: {
+    width: (height * 5.41) / 100,
+    height: (height * 5.41) / 100,
+    backgroundColor: "rgba(48, 48, 48, 1)",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 8,
+    position: "absolute",
+    elevation: 2,
+    top: 0,
+    right: 0,
+  },
+  totalPriceContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginHorizontal: (5.066 * width) / 100,
+    marginBottom: (2.46 * height) / 100,
+  },
+  totalText: {
+    fontSize: (2.46 * height) / 100,
+    fontFamily: "NunitoSans-Bold",
+    color: "#808080",
   },
 });
