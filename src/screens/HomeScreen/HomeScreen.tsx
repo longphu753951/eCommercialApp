@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Fontisto } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { categoryList, itemList } from "config/mockData";
+import { Header } from "components";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -119,12 +120,7 @@ export const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
-        <View style={{ alignItems: "center" }}>
-          <Text style={[{ color: "#909090" }, styles.titleText]}>
-            Make home
-          </Text>
-          <Text style={styles.titleText}>BEAUTIFUL</Text>
-        </View>
+        <Header/>
         <FlatList
           style={styles.categoryContainer}
           data={categoryList}
