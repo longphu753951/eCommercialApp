@@ -135,7 +135,7 @@ export const ProductScreen = () => {
           <View
             style={{
               position: "absolute",
-              left: responsiveWidth(5.33),
+              left: responsiveWidth(5.33*a),
               top: responsiveHeight(7.26 * a),
               alignItems: "center",
             }}

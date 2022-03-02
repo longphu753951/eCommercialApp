@@ -47,7 +47,7 @@ const Header: React.FC<Props> = (props: Props) => {
       <TouchableOpacity onPress={() => leftFunction()}>
         <AntDesign
           name={isBackButton ? "left" : leftButton}
-          size={24}
+          size={(height * 2.95) / 100}
           color="#808080"
         />
       </TouchableOpacity>
@@ -57,7 +57,11 @@ const Header: React.FC<Props> = (props: Props) => {
   const RightButton: React.FC = () => {
     return (
       <TouchableOpacity>
-        <AntDesign name={rightButton} size={24} color="#808080" />
+        <AntDesign
+          name={rightButton}
+          size={(height * 2.95) / 100}
+          color="#808080"
+        />
       </TouchableOpacity>
     );
   };
@@ -103,7 +107,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     width: "100%",
-    height: 6 * height /100,
+    height: (8 * height) / 100,
     paddingHorizontal: (Dimensions.get("window").width * 5.33) / 100,
   },
 });
