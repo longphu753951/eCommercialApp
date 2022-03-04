@@ -13,7 +13,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 import { Card } from "components";
-import { checkOutInfo } from "config/mockData";
+import { checkOutInfo, deliveryBrand } from "config/mockData";
 import _ from "lodash";
 import { ScrollView } from "react-native-gesture-handler";
 import { Header } from "components";
@@ -158,13 +158,17 @@ export const CheckOutScreen = () => {
           <CardInfo
             item={checkOutInfo[2]}
             child={
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  paddingVertical: (1.847 * height) / 100,
+                  
+                }}
+              >
                 <View
                   style={{
-                    backgroundColor: "white",
-                    paddingHorizontal: (4.26 * width) / 100,
-                    paddingVertical: (0.86 * height) / 100,
-                    marginVertical: (1.847 * height) / 100,
+                    
                     marginHorizontal: (4.8 * width) / 100,
                     shadowColor: "#000",
                     shadowOffset: {
@@ -181,10 +185,10 @@ export const CheckOutScreen = () => {
                   <Image
                     resizeMode="contain"
                     style={{
-                      width: (8.533 * width) / 100,
+                      width: (20 * width) / 100,
                       height: (2.46 * height) / 100,
                     }}
-                    source={require("assets/images/mastercard.png")}
+                    source={deliveryBrand[checkOutInfo[2].name]}
                   />
                 </View>
                 <Text
@@ -193,7 +197,7 @@ export const CheckOutScreen = () => {
                     fontFamily: "NunitoSans-Regular",
                   }}
                 >
-                  Fast (2-3 days)
+                  {checkOutInfo[2].type}
                 </Text>
               </View>
             }
@@ -306,7 +310,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 8,
-    marginTop: 1.8 * height / 100,
+    marginTop: (1.8 * height) / 100,
   },
   addAllText: {
     fontFamily: "NunitoSans-Regular",

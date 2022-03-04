@@ -268,7 +268,7 @@ export const checkOutInfo = [
   },
   {
     title: 'Delivery method',
-    name: 'Ahamove',
+    name: 'Dhl',
     type: 'Fast (2-3 days)'
   },
   {
@@ -277,3 +277,11 @@ export const checkOutInfo = [
     total: '100.00'
   }
 ];
+
+export const deliveryBrand = {
+  "Ahamove": require('assets/images/delivery-item/ahamove.png'),
+  "Giaohangtietkiem": require('assets/images/delivery-item/giaohangtietkiem.png'),
+  "Lalamove": require('assets/images/delivery-item/lalamove.png'),
+  "Dhl": require('assets/images/delivery-item/dhl.png'),
+  "Fedex": require('assets/images/delivery-item/fedex.png'),
+}
