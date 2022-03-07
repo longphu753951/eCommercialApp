@@ -10,11 +10,12 @@ import {
   RefreshControl,
   Button,
   TextInput,
-  TouchableOpacity,
+  
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { myCart } from "config/mockData";
 import _ from "lodash";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { CartItem, Header, IncrementButton } from "components";
 import { useNavigation } from "@react-navigation/native";
 const wait = (timeout: number) => {
