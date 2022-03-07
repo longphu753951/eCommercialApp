@@ -10,14 +10,16 @@ import {
   RefreshControl,
   Button,
   TextInput,
-  
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { myCart } from "config/mockData";
 import _ from "lodash";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { CartItem, Header, IncrementButton } from "components";
 import { useNavigation } from "@react-navigation/native";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -67,48 +69,61 @@ export const MyCartScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.contentContainer}>
-        <Header title={"MY CART"} />
-        <View style={styles.bodyContainer}>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            style={styles.itemFlatList}
-            data={myCart}
-            ItemSeparatorComponent={ItemDivider}
-            keyExtractor={(item) => item.name}
-            renderItem={item}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-          />
-          <View>
-            <View style={styles.promoInputContainer}>
-              <TextInput
-                placeholder="Enter your promo code"
-                style={styles.PromoTextInput}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
+        <TouchableWithoutFeedback style={{height: '100%'}}>
+          <View style={styles.contentContainer}>
+            <Header title={"MY CART"} />
+            <View style={styles.bodyContainer}>
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                style={styles.itemFlatList}
+                data={myCart}
+                ItemSeparatorComponent={ItemDivider}
+                keyExtractor={(item) => item.name}
+                renderItem={item}
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  />
+                }
               />
               <View>
-                <TouchableOpacity style={styles.promoButton} >
-                  <AntDesign
-                    name="right"
-                    size={(height * 1.97) / 100}
-                    color="white"
+                <View style={styles.promoInputContainer}>
+                  <TextInput
+                    placeholder="Enter your promo code"
+                    style={styles.PromoTextInput}
                   />
+                  <View>
+                    <TouchableOpacity style={styles.promoButton}>
+                      <AntDesign
+                        name="right"
+                        size={(height * 1.97) / 100}
+                        color="white"
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={styles.totalPriceContainer}>
+                  <Text style={styles.totalText}>Total: </Text>
+                  <Text style={[styles.totalText, { color: "#303030" }]}>
+                    $ 95.00
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  style={styles.checkOutButton}
+                  onPress={() => navigation.navigate("CheckOutScreen")}
+                >
+                  <Text style={styles.addAllText}>CHECK OUT</Text>
                 </TouchableOpacity>
               </View>
             </View>
-            <View style={styles.totalPriceContainer}>
-              <Text style={styles.totalText}>Total: </Text>
-              <Text style={[styles.totalText, { color: "#303030" }]}>
-                $ 95.00
-              </Text>
-            </View>
-            <TouchableOpacity style={styles.checkOutButton} onPress ={() => navigation.navigate('CheckOutScreen')}>
-              <Text style={styles.addAllText}>CHECK OUT</Text>
-            </TouchableOpacity>
           </View>
-        </View>
-      </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -208,8 +223,8 @@ const styles = StyleSheet.create({
     height: (height * 5.41) / 100,
     borderRadius: 10,
     shadowColor: "#000",
-    fontFamily: 'NunitoSans-Regular',
-    fontSize: height * 1.97/100,
+    fontFamily: "NunitoSans-Regular",
+    fontSize: (height * 1.97) / 100,
     shadowOffset: {
       width: 0,
       height: 2,
