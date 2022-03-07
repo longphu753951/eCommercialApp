@@ -95,7 +95,8 @@ export const ShippingScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
-        <Header title = {'SHIPPING ADDRESS'}/>
+        <Header title={"SHIPPING ADDRESS"} />
+
         <FlatList
           style={styles.itemFlatList}
           data={addressList}
@@ -151,6 +152,8 @@ const styles = StyleSheet.create({
   },
   itemFlatList: {
     flex: 1,
+    marginTop: (Dimensions.get("window").height * 1.72) / 100,
+
     paddingHorizontal: (Dimensions.get("window").width * 5.33) / 100,
   },
   checkbox: {

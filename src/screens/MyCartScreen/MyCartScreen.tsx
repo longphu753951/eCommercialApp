@@ -16,6 +16,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { myCart } from "config/mockData";
 import _ from "lodash";
 import { CartItem, Header, IncrementButton } from "components";
+import { useNavigation } from "@react-navigation/native";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -26,6 +27,7 @@ const height = Dimensions.get("window").height;
 export const MyCartScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [chooseCat, setChooseCat] = useState("Popular");
+  const navigation = useNavigation();
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -85,7 +87,7 @@ export const MyCartScreen = () => {
                 style={styles.PromoTextInput}
               />
               <View>
-                <TouchableOpacity style={styles.promoButton}>
+                <TouchableOpacity style={styles.promoButton} >
                   <AntDesign
                     name="right"
                     size={(height * 1.97) / 100}
@@ -100,7 +102,7 @@ export const MyCartScreen = () => {
                 $ 95.00
               </Text>
             </View>
-            <TouchableOpacity style={styles.checkOutButton}>
+            <TouchableOpacity style={styles.checkOutButton} onPress ={() => navigation.navigate('CheckOutScreen')}>
               <Text style={styles.addAllText}>CHECK OUT</Text>
             </TouchableOpacity>
           </View>
