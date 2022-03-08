@@ -117,7 +117,6 @@ export const MyCartScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  
   itemContainer: {
     marginTop: (height * 1.47) / 100,
     paddingBottom: (height * 1.47) / 100,
