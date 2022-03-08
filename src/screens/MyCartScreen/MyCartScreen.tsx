@@ -1,25 +1,24 @@
 import React, { useState, useCallback } from "react";
 import {
-  SafeAreaView,
   Text,
   View,
   FlatList,
   StyleSheet,
   Dimensions,
-  Image,
   RefreshControl,
-  Button,
   TextInput,
   TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { myCart } from "config/mockData";
 import _ from "lodash";
-import { CartItem, Header, IncrementButton } from "components";
+import {
+  CartItem,
+  Header,
+  IncrementButton,
+  FCKeyBoardAvoidingView,
+} from "components";
 import { useNavigation } from "@react-navigation/native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -29,7 +28,6 @@ const height = Dimensions.get("window").height;
 
 export const MyCartScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
-  const [chooseCat, setChooseCat] = useState("Popular");
   const navigation = useNavigation();
 
   const onRefresh = useCallback(() => {
@@ -68,71 +66,57 @@ export const MyCartScreen = () => {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 1 }}
-      >
-        <TouchableWithoutFeedback style={{height: '100%'}}>
-          <View style={styles.contentContainer}>
-            <Header title={"MY CART"} />
-            <View style={styles.bodyContainer}>
-              <FlatList
-                showsVerticalScrollIndicator={false}
-                style={styles.itemFlatList}
-                data={myCart}
-                ItemSeparatorComponent={ItemDivider}
-                keyExtractor={(item) => item.name}
-                renderItem={item}
-                refreshControl={
-                  <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                  />
-                }
+    <FCKeyBoardAvoidingView>
+      <View style={styles.contentContainer}>
+        <Header title={"MY CART"} />
+        <View style={styles.bodyContainer}>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            style={styles.itemFlatList}
+            data={myCart}
+            ItemSeparatorComponent={ItemDivider}
+            keyExtractor={(item) => item.name}
+            renderItem={item}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          />
+          <View>
+            <View style={styles.promoInputContainer}>
+              <TextInput
+                placeholder="Enter your promo code"
+                style={styles.PromoTextInput}
               />
               <View>
-                <View style={styles.promoInputContainer}>
-                  <TextInput
-                    placeholder="Enter your promo code"
-                    style={styles.PromoTextInput}
+                <TouchableOpacity style={styles.promoButton}>
+                  <AntDesign
+                    name="right"
+                    size={(height * 1.97) / 100}
+                    color="white"
                   />
-                  <View>
-                    <TouchableOpacity style={styles.promoButton}>
-                      <AntDesign
-                        name="right"
-                        size={(height * 1.97) / 100}
-                        color="white"
-                      />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                <View style={styles.totalPriceContainer}>
-                  <Text style={styles.totalText}>Total: </Text>
-                  <Text style={[styles.totalText, { color: "#303030" }]}>
-                    $ 95.00
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  style={styles.checkOutButton}
-                  onPress={() => navigation.navigate("CheckOutScreen")}
-                >
-                  <Text style={styles.addAllText}>CHECK OUT</Text>
                 </TouchableOpacity>
               </View>
             </View>
+            <View style={styles.totalPriceContainer}>
+              <Text style={styles.totalText}>Total: </Text>
+              <Text style={[styles.totalText, { color: "#303030" }]}>
+                $ 95.00
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={styles.checkOutButton}
+              onPress={() => navigation.navigate("CheckOutScreen")}
+            >
+              <Text style={styles.addAllText}>CHECK OUT</Text>
+            </TouchableOpacity>
           </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+        </View>
+      </View>
+    </FCKeyBoardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-  },
   itemContainer: {
     marginTop: (height * 1.47) / 100,
     paddingBottom: (height * 1.47) / 100,
