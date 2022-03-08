@@ -6,6 +6,7 @@ import {
   Platform,
   SafeAreaView,
   TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -26,7 +27,7 @@ const FCKeyBoardAvoidingView: React.FC<Props> = (props: Props)=> {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
       >
-        <TouchableWithoutFeedback style={{ height: "100%" }}>
+        <TouchableWithoutFeedback style={{ height: "100%" }} onPress={Keyboard.dismiss}>
           {children}
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
