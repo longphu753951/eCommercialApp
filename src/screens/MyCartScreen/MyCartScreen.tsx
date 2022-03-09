@@ -7,6 +7,7 @@ import {
   Dimensions,
   RefreshControl,
   TextInput,
+  Animated,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { myCart } from "config/mockData";
@@ -18,6 +19,7 @@ import {
   FCKeyBoardAvoidingView,
 } from "components";
 import { useNavigation } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
 import { TouchableOpacity } from "react-native-gesture-handler";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -27,6 +29,13 @@ const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 export const MyCartScreen = () => {
+  const scrollY = new Animated.Value(0);
+  
+  const translateY = scrollY.interpolate({
+    inputRange: [0, (21.05 * height) / 100/4],
+    outputRange: [0, (21.05 * height) / 100],
+  });
+
   const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
 
@@ -74,48 +83,73 @@ export const MyCartScreen = () => {
             showsVerticalScrollIndicator={false}
             style={styles.itemFlatList}
             data={myCart}
-            keyboardShouldPersistTaps="handled"
             ItemSeparatorComponent={ItemDivider}
             keyExtractor={(item) => item.name}
             renderItem={item}
+            onScroll={(e) => {
+              if(e.nativeEvent.contentOffset.y <0) return
+              scrollY.setValue(e.nativeEvent.contentOffset.y);
+            }}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
           />
-          <View>
-            <View style={[styles.promoInputContainer]}>
-              <TextInput
-                placeholder="Enter your promo code"
-                style={styles.PromoTextInput}
-              />
-              <View style={styles.promoButtonContainer}>
-                <TouchableOpacity
-                  onPress={() => {
-                    console.log("asd");
-                  }}
-                  style={styles.promoButton}
-                >
-                  <AntDesign
-                    name="right"
-                    size={(height * 1.97) / 100}
-                    color="white"
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View style={styles.totalPriceContainer}>
-              <Text style={styles.totalText}>Total: </Text>
-              <Text style={[styles.totalText, { color: "#303030" }]}>
-                $ 95.00
-              </Text>
-            </View>
-            <TouchableOpacity
-              style={styles.checkOutButton}
-              onPress={() => navigation.navigate("CheckOutScreen")}
+          <Animated.View
+            style={{
+              position: myCart.length <=5 ? "relative" : "absolute",
+              bottom: 0,
+              height: (21.05 * height) / 100,
+              transform: [
+                {translateY: myCart.length <= 5 ? 0 :  translateY}
+              ]
+            }}
+          >
+            <LinearGradient
+              colors={[
+                "#FFFFFF",
+                "rgba(255, 255, 255, 0.9)",
+                "rgba(255, 255, 255, 0.2)",
+              ]}
+              style={{
+                width: width,
+                paddingHorizontal:
+                  (Dimensions.get("window").width * 5.33) / 100,
+              }}
             >
-              <Text style={styles.addAllText}>CHECK OUT</Text>
-            </TouchableOpacity>
-          </View>
+              <View style={[styles.promoInputContainer]}>
+                <TextInput
+                  placeholder="Enter your promo code"
+                  style={styles.PromoTextInput}
+                />
+                <View style={styles.promoButtonContainer}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      console.log("asd");
+                    }}
+                    style={styles.promoButton}
+                  >
+                    <AntDesign
+                      name="right"
+                      size={(height * 1.97) / 100}
+                      color="white"
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={styles.totalPriceContainer}>
+                <Text style={styles.totalText}>Total: </Text>
+                <Text style={[styles.totalText, { color: "#303030" }]}>
+                  $ 95.00
+                </Text>
+              </View>
+              <TouchableOpacity
+                style={styles.checkOutButton}
+                onPress={() => navigation.navigate("CheckOutScreen")}
+              >
+                <Text style={styles.addAllText}>CHECK OUT</Text>
+              </TouchableOpacity>
+            </LinearGradient>
+          </Animated.View>
         </View>
       </View>
     </FCKeyBoardAvoidingView>

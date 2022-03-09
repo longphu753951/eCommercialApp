@@ -9,6 +9,8 @@ interface Props {
   image?: any;
   content?: React.ReactNode;
   bottomContent?: React.ReactNode;
+  isRemoving?: boolean;
+  cartStyle?: any;
 }
 
 const width = Dimensions.get("window").width;
@@ -18,30 +20,40 @@ const seperate = (width * 5.33) / 100;
 const contentWidth = (width * 57.33) / 100;
 
 const CartItem: React.FC<Props> = (props: Props) => {
-  const { content, image, bottomContent } = props;
+  const { content, image, bottomContent, isRemoving, cartStyle } = props;
   return (
-    <View style={styles.itemContainer}>
+    <View style={[styles.itemContainer, cartStyle]}>
       <Image style={styles.itemImage} source={image} />
       <View style={styles.contentItemContainer}>
         <View style={styles.itemTextContainer}>
           {content}
-          <TouchableOpacity
-            style={{
-              width: (height * 3.69) / 100,
-              alignItems: "center",
-            }}
-          >
-            <FontAwesomeIcon
-              size={(height * 2.401) / 100}
-              icon={faCircleXmark}
-              color={"#BDBDBD"}
-            />
-          </TouchableOpacity>
+          {isRemoving && (
+            <TouchableOpacity
+              style={{
+                width: (height * 3.69) / 100,
+                alignItems: "center",
+              }}
+            >
+              <FontAwesomeIcon
+                size={(height * 2.401) / 100}
+                icon={faCircleXmark}
+                color={"#BDBDBD"}
+              />
+            </TouchableOpacity>
+          )}
         </View>
         <View style={styles.bottomCotainer}>{bottomContent}</View>
       </View>
     </View>
   );
+};
+
+CartItem.defaultProps = {
+  image: require(""),
+  content: undefined,
+  bottomContent: undefined,
+  isRemoving: true,
+  cartStyle: {},
 };
 
 const styles = StyleSheet.create({
