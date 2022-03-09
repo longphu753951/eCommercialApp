@@ -213,24 +213,7 @@ export const LoginScreen = () => {
         </View>
       </View>
     </FCKeyBoardAvoidingView>
-    // <SafeAreaView style={styles.containerStyle}>
-    //   <ScrollView
-    //     showsVerticalScrollIndicator={false}
-    //     style = {{flex: 1}}>
-    //     <KeyboardAvoidingView
-    //       behavior={Platform.OS === "ios" ? "padding" : "height"}
-    //       contentContainerStyle={styles.containerStyle}
-    //       style={styles.containerStyle}
-    //     >
-    //       <TouchableWithoutFeedback
-    //         onPress={Keyboard.dismiss}
-    //         accessible={false}
-    //       >
 
-    //       </TouchableWithoutFeedback>
-    //     </KeyboardAvoidingView>
-    //   </ScrollView>
-    // </SafeAreaView>
   );
 };
 

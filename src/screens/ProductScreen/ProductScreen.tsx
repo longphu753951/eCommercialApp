@@ -213,7 +213,7 @@ export const ProductScreen = () => {
               console.log(child)
             }}/>
           </View>
-          <View style={styles.ratingContainer}>
+          <TouchableOpacity onPress={()=> navigation.navigate("RatingScreen")} style={styles.ratingContainer}>
             <Rating
               type="star"
               ratingCount={1}
@@ -223,7 +223,7 @@ export const ProductScreen = () => {
             />
             <Text style={styles.rating}>{product.rating}</Text>
             <Text style={styles.reviews}>({product.reviews} reviews)</Text>
-          </View>
+          </TouchableOpacity>
           <View style={styles.descriptionContainer}>
             <Text style={styles.description}>{product.description}</Text>
           </View>
@@ -293,6 +293,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: (1.412 * height) / 100,
+    justifyContent: 'flex-start'
   },
   rating: {
     fontFamily: "NunitoSans-Bold",

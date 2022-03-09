@@ -74,13 +74,11 @@ export const FavoriteScreen = () => {
           leftButton={"search1"}
           isBackButton={false}
           rightButton={"shoppingcart"}
-          onPressRightButton = {() => {
-            navigation.navigate('MyCartScreen')
+          onPressRightButton={() => {
+            navigation.navigate("MyCartScreen");
           }}
         />
-        <View
-          style={styles.bodyContainer}
-        >
+        <View style={styles.bodyContainer}>
           <FlatList
             showsVerticalScrollIndicator={false}
             style={styles.itemFlatList}

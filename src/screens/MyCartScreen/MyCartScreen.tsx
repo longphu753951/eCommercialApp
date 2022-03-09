@@ -74,6 +74,7 @@ export const MyCartScreen = () => {
             showsVerticalScrollIndicator={false}
             style={styles.itemFlatList}
             data={myCart}
+            keyboardShouldPersistTaps="handled"
             ItemSeparatorComponent={ItemDivider}
             keyExtractor={(item) => item.name}
             renderItem={item}
