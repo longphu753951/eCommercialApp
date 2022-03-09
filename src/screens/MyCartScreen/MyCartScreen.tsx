@@ -7,7 +7,6 @@ import {
   Dimensions,
   RefreshControl,
   TextInput,
-  TouchableOpacity,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { myCart } from "config/mockData";
@@ -19,6 +18,7 @@ import {
   FCKeyBoardAvoidingView,
 } from "components";
 import { useNavigation } from "@react-navigation/native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -74,6 +74,7 @@ export const MyCartScreen = () => {
             showsVerticalScrollIndicator={false}
             style={styles.itemFlatList}
             data={myCart}
+            keyboardShouldPersistTaps="handled"
             ItemSeparatorComponent={ItemDivider}
             keyExtractor={(item) => item.name}
             renderItem={item}
@@ -82,13 +83,18 @@ export const MyCartScreen = () => {
             }
           />
           <View>
-            <View style={styles.promoInputContainer}>
+            <View style={[styles.promoInputContainer]}>
               <TextInput
                 placeholder="Enter your promo code"
                 style={styles.PromoTextInput}
               />
-              <View>
-                <TouchableOpacity style={styles.promoButton}>
+              <View style={styles.promoButtonContainer}>
+                <TouchableOpacity
+                  onPress={() => {
+                    console.log("asd");
+                  }}
+                  style={styles.promoButton}
+                >
                   <AntDesign
                     name="right"
                     size={(height * 1.97) / 100}
@@ -223,7 +229,6 @@ const styles = StyleSheet.create({
   promoInputContainer: {
     marginBottom: (height * 2.46) / 100,
     flexDirection: "row",
-    width: (Dimensions.get("window").height * 3.69) / 100,
   },
   promoButton: {
     width: (height * 5.41) / 100,
@@ -232,10 +237,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 8,
+  },
+  promoButtonContainer: {
     position: "absolute",
-    elevation: 2,
-    top: 0,
     right: 0,
+    top: 0,
+    elevation: 2,
   },
   totalPriceContainer: {
     flexDirection: "row",

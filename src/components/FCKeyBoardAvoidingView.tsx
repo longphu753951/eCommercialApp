@@ -5,9 +5,10 @@ import {
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
-  TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
@@ -19,15 +20,19 @@ const defaultProps = {
   children: undefined,
 };
 
-const FCKeyBoardAvoidingView: React.FC<Props> = (props: Props)=> {
-    const {children} = props;
+const FCKeyBoardAvoidingView: React.FC<Props> = (props: Props) => {
+  const { children } = props;
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
       >
-        <TouchableWithoutFeedback style={{ height: "100%" }} onPress={Keyboard.dismiss}>
+        <TouchableWithoutFeedback
+          style={{ height: "100%" }}
+          onPress={Keyboard.dismiss}
+          accessible={false}
+        >
           {children}
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>

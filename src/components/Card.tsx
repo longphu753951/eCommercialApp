@@ -23,7 +23,7 @@ const defaultProps = {
 
 const Card: React.FC<Props> = (props: Props) => {
   const { isButton, cardStyle, children, onPress } = props;
-  const style =  [cardStyle, styles.cardContainer] ;
+  const style = [cardStyle, styles.cardContainer];
   if (isButton) {
     return (
       <TouchableOpacity onPress={onPress} style={style}>
@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
     elevation: 2,
     borderRadius: 8,
     backgroundColor: "white",
-    
   },
 });
 

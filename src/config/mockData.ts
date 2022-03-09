@@ -239,6 +239,20 @@ export const myCart = [
     price: "12.00",
     quantity: 4,
   },
+  {
+    id: 4,
+    name: "Black Simple Lamp",
+    image: require("assets/images/demo-item/lamb.png"),
+    price: "12.00",
+    quantity: 4,
+  },
+  {
+    id: 36,
+    name: "Black Simple Lamp",
+    image: require("assets/images/demo-item/lamb.png"),
+    price: "12.00",
+    quantity: 4,
+  },
 ];
 
 export const product = {
