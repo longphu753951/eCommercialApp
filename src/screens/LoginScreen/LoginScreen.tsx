@@ -4,18 +4,18 @@ import {
   View,
   SafeAreaView,
   Image,
-  TouchableOpacity,
   KeyboardAvoidingView,
   StyleSheet,
   Keyboard,
   TouchableWithoutFeedback,
   Platform,
+  Dimensions,
 } from "react-native";
 import { TextInput } from "react-native-paper";
 import size from "config/size";
 import { useNavigation } from "@react-navigation/native";
 import { FCKeyBoardAvoidingView } from "components";
-import { ScrollView } from "react-native-gesture-handler";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 export const LoginScreen = () => {
   const navigation = useNavigation();
@@ -95,7 +95,7 @@ export const LoginScreen = () => {
           <View style={{ alignItems: "center", flexDirection: "column" }}>
             <TouchableOpacity
               style={{
-                width: "100%",
+                width: (Dimensions.get("window").width * 89.06) / 100,
                 alignSelf: "center",
                 justifyContent: "center",
                 marginTop: size.s50,
@@ -119,7 +119,7 @@ export const LoginScreen = () => {
             </TouchableOpacity>
             <TouchableOpacity
               style={{
-                width: "100%",
+                width: (Dimensions.get("window").width * 89.06) / 100,
                 alignSelf: "center",
                 justifyContent: "center",
                 marginTop: size.s20,
@@ -213,7 +213,6 @@ export const LoginScreen = () => {
         </View>
       </View>
     </FCKeyBoardAvoidingView>
-
   );
 };
 
