@@ -42,7 +42,7 @@ export const RatingScreen = () => {
             width: (4.92 * height) / 100,
             height: (4.92 * height) / 100,
             position: "absolute",
-            top: -20,
+            top: -(2.46 * height) / 100,
             left: (39.46 * width) / 100,
             borderRadius: 100,
           }}

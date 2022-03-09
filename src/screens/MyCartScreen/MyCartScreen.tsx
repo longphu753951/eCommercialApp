@@ -33,7 +33,7 @@ export const MyCartScreen = () => {
   
   const translateY = scrollY.interpolate({
     inputRange: [0, (21.05 * height) / 100/4],
-    outputRange: [0, (21.05 * height) / 100],
+    outputRange: [0, (21.05 * height) / 90],
   });
 
   const [refreshing, setRefreshing] = useState(false);
@@ -86,6 +86,7 @@ export const MyCartScreen = () => {
             ItemSeparatorComponent={ItemDivider}
             keyExtractor={(item) => item.name}
             renderItem={item}
+            bounces = {false}
             onScroll={(e) => {
               if(e.nativeEvent.contentOffset.y <0) return
               scrollY.setValue(e.nativeEvent.contentOffset.y);
