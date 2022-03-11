@@ -100,7 +100,7 @@ export const ProductScreen = () => {
           <View
             style={{
               width: (Dimensions.get("window").width * 86.13) / 100,
-              height: (Dimensions.get("window").height * 56.03) / 100,
+              height: (Dimensions.get("window").height * 54.03) / 100,
               borderBottomLeftRadius: 50,
               overflow: "hidden",
             }}

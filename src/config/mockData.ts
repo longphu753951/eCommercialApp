@@ -299,3 +299,38 @@ export const deliveryBrand = {
   "Dhl": require('assets/images/delivery-item/dhl.png'),
   "Fedex": require('assets/images/delivery-item/fedex.png'),
 }
+
+export const rating = {
+  product: {
+    name: "Coffee Table",
+    image: require("assets/images/demo-item/table.png"),
+    rating: 4.5,
+    review: 10,
+  },
+  reviews: [
+    {
+      id: 1,
+      name: 'Tran Long Phu',
+      image: require("assets/images/profile-image.png"),
+      rating: 4,
+      date: '20/03/2020',
+      reviewDetail: 'Nice Furniture with good delivery. The delivery time is very fast. Then products look like exactly the picture in the app. Besides, color is also the same and quality is very good despite very cheap price'
+    },
+    {
+      id: 2,
+      name: 'Tran Long Phu',
+      image: require("assets/images/profile-image.png"),
+      rating: 4,
+      date: '20/03/2020',
+      reviewDetail: 'Nice Furniture with good delivery. The delivery time is very fast. Then products look like exactly the picture in the app. Besides, color is also the same and quality is very good despite very cheap price'
+    },
+    {
+      id: 3,
+      name: 'Tran Long Phu',
+      image: require("assets/images/profile-image.png"),
+      rating: 4,
+      date: '20/03/2020',
+      reviewDetail: 'Nice Furniture with good delivery. The delivery time is very fast. Then products look like exactly the picture in the app. Besides, color is also the same and quality is very good despite very cheap price'
+    },
+  ]
+}

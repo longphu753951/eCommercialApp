@@ -12,8 +12,10 @@ import { MyReviewScreen } from "screens/MyReviewScreen/MyReviewScreen";
 import { ProductScreen } from "screens/ProductScreen/ProductScreen";
 import { MyCartScreen } from "screens/MyCartScreen/MyCartScreen";
 import { CheckOutScreen } from "screens/CheckOutScreen/CheckOutScreen";
+import { RatingScreen } from "screens/RatingScreen/RatingScreen";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Dimensions } from "react-native";
+
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -81,6 +83,13 @@ export const allScreens = (Stack: any) => {
       <Stack.Screen
         name="CheckOutScreen"
         component={CheckOutScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="RatingScreen"
+        component={RatingScreen}
         options={{
           headerShown: false,
         }}
