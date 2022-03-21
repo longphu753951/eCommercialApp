@@ -8,8 +8,9 @@ import {
   Dimensions,
   Image,
   RefreshControl,
+  TouchableOpacity
 } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import {  } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { Fontisto } from "@expo/vector-icons";
 import { categoryList, itemList } from "config/mockData";
@@ -54,6 +55,7 @@ export const HomeScreen = () => {
             style={{
               height: (Dimensions.get("window").height * 3.44) / 100,
               tintColor: category.item.name === chooseCat ? "white" : "#909090",
+              width: (Dimensions.get("window").height * 3.44) / 100,
             }}
             source={
               category.item.name === chooseCat
