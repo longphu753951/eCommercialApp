@@ -10,6 +10,8 @@
       "assets/*": ["./src/assets/*"],
       "config/*": ["./src/config/*"],
       "components/*": ["./src/components/*"],
+      "reducers/*": ["./src/reducers/*"],
+      "store/*": ["./src/store/*"],
     }
   }
 }
