@@ -1,13 +1,17 @@
-import React, {useEffect, useState} from 'react';
-import {Platform, BackHandler, ToastAndroid} from 'react-native';
-import Navigation from 'navigation/Navigations';
-import {useFonts} from 'expo-font';
-import _ from 'lodash';
-import font from 'config/font';
+import React, { useEffect, useState } from "react";
+import { Platform, BackHandler, ToastAndroid } from "react-native";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/es/integration/react";
+import Navigation from "navigation/Navigations";
+import { useFonts } from "expo-font";
+import _ from "lodash";
+import font from "config/font";
+import configureStore from "store";
 
 const App = () => {
   const [loaded] = useFonts(font);
   const [exitApp, setExitApp] = useState(0);
+  const { persistor, store } = configureStore();
   const backAction = () => {
     setTimeout(() => {
       setExitApp(0);
@@ -24,16 +28,22 @@ const App = () => {
   };
   useEffect(() => {
     const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction,
+      "hardwareBackPress",
+      backAction
     );
     return () => backHandler.remove();
   });
-  
+
   if (!loaded) {
     return null;
   }
-  return <Navigation/>;
+  return (
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <Navigation />
+      </PersistGate>
+    </Provider>
+  );
 };
 
 export default App;
