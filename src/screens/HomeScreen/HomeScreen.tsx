@@ -14,6 +14,7 @@ import {  } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { Fontisto } from "@expo/vector-icons";
 import { categoryList, itemList } from "config/mockData";
+import useRefreshing from "./HomeFunction";
 import { Header } from "components";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -21,21 +22,23 @@ const wait = (timeout: number) => {
 
 export const HomeScreen = () => {
   const navigation = useNavigation();
-  const [refreshing, setRefreshing] = useState(false);
+  
   const [chooseCat, setChooseCat] = useState("Popular");
 
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
-  }, []);
-
+  // const onRefresh = useCallback(() => {
+  //   setRefreshing(true);
+  //   wait(2000).then(() => setRefreshing(false));
+  // }, []);
+  const {refreshing, onRefresh} = useRefreshing();
+  console.log(refreshing);
   const categoryItem = (category: any): JSX.Element => {
     return (
       <TouchableOpacity
         onPress={() => {
           setChooseCat(category.item.name);
-          setRefreshing(true);
-          wait(2000).then(() => setRefreshing(false));
+          useRefreshing();
+          // setRefreshing(true);
+          // wait(2000).then(() => setRefreshing(false));
         }}
         style={styles.categoryButtonContainer}
       >
