@@ -3,6 +3,7 @@ import { Platform, BackHandler, ToastAndroid } from "react-native";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/es/integration/react";
 import Navigation from "navigation/Navigations";
+import { StripeProvider } from "@stripe/stripe-react-native";
 import { useFonts } from "expo-font";
 import _ from "lodash";
 import font from "config/font";
@@ -38,11 +39,13 @@ const App = () => {
     return null;
   }
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <Navigation />
-      </PersistGate>
-    </Provider>
+    <StripeProvider publishableKey={"pk_test_51KAS9GEAPiKpbC1N48OEYp3ofa5Ll0aDuPI6Y8waDoh1x6otOE4bljUQa5aJY3i5lt2dH46owJRV3w9R9sbh1O7c00oZ7xp778"}>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <Navigation />
+        </PersistGate>
+      </Provider>
+    </StripeProvider>
   );
 };
 
