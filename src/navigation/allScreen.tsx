@@ -13,6 +13,7 @@ import { ProductScreen } from "screens/ProductScreen/ProductScreen";
 import { MyCartScreen } from "screens/MyCartScreen/MyCartScreen";
 import { CheckOutScreen } from "screens/CheckOutScreen/CheckOutScreen";
 import { RatingScreen } from "screens/RatingScreen/RatingScreen";
+import { MyOrderScreen } from 'screens/MyOrderScreen/MyOrderScreen';
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Dimensions } from "react-native";
 
@@ -76,6 +77,13 @@ export const allScreens = (Stack: any) => {
       <Stack.Screen
         name="MyCartScreen"
         component={MyCartScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen 
+        name = "MyOrderScreen"
+        component={MyOrderScreen}
         options={{
           headerShown: false,
         }}
@@ -148,6 +156,7 @@ const allTabScreens = (Tab: any) => {
 export const tabNavigation = () => {
   return (
     <Tab.Navigator
+      lazy = {true}
       tabBarOptions={{
         showIcon: true,
         showLabel: false,
@@ -162,7 +171,7 @@ export const tabNavigation = () => {
           },
           shadowOpacity: 0.23,
           shadowRadius: 2.62,
-
+          
           elevation: 4,
         },
       }}
