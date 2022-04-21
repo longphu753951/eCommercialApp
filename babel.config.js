@@ -27,6 +27,7 @@ module.exports = function (api) {
             "components": "./src/components",
             "reducers": "./src/reducers",
             "store": "./src/store",
+            "middlewares": "./src/middlewares",
           }
         },
       ],

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   SafeAreaView,
   Text,
@@ -14,28 +14,43 @@ import {  } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { Fontisto } from "@expo/vector-icons";
 import { categoryList, itemList } from "config/mockData";
+import { useSelector, useDispatch } from 'react-redux'
+import { createSelector } from 'reselect'
+import {useRefreshing} from "./HomeFunction";
+import {categoryRoutine} from "reducers/category";
 import { Header } from "components";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
+
+
 export const HomeScreen = () => {
   const navigation = useNavigation();
-  const [refreshing, setRefreshing] = useState(false);
+  const dispatch = useDispatch()
+  const categories = useSelector(state => state.category.listCategories)
+
+  useEffect(() => {
+    dispatch({type: categoryRoutine.TRIGGER});
+    
+  }, [])
+
   const [chooseCat, setChooseCat] = useState("Popular");
 
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
-  }, []);
-
+  // const onRefresh = useCallback(() => {
+  //   setRefreshing(true);
+  //   wait(2000).then(() => setRefreshing(false));
+  // }, []);
+  const {refreshing, onRefresh} = useRefreshing();
+  console.log(refreshing);
   const categoryItem = (category: any): JSX.Element => {
     return (
       <TouchableOpacity
         onPress={() => {
           setChooseCat(category.item.name);
-          setRefreshing(true);
-          wait(2000).then(() => setRefreshing(false));
+          onRefresh();
+          // setRefreshing(true);
+          // wait(2000).then(() => setRefreshing(false));
         }}
         style={styles.categoryButtonContainer}
       >
@@ -59,8 +74,8 @@ export const HomeScreen = () => {
             }}
             source={
               category.item.name === chooseCat
-                ? category.item.solid
-                : category.item.outline
+                ? {uri: category.item.image_solid}
+                : {uri: category.item.image_outline}
             }
           />
         </View>
@@ -136,7 +151,7 @@ export const HomeScreen = () => {
         >
           <FlatList
             style={styles.categoryContainer}
-            data={categoryList}
+            data={categories}
             showsHorizontalScrollIndicator={false}
             renderItem={categoryItem}
             keyExtractor={(category) => category.name}
