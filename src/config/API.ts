@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const API_DOMAIN = 'localhost:8000' //test on localhost
+const API_DOMAIN = 'http://127.0.0.1:8000' //test on localhost
 
 const API = {
   CATEGORY: '/categories/',
@@ -16,3 +16,4 @@ _.forEach(API, (val, index) => {
   
   API.DOMAIN = API_DOMAIN;
   
+export default API;

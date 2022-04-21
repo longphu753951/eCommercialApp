@@ -8,7 +8,7 @@ import { useFonts } from "expo-font";
 import _ from "lodash";
 import font from "config/font";
 import configureStore from "store";
-
+import 'middlewares';
 const App = () => {
   const [loaded] = useFonts(font);
   const [exitApp, setExitApp] = useState(0);

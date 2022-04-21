@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   SafeAreaView,
   Text,
@@ -14,15 +14,27 @@ import {  } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { Fontisto } from "@expo/vector-icons";
 import { categoryList, itemList } from "config/mockData";
-import useRefreshing from "./HomeFunction";
+import { useSelector, useDispatch } from 'react-redux'
+import { createSelector } from 'reselect'
+import {useRefreshing} from "./HomeFunction";
+import {categoryRoutine} from "reducers/category";
 import { Header } from "components";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
+
+
 export const HomeScreen = () => {
   const navigation = useNavigation();
-  
+  const dispatch = useDispatch()
+  const categories = useSelector(state => state.category.listCategories)
+
+  useEffect(() => {
+    dispatch({type: categoryRoutine.TRIGGER});
+    
+  }, [])
+
   const [chooseCat, setChooseCat] = useState("Popular");
 
   // const onRefresh = useCallback(() => {
@@ -36,7 +48,7 @@ export const HomeScreen = () => {
       <TouchableOpacity
         onPress={() => {
           setChooseCat(category.item.name);
-          useRefreshing();
+          onRefresh();
           // setRefreshing(true);
           // wait(2000).then(() => setRefreshing(false));
         }}
@@ -62,8 +74,8 @@ export const HomeScreen = () => {
             }}
             source={
               category.item.name === chooseCat
-                ? category.item.solid
-                : category.item.outline
+                ? {uri: category.item.image_solid}
+                : {uri: category.item.image_outline}
             }
           />
         </View>
@@ -139,7 +151,7 @@ export const HomeScreen = () => {
         >
           <FlatList
             style={styles.categoryContainer}
-            data={categoryList}
+            data={categories}
             showsHorizontalScrollIndicator={false}
             renderItem={categoryItem}
             keyExtractor={(category) => category.name}

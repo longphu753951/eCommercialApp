@@ -30,7 +30,7 @@ export default function configurationStore(initialState = {}) {
       }).concat(sagaMiddleware),
   });
   const persistor = persistStore(store);
-  //sagaMiddleware.run(rootSaga);
+  sagaMiddleware.run(rootSaga);
 
   return { persistor, store };
 }

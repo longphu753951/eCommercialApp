@@ -1,9 +1,10 @@
 import axios from "axios";
 import { createRoutine } from "redux-saga-routines";
 import { createReducer } from "@reduxjs/toolkit";
-import { all, takeLatest, call, put } from "redux-saga/effects";
+import { all, takeEvery, call, put } from "redux-saga/effects";
 import moment from "moment";
 import { category } from "config/types";
+import API from "config/API";
 
 interface CategoryState {
   listCategories: category[];
@@ -21,13 +22,15 @@ export const categoryRoutine = createRoutine("CATEGORY");
 // SAGAS
 
 function* fetchCategorySaga() {
-  const { data } = yield call(axios.postWithoutAuth, API.AGENT_COMPANIES);
+  const data = yield call(axios.postWithoutAuth, API.CATEGORY);
+  yield put({
+    type: categoryRoutine.SUCCESS,
+    payload: data,
+  });
 }
 
-export function* authSaga() {
-  yield all([
-    fetchCategorySaga(),
-  ]);
+export function* categorySaga() {
+  yield all([takeEvery(categoryRoutine.TRIGGER, fetchCategorySaga)]);
 }
 
 // =========================================================
@@ -42,12 +45,9 @@ const INITIAL_STATE: CategoryState = {
 
 export default createReducer(INITIAL_STATE, (builder) => {
   builder
-    .addCase(categoryRoutine.TRIGGER, (state, action) => {
-        state.loading = true;
-    })
     .addCase(categoryRoutine.SUCCESS, (state, action) => {
-      state.loading = false
-      console.log(action);
+      state.loading = false;
+      state.listCategories = action.payload.results;
     })
     .addCase(categoryRoutine.FAILURE, (state, action) => {
       state.loading = false;

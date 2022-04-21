@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
+import { useNavigation } from "@react-navigation/native";
 
-
-export default function useRefreshing() {
+export function useRefreshing() {
   const [refreshing, setRefreshing] = useState(false);
 
   const wait = (timeout: number) => {
