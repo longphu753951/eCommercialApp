@@ -1,9 +1,11 @@
 import _ from 'lodash';
 
-const API_DOMAIN = 'http://127.0.0.1:8000' //test on localhost
+const API_DOMAIN = 'http://192.168.1.23:8000' //test on localhost
 
 const API = {
   CATEGORY: '/categories/',
+  PRODUCT: '/products/',
+  PRODUCT_BY_CATEGORY: `/categories/id/products/`
 };
 
 interface API {

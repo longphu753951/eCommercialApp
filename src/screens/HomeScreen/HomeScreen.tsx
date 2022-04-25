@@ -17,7 +17,7 @@ import { categoryList, itemList } from "config/mockData";
 import { useSelector, useDispatch } from 'react-redux'
 import { createSelector } from 'reselect'
 import {useRefreshing} from "./HomeFunction";
-import {categoryRoutine} from "reducers/category";
+import {categoryRoutine, productRoutine} from "reducers/item";
 import { Header } from "components";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -28,15 +28,17 @@ const wait = (timeout: number) => {
 export const HomeScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch()
-  const categories = useSelector(state => state.category.listCategories)
+  const categories = useSelector(state => state.item.listCategories)
+  const products = useSelector(state => state.item.listProducts)
+
 
   useEffect(() => {
     dispatch({type: categoryRoutine.TRIGGER});
-    
+    dispatch({type: productRoutine.TRIGGER});
   }, [])
 
   const [chooseCat, setChooseCat] = useState("Popular");
-
+  console.log(products)
   // const onRefresh = useCallback(() => {
   //   setRefreshing(true);
   //   wait(2000).then(() => setRefreshing(false));
@@ -100,7 +102,7 @@ export const HomeScreen = () => {
       onPress={() => navigation.navigate("ProductScreen")}
     >
       <View>
-        <Image source={item.item.image} style={styles.itemImage} />
+        <Image source={{uri:item.item.defaultImage}} style={styles.itemImage} />
         <TouchableOpacity style={styles.shoppingIconContainer}>
           <Fontisto
             name="shopping-bag"
@@ -128,7 +130,7 @@ export const HomeScreen = () => {
             marginTop: (Dimensions.get("window").width * 1.13) / 100,
           }}
         >
-          $ {item.item.price}
+          $ {item.item.defaultPrice}
         </Text>
       </View>
     </TouchableOpacity>
@@ -160,7 +162,7 @@ export const HomeScreen = () => {
           <FlatList
             numColumns={2}
             showsVerticalScrollIndicator={false}
-            data={itemList}
+            data={products}
             style={styles.itemContainer}
             columnWrapperStyle={{ justifyContent: "space-between" }}
             renderItem={item}

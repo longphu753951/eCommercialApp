@@ -3,11 +3,11 @@ import { createRoutine } from "redux-saga-routines";
 import { createReducer } from "@reduxjs/toolkit";
 import { all, takeEvery, call, put } from "redux-saga/effects";
 import moment from "moment";
-import { category } from "config/types";
 import API from "config/API";
 
-interface CategoryState {
-  listCategories: category[];
+interface itemState {
+  listCategories: []
+  listProducts: [];
   loading: boolean;
   error: string;
 }
@@ -16,6 +16,8 @@ interface CategoryState {
 // =========================================================
 // TYPES
 export const categoryRoutine = createRoutine("CATEGORY");
+export const productRoutine = createRoutine("PRODUCT");
+export const productByCategoryRoutime = createRoutine("CATEGORY/PRODUCT");
 
 // =========================================================
 // =========================================================
@@ -29,16 +31,39 @@ function* fetchCategorySaga() {
   });
 }
 
-export function* categorySaga() {
-  yield all([takeEvery(categoryRoutine.TRIGGER, fetchCategorySaga)]);
+function* fetchProductSaga() {
+
+  const data = yield call(axios.postWithoutAuth, API.PRODUCT);
+  yield put({
+    type: productRoutine.SUCCESS,
+    payload: data,
+  });
+}
+
+function* fetchProductByCategorySaga(categoryId: any) {
+  const url = API.CATEGORY.replace('id', categoryId)
+  const data = yield call(axios.postWithoutAuth, url);
+  yield put({
+    type: productByCategoryRoutime.SUCCESS,
+    payload: data,
+  });
+}
+
+export function* itemSaga() {
+  yield all([
+    takeEvery(categoryRoutine.TRIGGER, fetchCategorySaga),
+    takeEvery(productByCategoryRoutime.TRIGGER, fetchProductByCategorySaga),
+    takeEvery(productRoutine.TRIGGER, fetchProductSaga)
+  ]);
 }
 
 // =========================================================
 // =========================================================
 // REDUCER
 
-const INITIAL_STATE: CategoryState = {
+const INITIAL_STATE: itemState = {
   listCategories: [],
+  listProducts: [],
   loading: false,
   error: "",
 };
@@ -51,6 +76,13 @@ export default createReducer(INITIAL_STATE, (builder) => {
     })
     .addCase(categoryRoutine.FAILURE, (state, action) => {
       state.loading = false;
-      console.log(action);
-    });
+    })
+    .addCase(productRoutine.SUCCESS, (state, action) => {
+      state.loading = false;
+      state.listProducts = action.payload.results;
+    })
+    .addCase(productByCategoryRoutime.SUCCESS, (state, action) => {
+      state.loading = false;
+      state.listProducts = action.payload.results;
+    })
 });
