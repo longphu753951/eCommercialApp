@@ -13,7 +13,6 @@ import {
 import {  } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { Fontisto } from "@expo/vector-icons";
-import { categoryList, itemList } from "config/mockData";
 import { useSelector, useDispatch } from 'react-redux'
 import { createSelector } from 'reselect'
 import {useRefreshing} from "./HomeFunction";
@@ -35,22 +34,22 @@ export const HomeScreen = () => {
   useEffect(() => {
     dispatch({type: categoryRoutine.TRIGGER});
     dispatch({type: productRoutine.TRIGGER});
+    
   }, [])
 
-  const [chooseCat, setChooseCat] = useState("Popular");
-  console.log(products)
+  const [chooseCat, setChooseCat] = useState(0);
   // const onRefresh = useCallback(() => {
   //   setRefreshing(true);
   //   wait(2000).then(() => setRefreshing(false));
   // }, []);
   const {refreshing, onRefresh} = useRefreshing();
-  console.log(refreshing);
   const categoryItem = (category: any): JSX.Element => {
     return (
       <TouchableOpacity
+      key={category.item.id}
         onPress={() => {
-          setChooseCat(category.item.name);
-          onRefresh();
+          setChooseCat(category.item.id);
+          onRefresh(category.item.id);
           // setRefreshing(true);
           // wait(2000).then(() => setRefreshing(false));
         }}
@@ -61,7 +60,7 @@ export const HomeScreen = () => {
             width: (Dimensions.get("window").height * 5.42) / 100,
             height: (Dimensions.get("window").height * 5.42) / 100,
             backgroundColor:
-              category.item.name === chooseCat ? "#303030" : "#F0F0F0",
+              category.item.id === chooseCat ? "#303030" : "#F0F0F0",
             borderRadius: 12,
             justifyContent: "center",
             alignItems: "center",
@@ -71,11 +70,11 @@ export const HomeScreen = () => {
             resizeMode="contain"
             style={{
               height: (Dimensions.get("window").height * 3.44) / 100,
-              tintColor: category.item.name === chooseCat ? "white" : "#909090",
+              tintColor: category.item.id === chooseCat ? "white" : "#909090",
               width: (Dimensions.get("window").height * 3.44) / 100,
             }}
             source={
-              category.item.name === chooseCat
+              category.item.id === chooseCat
                 ? {uri: category.item.image_solid}
                 : {uri: category.item.image_outline}
             }
@@ -98,11 +97,12 @@ export const HomeScreen = () => {
 
   const item = (item: any): JSX.Element => (
     <TouchableOpacity
+      key={item.item.id}
       style={styles.itemButtonContainer}
       onPress={() => navigation.navigate("ProductScreen")}
     >
       <View>
-        <Image source={{uri:item.item.defaultImage}} style={styles.itemImage} />
+        <Image source={{uri:item.item.productAttribute.productImage[0].image}} style={styles.itemImage} />
         <TouchableOpacity style={styles.shoppingIconContainer}>
           <Fontisto
             name="shopping-bag"
@@ -130,7 +130,7 @@ export const HomeScreen = () => {
             marginTop: (Dimensions.get("window").width * 1.13) / 100,
           }}
         >
-          $ {item.item.defaultPrice}
+          $ {item.item.productAttribute.price}
         </Text>
       </View>
     </TouchableOpacity>
@@ -156,7 +156,7 @@ export const HomeScreen = () => {
             data={categories}
             showsHorizontalScrollIndicator={false}
             renderItem={categoryItem}
-            keyExtractor={(category) => category.name}
+            keyExtractor={(category) => category.id}
             horizontal={true}
           />
           <FlatList
@@ -166,7 +166,7 @@ export const HomeScreen = () => {
             style={styles.itemContainer}
             columnWrapperStyle={{ justifyContent: "space-between" }}
             renderItem={item}
-            keyExtractor={(item) => item.name}
+            keyExtractor={(item) => item.id}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const API_DOMAIN = 'http://192.168.1.23:8000' //test on localhost
+const API_DOMAIN = 'http://192.168.1.13:8000' //test on localhost
 
 const API = {
   CATEGORY: '/categories/',
