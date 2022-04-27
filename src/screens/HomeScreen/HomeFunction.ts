@@ -1,17 +1,16 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import { productByCategoryRoutime } from "reducers/item";
+
 
 export function useRefreshing() {
-  const [refreshing, setRefreshing] = useState(false);
+  const dispatch = useDispatch();
+  const refreshing = useSelector((state) => state.item.loading);
 
-  const wait = (timeout: number) => {
-    return new Promise((resolve) => setTimeout(resolve, timeout));
+  const onRefresh = (id: any) => {
+    dispatch({ type: productByCategoryRoutime.TRIGGER, id: id });
   };
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
-  }, []);
 
   return { refreshing, onRefresh };
 }
