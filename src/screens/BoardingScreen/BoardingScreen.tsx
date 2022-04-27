@@ -13,8 +13,6 @@ import { useNavigation } from "@react-navigation/native";
 import size from "config/size";
 
 export const BoardingScreen = () => {
-  console.log(Dimensions.get('window'))
-  //console.log(PixelRatio.getPixelSizeForLayoutSize(844));
   const navigation = useNavigation();
 
   return (

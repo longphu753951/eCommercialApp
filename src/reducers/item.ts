@@ -6,8 +6,9 @@ import moment from "moment";
 import API from "config/API";
 
 interface itemState {
-  listCategories: [];
+  listCategories: any[];
   listProducts: [];
+  product: any;
   loading: boolean;
   error: string;
 }
@@ -15,9 +16,10 @@ interface itemState {
 // =========================================================
 // =========================================================
 // TYPES
-export const categoryRoutine = createRoutine("CATEGORY", (id: any) => id);
-export const productRoutine = createRoutine("PRODUCT");
+export const categoryRoutine = createRoutine("CATEGORIES", (id: any) => id);
+export const productRoutine = createRoutine("PRODUCTS");
 export const productByCategoryRoutime = createRoutine("CATEGORY/PRODUCT");
+export const productByIdRoutime = createRoutine("PRODUCT", (id: any) => id);
 
 // =========================================================
 // =========================================================
@@ -40,21 +42,23 @@ function* fetchProductSaga() {
 }
 
 function* fetchProductByCategorySaga(action) {
-  const url =
-    action.id === 0
-      ? API.PRODUCT
-      : API.PRODUCT_BY_CATEGORY.replace("id", action.id);
+  const url = API.PRODUCT_BY_CATEGORY.replace("id", action.id);
   const data = yield call(axios.postWithoutAuth, url);
-  
-  action.id === 0
-    ? (yield put({
-        type: productRoutine.SUCCESS,
-        payload: data,
-      }))
-    : (yield put({
-        type: productByCategoryRoutime.SUCCESS,
-        payload: data,
-      }));
+
+  yield put({
+    type: productByCategoryRoutime.SUCCESS,
+    payload: data,
+  });
+}
+
+function* fetchProductByIdSaga(action) {
+  const url = API.PRODUCT_BY_ID.replace("id", action.id);
+  const data = yield call(axios.postWithoutAuth, url);
+
+  yield put({
+    type: productByIdRoutime.SUCCESS,
+    payload: data,
+  });
 }
 
 export function* itemSaga() {
@@ -62,6 +66,7 @@ export function* itemSaga() {
     takeEvery(categoryRoutine.TRIGGER, fetchCategorySaga),
     takeEvery(productByCategoryRoutime.TRIGGER, fetchProductByCategorySaga),
     takeEvery(productRoutine.TRIGGER, fetchProductSaga),
+    takeEvery(productByIdRoutime.TRIGGER, fetchProductByIdSaga),
   ]);
 }
 
@@ -72,6 +77,7 @@ export function* itemSaga() {
 const INITIAL_STATE: itemState = {
   listCategories: [],
   listProducts: [],
+  product: null,
   loading: false,
   error: "",
 };
@@ -105,5 +111,13 @@ export default createReducer(INITIAL_STATE, (builder) => {
     .addCase(productByCategoryRoutime.SUCCESS, (state, action) => {
       state.loading = false;
       state.listProducts = action.payload;
-    });
+    })
+    .addCase(productByIdRoutime.TRIGGER, (state, action) => {
+      state.loading = true;
+      state.product = null;
+    })
+    .addCase(productByIdRoutime.SUCCESS, (state, action) => {
+      state.loading = false;
+      state.product = action.payload;
+    })
 });

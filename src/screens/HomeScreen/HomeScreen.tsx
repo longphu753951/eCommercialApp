@@ -8,45 +8,46 @@ import {
   Dimensions,
   Image,
   RefreshControl,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
-import {  } from "react-native-gesture-handler";
+import {} from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { Fontisto } from "@expo/vector-icons";
-import { useSelector, useDispatch } from 'react-redux'
-import { createSelector } from 'reselect'
-import {useRefreshing} from "./HomeFunction";
-import {categoryRoutine, productRoutine} from "reducers/item";
+import { useSelector, useDispatch } from "react-redux";
+import { createSelector } from "reselect";
+import { useRefreshing } from "./HomeFunction";
+import {
+  categoryRoutine,
+  productByCategoryRoutime,
+  productByIdRoutime,
+  productRoutine,
+} from "reducers/item";
 import { Header } from "components";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-
-
 export const HomeScreen = () => {
   const navigation = useNavigation();
-  const dispatch = useDispatch()
-  const categories = useSelector(state => state.item.listCategories)
-  const products = useSelector(state => state.item.listProducts)
-
+  const dispatch = useDispatch();
+  const categories = useSelector((state) => state.item.listCategories);
+  const products = useSelector((state) => state.item.listProducts);
 
   useEffect(() => {
-    dispatch({type: categoryRoutine.TRIGGER});
-    dispatch({type: productRoutine.TRIGGER});
-    
-  }, [])
+    dispatch({ type: categoryRoutine.TRIGGER });
+    dispatch({ type: productByCategoryRoutime.TRIGGER, id: 0 });
+  }, []);
 
   const [chooseCat, setChooseCat] = useState(0);
   // const onRefresh = useCallback(() => {
   //   setRefreshing(true);
   //   wait(2000).then(() => setRefreshing(false));
   // }, []);
-  const {refreshing, onRefresh} = useRefreshing();
+  const { refreshing, onRefresh } = useRefreshing();
   const categoryItem = (category: any): JSX.Element => {
     return (
       <TouchableOpacity
-      key={category.item.id}
+        key={category.item.id}
         onPress={() => {
           setChooseCat(category.item.id);
           onRefresh(category.item.id);
@@ -75,8 +76,8 @@ export const HomeScreen = () => {
             }}
             source={
               category.item.id === chooseCat
-                ? {uri: category.item.image_solid}
-                : {uri: category.item.image_outline}
+                ? { uri: category.item.image_solid }
+                : { uri: category.item.image_outline }
             }
           />
         </View>
@@ -95,46 +96,54 @@ export const HomeScreen = () => {
     );
   };
 
-  const item = (item: any): JSX.Element => (
-    <TouchableOpacity
-      key={item.item.id}
-      style={styles.itemButtonContainer}
-      onPress={() => navigation.navigate("ProductScreen")}
-    >
-      <View>
-        <Image source={{uri:item.item.productAttribute.productImage[0].image}} style={styles.itemImage} />
-        <TouchableOpacity style={styles.shoppingIconContainer}>
-          <Fontisto
-            name="shopping-bag"
-            size={(Dimensions.get("window").height * 1.97) / 100}
-            color="white"
+  const item = (item: any): JSX.Element => {
+    return (
+      <TouchableOpacity
+        key={item.item.id}
+        style={styles.itemButtonContainer}
+        onPress={async() => {
+          await dispatch({ type: productByIdRoutime.TRIGGER, id: item.item.id });
+          navigation.navigate("ProductScreen")
+        }}
+      >
+        <View>
+          <Image
+            source={{ uri: item.item.productAttribute.productImage[0].image }}
+            style={styles.itemImage}
           />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.itemContentContainer}>
-        <Text
-          style={[
-            {
-              fontFamily: "NunitoSans-Light",
+          <TouchableOpacity style={styles.shoppingIconContainer}>
+            <Fontisto
+              name="shopping-bag"
+              size={(Dimensions.get("window").height * 1.97) / 100}
+              color="white"
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.itemContentContainer}>
+          <Text
+            style={[
+              {
+                fontFamily: "NunitoSans-Light",
+                fontSize: (Dimensions.get("window").height * 1.724) / 100,
+                marginTop: (Dimensions.get("window").width * 2.66) / 100,
+              },
+            ]}
+          >
+            {item.item.name}
+          </Text>
+          <Text
+            style={{
+              fontFamily: "NunitoSans-Bold",
               fontSize: (Dimensions.get("window").height * 1.724) / 100,
-              marginTop: (Dimensions.get("window").width * 2.66) / 100,
-            },
-          ]}
-        >
-          {item.item.name}
-        </Text>
-        <Text
-          style={{
-            fontFamily: "NunitoSans-Bold",
-            fontSize: (Dimensions.get("window").height * 1.724) / 100,
-            marginTop: (Dimensions.get("window").width * 1.13) / 100,
-          }}
-        >
-          $ {item.item.productAttribute.price}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
+              marginTop: (Dimensions.get("window").width * 1.13) / 100,
+            }}
+          >
+            $ {item.item.productAttribute.price}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -143,14 +152,12 @@ export const HomeScreen = () => {
           leftButton={"search1"}
           isBackButton={false}
           rightButton={"shoppingcart"}
-          onPressRightButton = {() => {
-            navigation.navigate('MyCartScreen')
+          onPressRightButton={() => {
+            navigation.navigate("MyCartScreen");
           }}
         />
 
-        <View
-          style={styles.bodyContainer}
-        >
+        <View style={styles.bodyContainer}>
           <FlatList
             style={styles.categoryContainer}
             data={categories}
@@ -168,7 +175,12 @@ export const HomeScreen = () => {
             renderItem={item}
             keyExtractor={(item) => item.id}
             refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={() => {
+                  onRefresh(chooseCat);
+                }}
+              />
             }
           />
         </View>
