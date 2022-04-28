@@ -2,20 +2,15 @@ import React, { Component } from "react";
 import {
   Text,
   View,
-  SafeAreaView,
   Image,
-  KeyboardAvoidingView,
   StyleSheet,
-  Keyboard,
-  TouchableWithoutFeedback,
-  Platform,
   Dimensions,
+  TouchableOpacity,
 } from "react-native";
 import { TextInput } from "react-native-paper";
 import size from "config/size";
 import { useNavigation } from "@react-navigation/native";
 import { FCKeyBoardAvoidingView } from "components";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -31,40 +26,24 @@ export const LoginScreen = () => {
   };
 
   return (
-    <FCKeyBoardAvoidingView>
-      <View style={{ flex: 1 }}>
-        <View style={{ alignItems: "center" }}>
+    <FCKeyBoardAvoidingView style={styles.container}>
+      <View style={styles.contentContainer}>
+        <View style={{ alignItems: "center", width: "100%" }}>
           <Image
-            style={{ width: 84* width/100 }}
+            style={styles.topImage}
             resizeMode={"contain"}
             source={require("assets/images/icon.png")}
           />
         </View>
-        <View style={{ marginLeft: size.h52, marginTop: 40 }}>
-          <Text
-            style={{
-              fontFamily: "Gelasio-SemiBold",
-              fontSize: 27,
-              color: "#606060",
-            }}
-          >
-            Good {timeOfDay()} !
-          </Text>
-          <Text
-            style={{
-              fontFamily: "Gelasio-SemiBold",
-              fontSize: 45,
-              color: "#303030",
-              marginTop: size.h14,
-            }}
-          >
-            Sign In
-          </Text>
+        <View style={styles.welcomeContainer}>
+          <Text style={styles.welcomeText}>Good {timeOfDay()} !</Text>
+          <Text style={styles.signInText}>Sign In</Text>
         </View>
         <View
           style={{
-            marginTop: 15,
-            marginHorizontal: size.h52,
+            marginTop: (1.847 * height) / 100,
+
+            width: "100%",
           }}
         >
           <TextInput
@@ -75,7 +54,7 @@ export const LoginScreen = () => {
             onChangeText={(text) => console.log(text)}
           />
           <TextInput
-            style={{ marginTop: 15 }}
+            style={{ marginTop: (1 * height) / 100 }}
             mode="outlined"
             activeOutlineColor={"#303030"}
             label="Password"
@@ -84,7 +63,12 @@ export const LoginScreen = () => {
             onChangeText={(text) => console.log(text)}
           />
           <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
-            <TouchableOpacity style={{ marginVertical: 10 }}>
+            <TouchableOpacity
+              style={{ marginVertical: 10 }}
+              onPress={() => {
+                console.log("forgot the password");
+              }}
+            >
               <Text
                 style={{
                   fontSize: 18,
@@ -96,86 +80,26 @@ export const LoginScreen = () => {
             </TouchableOpacity>
           </View>
           <View style={{ alignItems: "center", flexDirection: "column" }}>
-            {console.log(size.s20)}
             <TouchableOpacity
-              style={{
-                width: (Dimensions.get("window").width * 89.06) / 100,
-                alignSelf: "center",
-                justifyContent: "center",
-                marginTop: size.s50,
-                height: 45,
-                borderRadius: 4,
-                backgroundColor: "#212121",
-              }}
+              style={[styles.button, styles.signInButton]}
               onPress={() => navigation.navigate("tabNavigation")}
             >
-              <Text
-                style={{
-                  fontFamily: "NunitoSans-Regular",
-                  fontSize: 18,
-                  width: "100%",
-                  textAlign: "center",
-                  color: "#ffffff",
-                }}
-              >
-                Sign in
-              </Text>
+              <Text style={styles.buttonText}>Sign in</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={{
-                width: (Dimensions.get("window").width * 89.06) / 100,
-                alignSelf: "center",
-                justifyContent: "center",
-                marginTop: size.s20,
-                height: 45,
-                borderRadius: 4,
-                backgroundColor: "#767676",
-              }}
+              style={[styles.button, styles.signUpButton]}
               onPress={() => navigation.navigate("tabNavigation")}
             >
-              <Text
-                style={{
-                  fontFamily: "NunitoSans-Regular",
-                  fontSize: 18,
-                  width: "100%",
-                  textAlign: "center",
-                  color: "#ffffff",
-                }}
-              >
-                Sign up
-              </Text>
+              <Text style={styles.buttonText}>Sign up</Text>
             </TouchableOpacity>
-            <Text
-              style={{
-                marginVertical: 25,
-                fontSize: 15,
-              }}
-            >
-              OR
-            </Text>
           </View>
+          <Text style={styles.orText}>OR</Text>
           <View>
             <TouchableOpacity
-              style={styles.signInWithButton}
-              onPress={() => navigation.navigate("tabNavigation")}
-            >
-              <Image
-                resizeMode="contain"
-                style={{ width: 18, height: 18, marginRight: 10 }}
-                source={require("assets/images/google-logo.png")}
-              />
-              <Text
-                style={{
-                  fontFamily: "NunitoSans-Regular",
-                  fontSize: 18,
-                  color: "#212121",
-                }}
-              >
-                Sign in with Google
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.signInWithButton}
+              style={[
+                styles.button,
+                styles.signInWithButton,
+              ]}
               onPress={() => navigation.navigate("tabNavigation")}
             >
               <Image
@@ -195,12 +119,38 @@ export const LoginScreen = () => {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.signInWithButton}
+              style={[
+                styles.button,
+                styles.signInWithButton,
+              ]}
               onPress={() => navigation.navigate("tabNavigation")}
             >
               <Image
                 resizeMode="contain"
-                style={{ width: 23, height: 23, marginRight: 10 }}
+                style={{ width: 18, height: 18, marginRight: 10 }}
+                source={require("assets/images/google-logo.png")}
+              />
+              <Text
+                style={{
+                  fontFamily: "NunitoSans-Regular",
+                  fontSize: 18,
+                  color: "#212121",
+                  textAlignVertical: "center",
+                }}
+              >
+                Sign in with Google
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.button,
+                styles.signInWithButton,
+              ]}
+              onPress={() => navigation.navigate("tabNavigation")}
+            >
+              <Image
+                resizeMode="contain"
+                style={{ width: 18, height: 18, marginRight: 10 }}
                 source={require("assets/images/facebook-logo.png")}
               />
               <Text
@@ -208,6 +158,7 @@ export const LoginScreen = () => {
                   fontFamily: "NunitoSans-Regular",
                   fontSize: 18,
                   color: "#212121",
+                  textAlignVertical: "center",
                 }}
               >
                 Sign in with Facebook
@@ -221,20 +172,64 @@ export const LoginScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  containerStyle: {
-    backgroundColor: "white",
+  container: {
     flex: 1,
+    backgroundColor: "white",
+  },
+  contentContainer: {
+    flex: 1,
+    alignItems: "flex-start",
+    justifyContent: "center",
+    paddingHorizontal: (width * 5.33) / 100,
+  },
+  topImage: {
+    width: (84 * width) / 100,
+  },
+  welcomeContainer: { marginTop: (4.92 * height) / 100 },
+  signInText: {
+    fontFamily: "Gelasio-SemiBold",
+    fontSize: 45,
+    color: "#303030",
+    marginTop: size.h14,
+  },
+  welcomeText: {
+    fontFamily: "Gelasio-SemiBold",
+    fontSize: 27,
+    color: "#606060",
+  },
+  buttonText: {
+    fontFamily: "NunitoSans-Regular",
+    fontSize: (1.97 * height) / 100,
+    width: "100%",
+    textAlign: "center",
+    color: "#ffffff",
+  },
+  button: {
+    width: (width * 89.06) / 100,
+    alignSelf: "center",
+    justifyContent: "center",
+
+    height: (height * 5.54) / 100,
+    borderRadius: 4,
+  },
+  signInButton: {
+    marginTop: (3.45 * height) / 100,
+    backgroundColor: "#212121",
+  },
+  signUpButton: {
+    marginTop: (height * 1.35) / 100,
+    backgroundColor: "#767676",
+  },
+  orText: {
+    marginVertical: (2.8 * height) / 100,
+    fontSize: (1.6 * height) / 100,
+    alignSelf: "center",
   },
   signInWithButton: {
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: size.s15,
-    height: 45,
-    borderRadius: 4,
-    backgroundColor: "#ffffff",
-    borderColor: "#212121",
-    borderWidth: size.s5,
     flexDirection: "row",
-  },
+    alignItems: "center",
+    borderColor: "#212121",
+    borderWidth: 3,
+    marginBottom: (1.35 * height) / 100
+  }
 });
