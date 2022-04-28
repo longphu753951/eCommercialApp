@@ -8,47 +8,49 @@ import {
   Dimensions,
   Image,
   RefreshControl,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
-import {  } from "react-native-gesture-handler";
+import {} from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { Fontisto } from "@expo/vector-icons";
-import { categoryList, itemList } from "config/mockData";
-import { useSelector, useDispatch } from 'react-redux'
-import { createSelector } from 'reselect'
-import {useRefreshing} from "./HomeFunction";
-import {categoryRoutine} from "reducers/category";
+import { useSelector, useDispatch } from "react-redux";
+import { createSelector } from "reselect";
+import { useRefreshing } from "./HomeFunction";
+import {
+  categoryRoutine,
+  productByCategoryRoutime,
+  productByIdRoutime,
+  productRoutine,
+} from "reducers/item";
 import { Header } from "components";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-
-
 export const HomeScreen = () => {
   const navigation = useNavigation();
-  const dispatch = useDispatch()
-  const categories = useSelector(state => state.category.listCategories)
+  const dispatch = useDispatch();
+  const categories = useSelector((state) => state.item.listCategories);
+  const products = useSelector((state) => state.item.listProducts);
 
   useEffect(() => {
-    dispatch({type: categoryRoutine.TRIGGER});
-    
-  }, [])
+    dispatch({ type: categoryRoutine.TRIGGER });
+    dispatch({ type: productByCategoryRoutime.TRIGGER, id: 0 });
+  }, []);
 
-  const [chooseCat, setChooseCat] = useState("Popular");
-
+  const [chooseCat, setChooseCat] = useState(0);
   // const onRefresh = useCallback(() => {
   //   setRefreshing(true);
   //   wait(2000).then(() => setRefreshing(false));
   // }, []);
-  const {refreshing, onRefresh} = useRefreshing();
-  console.log(refreshing);
+  const { refreshing, onRefresh } = useRefreshing();
   const categoryItem = (category: any): JSX.Element => {
     return (
       <TouchableOpacity
+        key={category.item.id}
         onPress={() => {
-          setChooseCat(category.item.name);
-          onRefresh();
+          setChooseCat(category.item.id);
+          onRefresh(category.item.id);
           // setRefreshing(true);
           // wait(2000).then(() => setRefreshing(false));
         }}
@@ -59,7 +61,7 @@ export const HomeScreen = () => {
             width: (Dimensions.get("window").height * 5.42) / 100,
             height: (Dimensions.get("window").height * 5.42) / 100,
             backgroundColor:
-              category.item.name === chooseCat ? "#303030" : "#F0F0F0",
+              category.item.id === chooseCat ? "#303030" : "#F0F0F0",
             borderRadius: 12,
             justifyContent: "center",
             alignItems: "center",
@@ -69,13 +71,13 @@ export const HomeScreen = () => {
             resizeMode="contain"
             style={{
               height: (Dimensions.get("window").height * 3.44) / 100,
-              tintColor: category.item.name === chooseCat ? "white" : "#909090",
+              tintColor: category.item.id === chooseCat ? "white" : "#909090",
               width: (Dimensions.get("window").height * 3.44) / 100,
             }}
             source={
-              category.item.name === chooseCat
-                ? {uri: category.item.image_solid}
-                : {uri: category.item.image_outline}
+              category.item.id === chooseCat
+                ? { uri: category.item.image_solid }
+                : { uri: category.item.image_outline }
             }
           />
         </View>
@@ -94,45 +96,54 @@ export const HomeScreen = () => {
     );
   };
 
-  const item = (item: any): JSX.Element => (
-    <TouchableOpacity
-      style={styles.itemButtonContainer}
-      onPress={() => navigation.navigate("ProductScreen")}
-    >
-      <View>
-        <Image source={item.item.image} style={styles.itemImage} />
-        <TouchableOpacity style={styles.shoppingIconContainer}>
-          <Fontisto
-            name="shopping-bag"
-            size={(Dimensions.get("window").height * 1.97) / 100}
-            color="white"
+  const item = (item: any): JSX.Element => {
+    return (
+      <TouchableOpacity
+        key={item.item.id}
+        style={styles.itemButtonContainer}
+        onPress={async() => {
+          await dispatch({ type: productByIdRoutime.TRIGGER, id: item.item.id });
+          navigation.navigate("ProductScreen")
+        }}
+      >
+        <View>
+          <Image
+            source={{ uri: item.item.productAttribute.productImage[0].image }}
+            style={styles.itemImage}
           />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.itemContentContainer}>
-        <Text
-          style={[
-            {
-              fontFamily: "NunitoSans-Light",
+          <TouchableOpacity style={styles.shoppingIconContainer}>
+            <Fontisto
+              name="shopping-bag"
+              size={(Dimensions.get("window").height * 1.97) / 100}
+              color="white"
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.itemContentContainer}>
+          <Text
+            style={[
+              {
+                fontFamily: "NunitoSans-Light",
+                fontSize: (Dimensions.get("window").height * 1.724) / 100,
+                marginTop: (Dimensions.get("window").width * 2.66) / 100,
+              },
+            ]}
+          >
+            {item.item.name}
+          </Text>
+          <Text
+            style={{
+              fontFamily: "NunitoSans-Bold",
               fontSize: (Dimensions.get("window").height * 1.724) / 100,
-              marginTop: (Dimensions.get("window").width * 2.66) / 100,
-            },
-          ]}
-        >
-          {item.item.name}
-        </Text>
-        <Text
-          style={{
-            fontFamily: "NunitoSans-Bold",
-            fontSize: (Dimensions.get("window").height * 1.724) / 100,
-            marginTop: (Dimensions.get("window").width * 1.13) / 100,
-          }}
-        >
-          $ {item.item.price}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
+              marginTop: (Dimensions.get("window").width * 1.13) / 100,
+            }}
+          >
+            $ {item.item.productAttribute.price}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -141,32 +152,35 @@ export const HomeScreen = () => {
           leftButton={"search1"}
           isBackButton={false}
           rightButton={"shoppingcart"}
-          onPressRightButton = {() => {
-            navigation.navigate('MyCartScreen')
+          onPressRightButton={() => {
+            navigation.navigate("MyCartScreen");
           }}
         />
 
-        <View
-          style={styles.bodyContainer}
-        >
+        <View style={styles.bodyContainer}>
           <FlatList
             style={styles.categoryContainer}
             data={categories}
             showsHorizontalScrollIndicator={false}
             renderItem={categoryItem}
-            keyExtractor={(category) => category.name}
+            keyExtractor={(category) => category.id}
             horizontal={true}
           />
           <FlatList
             numColumns={2}
             showsVerticalScrollIndicator={false}
-            data={itemList}
+            data={products}
             style={styles.itemContainer}
             columnWrapperStyle={{ justifyContent: "space-between" }}
             renderItem={item}
-            keyExtractor={(item) => item.name}
+            keyExtractor={(item) => item.id}
             refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={() => {
+                  onRefresh(chooseCat);
+                }}
+              />
             }
           />
         </View>

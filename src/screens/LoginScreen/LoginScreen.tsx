@@ -17,6 +17,9 @@ import { useNavigation } from "@react-navigation/native";
 import { FCKeyBoardAvoidingView } from "components";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
+const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
+
 export const LoginScreen = () => {
   const navigation = useNavigation();
 
@@ -32,7 +35,7 @@ export const LoginScreen = () => {
       <View style={{ flex: 1 }}>
         <View style={{ alignItems: "center" }}>
           <Image
-            style={{ width: 315 }}
+            style={{ width: 84* width/100 }}
             resizeMode={"contain"}
             source={require("assets/images/icon.png")}
           />
@@ -93,6 +96,7 @@ export const LoginScreen = () => {
             </TouchableOpacity>
           </View>
           <View style={{ alignItems: "center", flexDirection: "column" }}>
+            {console.log(size.s20)}
             <TouchableOpacity
               style={{
                 width: (Dimensions.get("window").width * 89.06) / 100,
