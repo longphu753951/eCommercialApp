@@ -10,19 +10,47 @@ import {
 import { TextInput } from "react-native-paper";
 import size from "config/size";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector, useDispatch } from "react-redux";
+import { useForm, Controller } from "react-hook-form";
 import { FCKeyBoardAvoidingView } from "components";
+import { loginRoutine } from "reducers/auth";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 export const LoginScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const timeOfDay = () => {
     const today = new Date();
     const curHr = today.getHours();
     const time = curHr < 12 ? "morning" : curHr < 18 ? "afternoon" : "evening";
     return time;
+  };
+
+  const {
+    register,
+    setValue,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      telephone: "",
+      password: "",
+    },
+  });
+  const onSubmit = (data) => {
+    console.log(data);
+    dispatch({ type: loginRoutine.TRIGGER, data: data });
+  };
+
+  const onChange = (arg) => {
+    return {
+      value: arg.nativeEvent.text,
+    };
   };
 
   return (
@@ -46,22 +74,44 @@ export const LoginScreen = () => {
             width: "100%",
           }}
         >
-          <TextInput
-            mode="outlined"
-            activeOutlineColor={"#303030"}
-            label="Telephone"
-            keyboardType="phone-pad"
-            onChangeText={(text) => console.log(text)}
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                mode="outlined"
+                activeOutlineColor={"#303030"}
+                label="Telephone"
+                keyboardType="phone-pad"
+                onChangeText={(value) => onChange(value)}
+                onBlur={onBlur}
+                value={value}
+              />
+            )}
+            name="telephone"
+            rules={{ required: true }}
           />
-          <TextInput
-            style={{ marginTop: (1 * height) / 100 }}
-            mode="outlined"
-            activeOutlineColor={"#303030"}
-            label="Password"
-            autoCapitalize={"none"}
-            secureTextEntry={true}
-            onChangeText={(text) => console.log(text)}
+          {errors.telephone && <Text>This is required.</Text>}
+
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={{ marginTop: (1 * height) / 100 }}
+                mode="outlined"
+                activeOutlineColor={"#303030"}
+                label="Password"
+                autoCapitalize={"none"}
+                secureTextEntry={true}
+                onChangeText={(value) => onChange(value)}
+                onBlur={onBlur}
+                value={value}
+              />
+            )}
+            name="password"
+            rules={{ required: true }}
           />
+          {errors.password && <Text>This is required.</Text>}
+
           <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
             <TouchableOpacity
               style={{ marginVertical: 10 }}
@@ -82,7 +132,7 @@ export const LoginScreen = () => {
           <View style={{ alignItems: "center", flexDirection: "column" }}>
             <TouchableOpacity
               style={[styles.button, styles.signInButton]}
-              onPress={() => navigation.navigate("tabNavigation")}
+              onPress={handleSubmit(onSubmit)} 
             >
               <Text style={styles.buttonText}>Sign in</Text>
             </TouchableOpacity>
@@ -96,10 +146,7 @@ export const LoginScreen = () => {
           <Text style={styles.orText}>OR</Text>
           <View>
             <TouchableOpacity
-              style={[
-                styles.button,
-                styles.signInWithButton,
-              ]}
+              style={[styles.button, styles.signInWithButton]}
               onPress={() => navigation.navigate("tabNavigation")}
             >
               <Image
@@ -119,10 +166,7 @@ export const LoginScreen = () => {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[
-                styles.button,
-                styles.signInWithButton,
-              ]}
+              style={[styles.button, styles.signInWithButton]}
               onPress={() => navigation.navigate("tabNavigation")}
             >
               <Image
@@ -142,10 +186,7 @@ export const LoginScreen = () => {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[
-                styles.button,
-                styles.signInWithButton,
-              ]}
+              style={[styles.button, styles.signInWithButton]}
               onPress={() => navigation.navigate("tabNavigation")}
             >
               <Image
@@ -230,6 +271,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderColor: "#212121",
     borderWidth: 3,
-    marginBottom: (1.35 * height) / 100
-  }
+    marginBottom: (1.35 * height) / 100,
+  },
 });

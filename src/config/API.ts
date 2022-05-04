@@ -6,7 +6,8 @@ const API = {
   CATEGORY: '/categories/',
   PRODUCT: '/products/',
   PRODUCT_BY_CATEGORY: '/categories/id/product/',
-  PRODUCT_BY_ID: '/products/id'
+  PRODUCT_BY_ID: '/products/id',
+  LOGIN: '/o/token/'
 };
 
 interface API {
