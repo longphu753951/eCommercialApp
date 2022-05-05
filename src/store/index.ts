@@ -35,6 +35,3 @@ export default function configurationStore(initialState = {}) {
   return { persistor, store };
 }
 
-export function getStore() {
-  return store;
-}

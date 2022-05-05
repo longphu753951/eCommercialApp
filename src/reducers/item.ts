@@ -26,6 +26,7 @@ export const productByIdRoutime = createRoutine("PRODUCT", (id: any) => id);
 // SAGAS
 
 function* fetchCategorySaga(): any {
+  console.log('abwf')
   const data = yield call(axios.getWithoutAuth, API.CATEGORY);
   yield put({
     type: categoryRoutine.SUCCESS,

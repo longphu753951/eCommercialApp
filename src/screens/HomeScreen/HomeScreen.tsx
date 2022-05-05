@@ -51,8 +51,6 @@ export const HomeScreen = () => {
         onPress={() => {
           setChooseCat(category.item.id);
           onRefresh(category.item.id);
-          // setRefreshing(true);
-          // wait(2000).then(() => setRefreshing(false));
         }}
         style={styles.categoryButtonContainer}
       >

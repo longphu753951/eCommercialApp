@@ -43,7 +43,7 @@ export const LoginScreen = () => {
     },
   });
   const onSubmit = (data) => {
-    console.log(data);
+    console.log('on submit')
     dispatch({ type: loginRoutine.TRIGGER, data: data });
   };
 
@@ -70,51 +70,56 @@ export const LoginScreen = () => {
         <View
           style={{
             marginTop: (1.847 * height) / 100,
-
             width: "100%",
           }}
         >
-          <Controller
-            control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                mode="outlined"
-                activeOutlineColor={"#303030"}
-                label="Telephone"
-                keyboardType="phone-pad"
-                onChangeText={(value) => onChange(value)}
-                onBlur={onBlur}
-                value={value}
-              />
+          <View style={{ height: (height * 8.9) / 100 }}>
+            <Controller
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  mode="outlined"
+                  activeOutlineColor={"#303030"}
+                  label="Telephone"
+                  keyboardType="phone-pad"
+                  onChangeText={(value) => onChange(value)}
+                  onBlur={onBlur}
+                  value={value}
+                />
+              )}
+              name="telephone"
+              rules={{ required: true }}
+            />
+            {errors.telephone && (
+              <Text style={styles.errorText}>This is required.</Text>
             )}
-            name="telephone"
-            rules={{ required: true }}
-          />
-          {errors.telephone && <Text>This is required.</Text>}
+          </View>
 
-          <Controller
-            control={control}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                style={{ marginTop: (1 * height) / 100 }}
-                mode="outlined"
-                activeOutlineColor={"#303030"}
-                label="Password"
-                autoCapitalize={"none"}
-                secureTextEntry={true}
-                onChangeText={(value) => onChange(value)}
-                onBlur={onBlur}
-                value={value}
-              />
-            )}
-            name="password"
-            rules={{ required: true }}
-          />
-          {errors.password && <Text>This is required.</Text>}
+          <View style={{ height: (height * 8.9) / 100 }}>
+            <Controller
+              control={control}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={{ marginTop: (1 * height) / 100 }}
+                  mode="outlined"
+                  activeOutlineColor={"#303030"}
+                  label="Password"
+                  autoCapitalize={"none"}
+                  secureTextEntry={true}
+                  onChangeText={(value) => onChange(value)}
+                  onBlur={onBlur}
+                  value={value}
+                />
+              )}
+              name="password"
+              rules={{ required: true }}
+            />
+            {errors.password && <Text style = {styles.errorText}>This is required.</Text>}
+          </View>
 
           <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
             <TouchableOpacity
-              style={{ marginVertical: 10 }}
+              style={{ marginVertical: (height * 1.01) / 100 }}
               onPress={() => {
                 console.log("forgot the password");
               }}
@@ -132,7 +137,7 @@ export const LoginScreen = () => {
           <View style={{ alignItems: "center", flexDirection: "column" }}>
             <TouchableOpacity
               style={[styles.button, styles.signInButton]}
-              onPress={handleSubmit(onSubmit)} 
+              onPress={handleSubmit(onSubmit)}
             >
               <Text style={styles.buttonText}>Sign in</Text>
             </TouchableOpacity>
@@ -254,7 +259,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   signInButton: {
-    marginTop: (3.45 * height) / 100,
     backgroundColor: "#212121",
   },
   signUpButton: {
@@ -273,4 +277,5 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     marginBottom: (1.35 * height) / 100,
   },
+  errorText: { marginTop: (height * 0.6) / 100 },
 });
