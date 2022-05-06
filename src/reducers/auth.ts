@@ -6,17 +6,21 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import API from "config/API";
 import { Alert } from "react-native";
 
+interface authState {
+  loading: boolean;
+  token: any;
+}
 // =========================================================
 // =========================================================
 // TYPES
 export const loginRoutine = createRoutine("AUTH/LOGIN");
+export const getCurrentUser = createRoutine("AUTH/GET_CURRENT_USER");
 
 // =========================================================
 // =========================================================
 // SAGAS
 
 function* loginSaga(action: any): Promise<void> {
-  console.log('xyz')
   try {
     const data = yield call(axios.postWithoutAuth, API.LOGIN, {
       username: "abc",
@@ -27,7 +31,28 @@ function* loginSaga(action: any): Promise<void> {
       telephone: action.data.telephone,
       password: action.data.password,
     });
+    yield put({
+      type: loginRoutine.SUCCESS,
+      payload: data,
+    });
+  } catch (e) {
+    yield put({
+      type: loginRoutine.FAILURE,
+    });
+  }
+}
 
+function* getCurrentUserSaga(action: any): Promise<void> {
+  try {
+    const data = yield call(axios.postWithAuth, API.LOGIN, {
+      username: "abc",
+      client_id: "KZ1xixxuPNWvwdD7HBvOnv3hJLSEPAXGmiXr1sLV",
+      client_secret:
+        "uobWATBOm3H3PhFUe3PMsulizLJyTt5rj7dUkiBXfjqN6J26No7b0zGPk5omuHD9TrSwqeG286Kew2JiUBGQp96Q5VOYG4uQszLtiQ9L5ydRWtF1nBH4KYe5LfZPC9kS",
+      grant_type: "password",
+      telephone: action.data.telephone,
+      password: action.data.password,
+    });
     yield put({
       type: loginRoutine.SUCCESS,
       payload: data,
@@ -40,23 +65,29 @@ function* loginSaga(action: any): Promise<void> {
 }
 
 export function* authSaga() {
-  yield all([
-    takeLatest(loginRoutine.TRIGGER, loginSaga),
-  ]);
+  yield all([takeLatest(loginRoutine.TRIGGER, loginSaga)]);
 }
 
 // =========================================================
 // =========================================================
 // REDUCER
 
-const INITIAL_STATE = {};
+const INITIAL_STATE = {
+  loading: false,
+  token: undefined,
+} as authState;
 
 export default createReducer(INITIAL_STATE, (builder) => {
   builder
+    .addCase(loginRoutine.TRIGGER, (state, action) => {
+      state.loading = true;
+    })
     .addCase(loginRoutine.SUCCESS, (state, action) => {
-      console.log('abc')
+      state.loading = false;
+      state.token = action.payload;
     })
     .addCase(loginRoutine.FAILURE, (state, action) => {
+      state.loading = false;
       Alert.alert("Login failed", "Wrong password or telephone number");
     });
   // .addCase(categoryRoutine.SUCCESS, (state, action) => {

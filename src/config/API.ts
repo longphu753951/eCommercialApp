@@ -7,7 +7,8 @@ const API = {
   PRODUCT: '/products/',
   PRODUCT_BY_CATEGORY: '/categories/id/product/',
   PRODUCT_BY_ID: '/products/id',
-  LOGIN: '/o/token/'
+  LOGIN: '/o/token/',
+  GET_CURRENT_USER: '',
 };
 
 interface API {

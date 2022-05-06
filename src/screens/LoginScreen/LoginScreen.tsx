@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
 import { useForm, Controller } from "react-hook-form";
 import { FCKeyBoardAvoidingView } from "components";
-import { loginRoutine } from "reducers/auth";
+import { getCurrentUser, loginRoutine } from "reducers/auth";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -21,6 +21,8 @@ const height = Dimensions.get("window").height;
 export const LoginScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const loading = useSelector((state) => state.auth.loading);
+  const token = useSelector((state) => state.auth.token);
 
   const timeOfDay = () => {
     const today = new Date();
@@ -42,19 +44,16 @@ export const LoginScreen = () => {
       password: "",
     },
   });
-  const onSubmit = (data) => {
-    console.log('on submit')
-    dispatch({ type: loginRoutine.TRIGGER, data: data });
-  };
-
-  const onChange = (arg) => {
-    return {
-      value: arg.nativeEvent.text,
-    };
+  const onSubmit = async (data) => {
+    console.log("on submit");
+    await dispatch({ type: loginRoutine.TRIGGER, data: data });
+    if(!token){
+      await dispatch({ type: getCurrentUser.TRIGGER });
+    }
   };
 
   return (
-    <FCKeyBoardAvoidingView style={styles.container}>
+    <FCKeyBoardAvoidingView loading={loading} style={styles.container}>
       <View style={styles.contentContainer}>
         <View style={{ alignItems: "center", width: "100%" }}>
           <Image
@@ -114,7 +113,9 @@ export const LoginScreen = () => {
               name="password"
               rules={{ required: true }}
             />
-            {errors.password && <Text style = {styles.errorText}>This is required.</Text>}
+            {errors.password && (
+              <Text style={styles.errorText}>This is required.</Text>
+            )}
           </View>
 
           <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>

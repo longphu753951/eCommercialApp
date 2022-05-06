@@ -1,5 +1,6 @@
 import _ from "lodash";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const postAxios = axios.post;
 const getAxios = axios.get;
@@ -28,6 +29,20 @@ axios.postWithoutAuth = (...params: any) => {
   return new Promise(async (resolve, reject) => {
     try {
       const response = await postAxios(...params);
+      checkAPIResultCode(response, resolve, reject);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+axios.postWithAuth = (...params: any) => {
+  let token = useSelector((state) => state.auth.token )
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await postAxios(...params, {
+        headers: token.access_token
+      });
       checkAPIResultCode(response, resolve, reject);
     } catch (e) {
       reject(e);

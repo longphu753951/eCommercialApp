@@ -1,11 +1,12 @@
 import { all } from "redux-saga/effects";
-import auth, { authSaga, loginSaga } from "reducers/auth";
+import auth, { authSaga } from "reducers/auth";
 import item, { itemSaga } from "reducers/item";
+import { combineReducers } from 'redux';
 
-export default {
+export default combineReducers({
   auth,
   item,
-};
+});
 
 export function* rootSaga() {
   yield all([
