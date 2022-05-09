@@ -1,7 +1,6 @@
 import _ from "lodash";
 import axios from "axios";
-import { useSelector } from "react-redux";
-
+import store from "store";
 const postAxios = axios.post;
 const getAxios = axios.get;
 
@@ -36,14 +35,16 @@ axios.postWithoutAuth = (...params: any) => {
   });
 };
 
-axios.postWithAuth = (...params: any) => {
-  let token = useSelector((state) => state.auth.token )
+axios.getWithAuth = (...params: any) => {
+  let token = store.getState().auth.token.access_token;
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  console.log(axios.defaults.headers)
   return new Promise(async (resolve, reject) => {
     try {
-      const response = await postAxios(...params, {
-        headers: token.access_token
-      });
-      checkAPIResultCode(response, resolve, reject);
+      const response = await axios.get(
+        "http://192.168.1.13:8000/users/current-user"
+      );
+      console.log(response);
     } catch (e) {
       reject(e);
     }

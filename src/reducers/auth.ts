@@ -7,7 +7,7 @@ import API from "config/API";
 import { Alert } from "react-native";
 
 interface authState {
-  loading: boolean;
+  loading: string;
   token: any;
 }
 // =========================================================
@@ -42,30 +42,25 @@ function* loginSaga(action: any): Promise<void> {
   }
 }
 
-function* getCurrentUserSaga(action: any): Promise<void> {
+function* getCurrentUserSaga(): Promise<void> {
   try {
-    const data = yield call(axios.postWithAuth, API.LOGIN, {
-      username: "abc",
-      client_id: "KZ1xixxuPNWvwdD7HBvOnv3hJLSEPAXGmiXr1sLV",
-      client_secret:
-        "uobWATBOm3H3PhFUe3PMsulizLJyTt5rj7dUkiBXfjqN6J26No7b0zGPk5omuHD9TrSwqeG286Kew2JiUBGQp96Q5VOYG4uQszLtiQ9L5ydRWtF1nBH4KYe5LfZPC9kS",
-      grant_type: "password",
-      telephone: action.data.telephone,
-      password: action.data.password,
-    });
+    const data = yield call(axios.getWithAuth, API.GET_CURRENT_USER);
+    console.log(data);
+
     yield put({
-      type: loginRoutine.SUCCESS,
+      type: getCurrentUser.SUCCESS,
       payload: data,
     });
   } catch (e) {
-    yield put({
-      type: loginRoutine.FAILURE,
-    });
+    console.log(e);
   }
 }
 
 export function* authSaga() {
-  yield all([takeLatest(loginRoutine.TRIGGER, loginSaga)]);
+  yield all([
+    takeLatest(loginRoutine.TRIGGER, loginSaga),
+    takeLatest(getCurrentUser.TRIGGER, getCurrentUserSaga),
+  ]);
 }
 
 // =========================================================
@@ -73,57 +68,24 @@ export function* authSaga() {
 // REDUCER
 
 const INITIAL_STATE = {
-  loading: false,
+  loading: "",
   token: undefined,
 } as authState;
 
 export default createReducer(INITIAL_STATE, (builder) => {
   builder
     .addCase(loginRoutine.TRIGGER, (state, action) => {
-      state.loading = true;
+      state.loading = "TRIGGER";
     })
     .addCase(loginRoutine.SUCCESS, (state, action) => {
-      state.loading = false;
+      state.loading = "SUCCESS";
       state.token = action.payload;
     })
     .addCase(loginRoutine.FAILURE, (state, action) => {
-      state.loading = false;
+      state.loading = "FAILURE";
       Alert.alert("Login failed", "Wrong password or telephone number");
+    })
+    .addCase(getCurrentUser.SUCCESS, (state, action) => {
+      console.log("abc");
     });
-  // .addCase(categoryRoutine.SUCCESS, (state, action) => {
-  //   state.loading = false;
-  //   state.listCategories = [
-  //     {
-  //       id: 0,
-  //       name: "Popular",
-  //       image_outline:
-  //         "http://192.168.1.13:8000/static/img/categories/2022/04/star-outline.png",
-  //       image_solid:
-  //         "http://192.168.1.13:8000/static/img/categories/2022/04/star-solid.png",
-  //     },
-  //   ];
-  //   action.payload.results.forEach((item) => state.listCategories.push(item));
-  // })
-  // .addCase(categoryRoutine.FAILURE, (state, action) => {
-  //   state.loading = false;
-  // })
-  // .addCase(productRoutine.SUCCESS, (state, action) => {
-  //   state.loading = false;
-  //   state.listProducts = action.payload.results;
-  // })
-  // .addCase(productByCategoryRoutime.TRIGGER, (state, action) => {
-  //   state.loading = true;
-  // })
-  // .addCase(productByCategoryRoutime.SUCCESS, (state, action) => {
-  //   state.loading = false;
-  //   state.listProducts = action.payload;
-  // })
-  // .addCase(productByIdRoutime.TRIGGER, (state, action) => {
-  //   state.loading = true;
-  //   state.product = null;
-  // })
-  // .addCase(productByIdRoutime.SUCCESS, (state, action) => {
-  //   state.loading = false;
-  //   state.product = action.payload;
-  // });
 });

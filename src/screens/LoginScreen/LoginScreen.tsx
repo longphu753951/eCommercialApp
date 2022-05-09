@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useCallback, useEffect } from "react";
 import {
   Text,
   View,
@@ -44,12 +44,23 @@ export const LoginScreen = () => {
       password: "",
     },
   });
+
+  const loginSuccess = useCallback(async () => {
+    console.log(loading)
+    if(loading === 'SUCCESS'){
+      await dispatch({ type: getCurrentUser.TRIGGER });
+
+    }
+  },[loading]);
+
+  useEffect(() => {
+    loginSuccess()
+  }, [loginSuccess])
+
   const onSubmit = async (data) => {
     console.log("on submit");
     await dispatch({ type: loginRoutine.TRIGGER, data: data });
-    if(!token){
-      await dispatch({ type: getCurrentUser.TRIGGER });
-    }
+    
   };
 
   return (

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Platform, BackHandler, ToastAndroid } from "react-native";
+import { BackHandler, ToastAndroid } from "react-native";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import Navigation from "navigation/Navigations";

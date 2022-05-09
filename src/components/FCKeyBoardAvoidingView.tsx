@@ -16,19 +16,19 @@ const height = Dimensions.get("window").height;
 
 interface Props {
   children?: React.ReactNode;
-  loading: boolean;
+  loading: string;
 }
 
 const defaultProps = {
   children: undefined,
-  loading: false,
+  loading: '',
 };
 
 const FCKeyBoardAvoidingView: React.FC<Props> = (props: Props) => {
   const { children, loading } = props;
   return (
     <>
-      {loading && (
+      {loading === 'TRIGGER' && (
         <View
           style={{
             position: "absolute",
