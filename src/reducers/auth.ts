@@ -9,6 +9,7 @@ import { Alert } from "react-native";
 interface authState {
   loading: string;
   token: any;
+  user: any;
 }
 // =========================================================
 // =========================================================
@@ -86,6 +87,6 @@ export default createReducer(INITIAL_STATE, (builder) => {
       Alert.alert("Login failed", "Wrong password or telephone number");
     })
     .addCase(getCurrentUser.SUCCESS, (state, action) => {
-      console.log("abc");
+      state.user = action.payload;
     });
 });

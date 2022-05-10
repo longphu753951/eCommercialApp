@@ -6,7 +6,6 @@ import createSagaMiddleware from "redux-saga";
 import reducers, { rootSaga } from "reducers";
 
 //Use this for developing purpose
-AsyncStorage.clear()
 
 
 const config = {

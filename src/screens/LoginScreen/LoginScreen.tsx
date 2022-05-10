@@ -1,4 +1,4 @@
-import React, { Component, useCallback, useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import {
   Text,
   View,
@@ -22,7 +22,6 @@ export const LoginScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.auth.loading);
-  const token = useSelector((state) => state.auth.token);
 
   const timeOfDay = () => {
     const today = new Date();
@@ -49,7 +48,7 @@ export const LoginScreen = () => {
     console.log(loading)
     if(loading === 'SUCCESS'){
       await dispatch({ type: getCurrentUser.TRIGGER });
-
+      navigation.navigate("tabNavigation")
     }
   },[loading]);
 

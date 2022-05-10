@@ -29,6 +29,7 @@ module.exports = function (api) {
             "store": "./src/store",
             "middlewares": "./src/middlewares",
             "utils": "./src/utils",
+            "services": "./src/services",
           }
         },
       ],

@@ -37,14 +37,16 @@ axios.postWithoutAuth = (...params: any) => {
 
 axios.getWithAuth = (...params: any) => {
   let token = store.getState().auth.token.access_token;
-  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-  console.log(axios.defaults.headers)
   return new Promise(async (resolve, reject) => {
     try {
       const response = await axios.get(
-        "http://192.168.1.13:8000/users/current-user"
+        ...params,{
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
       );
-      console.log(response);
+      checkAPIResultCode(response, resolve, reject);
     } catch (e) {
       reject(e);
     }
