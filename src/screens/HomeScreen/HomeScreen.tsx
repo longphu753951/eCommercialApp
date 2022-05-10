@@ -32,10 +32,6 @@ export const HomeScreen = () => {
   }, []);
 
   const [chooseCat, setChooseCat] = useState(0);
-  // const onRefresh = useCallback(() => {
-  //   setRefreshing(true);
-  //   wait(2000).then(() => setRefreshing(false));
-  // }, []);
   const { refreshing, onRefresh } = useRefreshing();
   const onSelectCategory = (category) => {
     setChooseCat(category.id);
