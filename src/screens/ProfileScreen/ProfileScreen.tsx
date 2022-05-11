@@ -82,7 +82,7 @@ export const ProfileScreen = () => {
             <Image
               resizeMode={"contain"}
               style={styles.profileImage}
-              source={{uri: (user.avatar ) }}
+              source={{uri: (user.avatar_path ) }}
             />
             <View style={styles.profileTextContainer}>
               <Text style={styles.name}>

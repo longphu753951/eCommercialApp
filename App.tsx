@@ -15,6 +15,7 @@ import { persistStore } from "redux-persist";
 
 let persistor = persistStore(store);
 
+
 const App = () => {
   const [loaded] = useFonts(font);
   const [exitApp, setExitApp] = useState(0);

@@ -5,11 +5,12 @@ import { all, takeEvery, call, put, takeLatest } from "redux-saga/effects";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import API from "config/API";
 import { Alert } from "react-native";
+import { User } from "config/types";
 
 interface authState {
   loading: string;
   token: any;
-  user: any;
+  user: User;
 }
 // =========================================================
 // =========================================================
@@ -68,10 +69,18 @@ export function* authSaga() {
 // =========================================================
 // REDUCER
 
-const INITIAL_STATE = {
+const INITIAL_STATE: authState = {
   loading: "",
   token: undefined,
-} as authState;
+  user: {
+    id: 0,
+    first_name: '',
+    last_name: '',
+    email: '',
+    telephone: '',
+    avatar_path: 'empty',
+  },
+};
 
 export default createReducer(INITIAL_STATE, (builder) => {
   builder
@@ -88,5 +97,6 @@ export default createReducer(INITIAL_STATE, (builder) => {
     })
     .addCase(getCurrentUser.SUCCESS, (state, action) => {
       state.user = action.payload;
+      console.log(state.token)
     });
 });
