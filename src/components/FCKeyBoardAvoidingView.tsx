@@ -6,37 +6,71 @@ import {
   Platform,
   SafeAreaView,
   Keyboard,
+  View,
+  TouchableWithoutFeedback,
 } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { ActivityIndicator } from "react-native-paper";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 interface Props {
   children?: React.ReactNode;
+  loading: string;
 }
 
 const defaultProps = {
   children: undefined,
+  loading: '',
 };
 
 const FCKeyBoardAvoidingView: React.FC<Props> = (props: Props) => {
-  const { children } = props;
+  const { children, loading } = props;
   return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 1 }}
-      >
-        <TouchableWithoutFeedback
-          style={{ height: "100%" }}
-          onPress={Keyboard.dismiss}
-          accessible={false}
+    <>
+      {loading === 'TRIGGER' && (
+        <View
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            zIndex: 1,
+            alignContent: 'center',
+            justifyContent: 'center',
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(52, 52, 52, 0.8)",
+          }}
         >
-          {children}
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+          <ActivityIndicator size={'large'} color= {'white'} />
+        </View>
+      )}
+      <SafeAreaView style={styles.container}>
+        <View
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+          }}
+        >
+          <TouchableWithoutFeedback
+            style={{ width: "100%", height: "100%" }}
+            onPress={() => Keyboard.dismiss()}
+          >
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+              style={{ flex: 1 }}
+            >
+              {children}
+            </KeyboardAvoidingView>
+          </TouchableWithoutFeedback>
+        </View>
+      </SafeAreaView>
+    </>
   );
 };
 

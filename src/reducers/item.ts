@@ -25,25 +25,25 @@ export const productByIdRoutime = createRoutine("PRODUCT", (id: any) => id);
 // =========================================================
 // SAGAS
 
-function* fetchCategorySaga() {
-  const data = yield call(axios.postWithoutAuth, API.CATEGORY);
+function* fetchCategorySaga(): any {
+  const data = yield call(axios.getWithoutAuth, API.CATEGORY);
   yield put({
     type: categoryRoutine.SUCCESS,
     payload: data,
   });
 }
 
-function* fetchProductSaga() {
-  const data = yield call(axios.postWithoutAuth, API.PRODUCT);
+function* fetchProductSaga(): any {
+  const data = yield call(axios.getWithoutAuth, API.PRODUCT);
   yield put({
     type: productRoutine.SUCCESS,
     payload: data,
   });
 }
 
-function* fetchProductByCategorySaga(action) {
+function* fetchProductByCategorySaga(action): any {
   const url = API.PRODUCT_BY_CATEGORY.replace("id", action.id);
-  const data = yield call(axios.postWithoutAuth, url);
+  const data = yield call(axios.getWithoutAuth, url);
 
   yield put({
     type: productByCategoryRoutime.SUCCESS,
@@ -51,9 +51,9 @@ function* fetchProductByCategorySaga(action) {
   });
 }
 
-function* fetchProductByIdSaga(action) {
+function* fetchProductByIdSaga(action): any {
   const url = API.PRODUCT_BY_ID.replace("id", action.id);
-  const data = yield call(axios.postWithoutAuth, url);
+  const data = yield call(axios.getWithoutAuth, url);
 
   yield put({
     type: productByIdRoutime.SUCCESS,
@@ -119,5 +119,5 @@ export default createReducer(INITIAL_STATE, (builder) => {
     .addCase(productByIdRoutime.SUCCESS, (state, action) => {
       state.loading = false;
       state.product = action.payload;
-    })
+    });
 });

@@ -174,7 +174,7 @@ export const ProductScreen = () => {
                   color="black"
                 />
               </TouchableOpacity>
-              <View
+              { productMain.productAttribute.length >= 2 && (<View
                 style={{
                   backgroundColor: "white",
                   marginTop: (Dimensions.get("window").height * 4.92) / 100,
@@ -191,7 +191,7 @@ export const ProductScreen = () => {
                   elevation: 2,
                   alignItems: "center",
                   justifyContent: "space-between",
-                  paddingVertical: (height * 1.847) / 100,
+                  paddingVertical: (height * 1.847) / 100, 
                 }}
               >
                 {productMain.productAttribute.map((item:any) => {
@@ -214,7 +214,7 @@ export const ProductScreen = () => {
                     ></TouchableOpacity>
                   );
                 })}
-              </View>
+              </View>)}
             </View>
           </View>
           <View style={styles.informationContainer}>

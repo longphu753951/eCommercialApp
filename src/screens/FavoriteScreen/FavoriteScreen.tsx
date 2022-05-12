@@ -16,6 +16,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { itemList } from "config/mockData";
 import _ from "lodash";
 import { CartItem, Header } from "components";
+import { useSelector } from "react-redux";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -25,6 +26,7 @@ const height = Dimensions.get("window").height;
 
 export const FavoriteScreen = () => {
   const navigation = useNavigation();
+  const bookmark = useSelector( state => state.auth.user.bookmark.bookmarkDetail)
   const [refreshing, setRefreshing] = useState(false);
   const [chooseCat, setChooseCat] = useState("Popular");
 
@@ -32,14 +34,16 @@ export const FavoriteScreen = () => {
     setRefreshing(true);
     wait(2000).then(() => setRefreshing(false));
   }, []);
+
   const item = (item: any): JSX.Element => {
+    console.log('item',item.item.productAttribute.price)
     return (
       <CartItem
-        image={item.item.image}
+        image={{uri: item.item.productAttribute.productImage[0].image}}
         content={
           <View style={{ flexDirection: "column" }}>
-            <Text style={styles.nameText}>{item.item.name}</Text>
-            <Text style={styles.priceText}>$ {item.item.price}</Text>
+            <Text style={styles.nameText}>{item.item.productAttribute.name}</Text>
+            <Text style={styles.priceText}>$ {item.item.productAttribute.price}</Text>
           </View>
         }
         bottomContent={
@@ -82,9 +86,9 @@ export const FavoriteScreen = () => {
           <FlatList
             showsVerticalScrollIndicator={false}
             style={styles.itemFlatList}
-            data={itemList}
+            data={bookmark}
             ItemSeparatorComponent={ItemDivider}
-            keyExtractor={(item) => item.name}
+            keyExtractor={(item) => item.id}
             renderItem={item}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
