@@ -45,7 +45,6 @@ export const LoginScreen = () => {
   });
 
   const loginSuccess = useCallback(async () => {
-    console.log(loading)
     if(loading === 'SUCCESS'){
       await dispatch({ type: getCurrentUser.TRIGGER });
       navigation.navigate("tabNavigation")
@@ -57,7 +56,6 @@ export const LoginScreen = () => {
   }, [loginSuccess])
 
   const onSubmit = async (data) => {
-    console.log("on submit");
     await dispatch({ type: loginRoutine.TRIGGER, data: data });
     
   };

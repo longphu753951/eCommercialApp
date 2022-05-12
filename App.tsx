@@ -12,9 +12,9 @@ import { StripeProvider as _StripeProvider } from "@stripe/stripe-react-native";
 import type { Props as StripeProviderProps } from "@stripe/stripe-react-native/lib/typescript/src/components/StripeProvider";
 const StripeProvider = _StripeProvider as React.FC<StripeProviderProps>;
 import { persistStore } from "redux-persist";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 let persistor = persistStore(store);
-
 
 const App = () => {
   const [loaded] = useFonts(font);
@@ -23,7 +23,7 @@ const App = () => {
     setTimeout(() => {
       setExitApp(0);
     }, 2000); // 2 seconds to tap second-time
-
+    AsyncStorage.clear();
     if (exitApp === 0) {
       setExitApp(exitApp + 1);
 

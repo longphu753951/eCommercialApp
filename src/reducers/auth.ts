@@ -5,18 +5,20 @@ import { all, takeEvery, call, put, takeLatest } from "redux-saga/effects";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import API from "config/API";
 import { Alert } from "react-native";
-import { User } from "config/types";
+import { Bookmark, User } from "config/types";
 
 interface authState {
   loading: string;
   token: any;
   user: User;
+  bookmark: Bookmark;
 }
 // =========================================================
 // =========================================================
 // TYPES
 export const loginRoutine = createRoutine("AUTH/LOGIN");
 export const getCurrentUser = createRoutine("AUTH/GET_CURRENT_USER");
+export const logoutRoutine = createRoutine("AUTH/LOGOUT")
 
 // =========================================================
 // =========================================================
@@ -47,7 +49,6 @@ function* loginSaga(action: any): Promise<void> {
 function* getCurrentUserSaga(): Promise<void> {
   try {
     const data = yield call(axios.getWithAuth, API.GET_CURRENT_USER);
-    console.log(data);
 
     yield put({
       type: getCurrentUser.SUCCESS,
@@ -71,7 +72,7 @@ export function* authSaga() {
 
 const INITIAL_STATE: authState = {
   loading: "",
-  token: undefined,
+  token: {},
   user: {
     id: 0,
     first_name: '',
@@ -80,6 +81,10 @@ const INITIAL_STATE: authState = {
     telephone: '',
     avatar_path: 'empty',
   },
+  bookmark: {
+    id: 0,
+    bookmarkDetail: [],
+  }
 };
 
 export default createReducer(INITIAL_STATE, (builder) => {
@@ -97,6 +102,10 @@ export default createReducer(INITIAL_STATE, (builder) => {
     })
     .addCase(getCurrentUser.SUCCESS, (state, action) => {
       state.user = action.payload;
-      console.log(state.token)
-    });
+    })
+    .addCase(logoutRoutine.TRIGGER, (state, action) => {
+      console.log(state.token);
+      state.token = undefined;
+    })
+    ;
 });

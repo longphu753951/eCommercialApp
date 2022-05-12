@@ -4,15 +4,17 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {allScreens} from './allScreen';
 import { StatusBar } from 'react-native';
 import { navigationRef } from 'services/navigationService';
+import store from 'store/';
+import { isEmpty } from 'lodash';
 
 const Stack = createStackNavigator();
 
-
 const Navigation = props => {
+
   return (
     <NavigationContainer ref={navigationRef}>
       <StatusBar barStyle='dark-content'/>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName={isEmpty(store.getState().auth.token) ? 'BoardingScreen' :'tabNavigation'}>
         {allScreens(Stack)}
       </Stack.Navigator>
     </NavigationContainer>

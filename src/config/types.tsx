@@ -53,11 +53,12 @@ export interface ProductImage {
 
 export interface Bookmark {
   id: number;
-  user: number;
+  bookmarkDetail: BookmarkDetail[];
 }
 
 export interface BookmarkDetail {
   id: number;
+  productAttribute: ProductAttribute;
 }
 
 export interface ShippingUnit {

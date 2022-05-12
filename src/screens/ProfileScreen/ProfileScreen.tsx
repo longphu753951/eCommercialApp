@@ -16,15 +16,17 @@ import { ScrollView } from "react-native-gesture-handler";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { Header, Card } from "components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutRoutine } from "reducers/auth";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 export const ProfileScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
-  console.log(user)
+  console.log(user);
   const renderCategory = (): JSX.Element => {
     const listItem = profileCategoryList.map((item) => {
       return (
@@ -55,7 +57,13 @@ export const ProfileScreen = () => {
         onPress: () => console.log("Cancel Pressed"),
         style: "cancel",
       },
-      { text: "OK", onPress: () => navigation.navigate("LoginScreen") },
+      {
+        text: "OK",
+        onPress: async () => {
+          await dispatch({type: logoutRoutine.TRIGGER})
+          navigation.navigate("LoginScreen");
+        },
+      },
     ]);
   };
 
@@ -82,7 +90,7 @@ export const ProfileScreen = () => {
             <Image
               resizeMode={"contain"}
               style={styles.profileImage}
-              source={{uri: (user.avatar_path ) }}
+              source={{ uri: user.avatar_path }}
             />
             <View style={styles.profileTextContainer}>
               <Text style={styles.name}>
