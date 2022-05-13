@@ -6,6 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import API from "config/API";
 import { Alert } from "react-native";
 import { Bookmark, User } from "config/types";
+import _ from "lodash";
 
 interface authState {
   loading: string;
@@ -49,7 +50,6 @@ function* loginSaga(action: any): Promise<void> {
 function* getCurrentUserSaga(): Promise<void> {
   try {
     const data = yield call(axios.getWithAuth, API.GET_CURRENT_USER);
-
     yield put({
       type: getCurrentUser.SUCCESS,
       payload: data,
@@ -101,10 +101,11 @@ export default createReducer(INITIAL_STATE, (builder) => {
       Alert.alert("Login failed", "Wrong password or telephone number");
     })
     .addCase(getCurrentUser.SUCCESS, (state, action) => {
-      state.user = action.payload;
+      let user = (({ bookmark, ...o }) => bookmark)(action.payload);
+      state.user = _.omit(action.payload,['bookmark']);
+      state.bookmark = action.payload.bookmark
     })
     .addCase(logoutRoutine.TRIGGER, (state, action) => {
-      console.log(state.token);
       state.token = undefined;
     })
     ;

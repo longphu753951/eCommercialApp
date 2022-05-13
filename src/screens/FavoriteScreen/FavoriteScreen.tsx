@@ -26,7 +26,7 @@ const height = Dimensions.get("window").height;
 
 export const FavoriteScreen = () => {
   const navigation = useNavigation();
-  const bookmark = useSelector( state => state.auth.user.bookmark.bookmarkDetail)
+  const bookmark = useSelector( state => state.user.bookmark.bookmarkDetail)
   const [refreshing, setRefreshing] = useState(false);
   const [chooseCat, setChooseCat] = useState("Popular");
 

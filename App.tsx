@@ -12,7 +12,6 @@ import { StripeProvider as _StripeProvider } from "@stripe/stripe-react-native";
 import type { Props as StripeProviderProps } from "@stripe/stripe-react-native/lib/typescript/src/components/StripeProvider";
 const StripeProvider = _StripeProvider as React.FC<StripeProviderProps>;
 import { persistStore } from "redux-persist";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 let persistor = persistStore(store);
 
