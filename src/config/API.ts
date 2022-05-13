@@ -9,6 +9,7 @@ const API = {
   PRODUCT_BY_ID: '/products/id',
   LOGIN: '/o/token/',
   GET_CURRENT_USER: '/users/current-user/',
+  BOOKMARK: '/bookmark/',
 };
 
 interface API {

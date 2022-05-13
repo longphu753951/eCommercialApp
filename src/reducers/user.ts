@@ -18,6 +18,7 @@ interface userState {
 // TYPES
 
 export const getCurrentUser = createRoutine("AUTH/GET_CURRENT_USER");
+export const getBookmark = createRoutine("GET_BOOKMARK");
 
 // =========================================================
 // =========================================================
@@ -35,8 +36,23 @@ function* getCurrentUserSaga(): Promise<void> {
   }
 }
 
+function* getBookmarkSaga(): Promise<void> {
+  try {
+    const data = yield call(axios.getWithAuth, API.BOOKMARK);
+    yield put({
+      type: getBookmark.SUCCESS,
+      payload: data,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 export function* userSaga() {
-  yield all([takeLatest(getCurrentUser.TRIGGER, getCurrentUserSaga)]);
+  yield all([
+    takeLatest(getCurrentUser.TRIGGER, getCurrentUserSaga),
+    takeLatest(getBookmark.TRIGGER, getBookmark),
+  ]);
 }
 
 const INITIAL_STATE: userState = {
@@ -63,5 +79,6 @@ export default createReducer(INITIAL_STATE, (builder) => {
     let user = (({ bookmark, ...o }) => bookmark)(action.payload);
     state.user = _.omit(action.payload, ["bookmark"]);
     state.bookmark = action.payload.bookmark;
-  });
+  })
+  ;
 });
