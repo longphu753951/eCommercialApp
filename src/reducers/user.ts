@@ -1,7 +1,7 @@
 import axios from "axios";
 import { createRoutine } from "redux-saga-routines";
 import { createReducer } from "@reduxjs/toolkit";
-import { all, takeEvery, call, put, takeLatest } from "redux-saga/effects";
+import { all, takeEvery, call, put, takeLatest, actionChannel } from "redux-saga/effects";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import API from "config/API";
 import { Alert } from "react-native";
@@ -11,14 +11,18 @@ import _ from "lodash";
 interface userState {
   bookmark: Bookmark;
   user: User;
+  loading: string;
+  bookmarkId: Number;
 }
 
 // =========================================================
 // =========================================================
 // TYPES
 
-export const getCurrentUser = createRoutine("AUTH/GET_CURRENT_USER");
-export const getBookmark = createRoutine("GET_BOOKMARK");
+export const getCurrentUser = createRoutine("USER/GET_CURRENT_USER");
+export const getBookmark = createRoutine("USER/GET_BOOKMARK");
+export const addBookmark = createRoutine("USER/ADD_BOOKMARK");
+export const deleteBookmark = createRoutine("USER/DELETE_BOOKMARK");
 
 // =========================================================
 // =========================================================
@@ -38,20 +42,56 @@ function* getCurrentUserSaga(): Promise<void> {
 
 function* getBookmarkSaga(): Promise<void> {
   try {
-    const data = yield call(axios.getWithAuth, API.BOOKMARK);
+    const data = yield call(axios.getWithAuth, API.BOOKMARK_BY_USER);
     yield put({
       type: getBookmark.SUCCESS,
       payload: data,
     });
   } catch (e) {
-    console.log(e);
+    console.log(e)
+    yield put({
+      type: addBookmark.FAILURE,
+    });
+  }
+}
+
+function* addBookmarkSaga(action: any):Promise<void> {
+  try {
+    const data = yield call(axios.postWithAuth, API.ADD_NEW_BOOKMARK, action.data)
+    yield put({
+      type: addBookmark.SUCCESS,
+      payload: data,
+    });
+  } catch (e) {
+    yield put({
+      type: addBookmark.FAILURE,
+    });
+  }
+}
+
+function* deleteBookmarkSaga(action: any):Promise<void> {
+  try {
+    const data = yield call(axios.postWithAuth, API.DELETE_BOOKMARK, {
+      bookmark: action.data.bookmark,
+      productAttribute: action.data.productAttribute
+    })
+    yield put({
+      type: deleteBookmark.SUCCESS,
+      payload: data,
+    });
+  } catch (e) {
+    yield put({
+      type: deleteBookmark.FAILURE,
+    });
   }
 }
 
 export function* userSaga() {
   yield all([
     takeLatest(getCurrentUser.TRIGGER, getCurrentUserSaga),
-    takeLatest(getBookmark.TRIGGER, getBookmark),
+    takeLatest(getBookmark.TRIGGER, getBookmarkSaga),
+    takeLatest(addBookmark.TRIGGER, addBookmarkSaga),
+    takeLatest(deleteBookmark.TRIGGER, deleteBookmarkSaga),
   ]);
 }
 
@@ -68,6 +108,7 @@ const INITIAL_STATE: userState = {
     id: 0,
     bookmarkDetail: [],
   },
+  loading: "",
 };
 
 // =========================================================
@@ -76,9 +117,26 @@ const INITIAL_STATE: userState = {
 
 export default createReducer(INITIAL_STATE, (builder) => {
   builder.addCase(getCurrentUser.SUCCESS, (state, action) => {
-    let user = (({ bookmark, ...o }) => bookmark)(action.payload);
     state.user = _.omit(action.payload, ["bookmark"]);
     state.bookmark = action.payload.bookmark;
+    state.bookmarkId = action.payload.id;
+  })
+  .addCase(getBookmark.TRIGGER, (state) => {
+    state.loading = "LOADING"
+  })
+  .addCase(getBookmark.SUCCESS, (state, action) => {
+    state.bookmark = action.payload;
+    state.loading = "SUCCESS"
+  })
+  .addCase(getBookmark.FAILURE, (state) => {
+    state.loading = "FAILURE"
+  })
+  .addCase(addBookmark.SUCCESS, (state, action) => {
+    state.bookmark = action.payload;
+    state.loading = "SUCCESS"
+  })
+  .addCase(addBookmark.FAILURE, (state) => {
+    state.loading = "FAILURE"
   })
   ;
 });

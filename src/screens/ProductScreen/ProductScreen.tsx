@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { product } from "config/mockData";
 import _ from "lodash";
-import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import {
   responsiveHeight,
   responsiveWidth,
@@ -23,7 +23,8 @@ import { Entypo } from "@expo/vector-icons";
 import { Rating } from "react-native-ratings";
 import { getDisplay } from "config/size";
 import { IncrementButton } from "components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addBookmark, deleteBookmark } from "reducers/user";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -31,15 +32,19 @@ const height = Dimensions.get("window").height;
 export const ProductScreen = () => {
   const navigation = useNavigation();
   const productMain = useSelector((state) => state.item.product);
+  const bookmark = useSelector( state => state.user.bookmark);
+  const dispatch = useDispatch();
+  const [isBookmarked, setIsBookmarked] = useState(false);
   const goBack = () => {
     navigation.goBack();
   };
 
   const [chosenProductAttribute, setChosenProductAttribute] = useState([]);
+  const [isShowingModal, setIsShowingModal] = useState(false)
 
   useEffect(() => {
     if (productMain !== null) {
-      setChosenProductAttribute(productMain.productAttribute[0]);
+      onSetChosenItem(productMain.productAttribute[0]);
     }
   }, [productMain]);
 
@@ -53,6 +58,44 @@ export const ProductScreen = () => {
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
   let a: number = getDisplay();
 
+  const onSetChosenItem = (item: any) => {
+      const choosenProduct = item;
+      setChosenProductAttribute(choosenProduct);
+      const listBookmarkId:string[] = bookmark.bookmarkDetail.map(item => item.productAttribute.sku);
+      setIsBookmarked(listBookmarkId.includes(item.sku))
+  }
+
+  const setBookmark = useCallback(async () => {
+    console.log(chosenProductAttribute)
+    // const data = {
+    //   bookmark: bookmark.id,
+    //   productAttribute: chosenProductAttribute.sku,
+    // }
+    // if(!isBookmarked) {
+    //   await dispatch({type: addBookmark.TRIGGER, data: data})
+    // }
+    // else {
+    //   await dispatch({type: deleteBookmark.TRIGGER, data: data})
+    // }
+    setIsBookmarked(!isBookmarked)
+  },[isBookmarked])
+
+  const Modal = (props: any) => {
+    const { showing } = props;
+
+    return (
+      <Modal
+      animationType="slide"
+        transparent={true}
+        visible={showing}
+      >
+        <View>
+          <Text>asdasdasdasdas</Text>
+        </View>
+      </Modal>
+    )
+  }
+
   const Paginator = ({ data, scrollX }) => {
     const { width } = useWindowDimensions();
     return (
@@ -64,6 +107,7 @@ export const ProductScreen = () => {
           right: 50,
         }}
       >
+        
         {data.map((_, index) => {
           const inputRange = [
             (index - 1) * ((Dimensions.get("window").width * 86.13) / 100),
@@ -197,9 +241,7 @@ export const ProductScreen = () => {
                 {productMain.productAttribute.map((item:any) => {
                   return (
                     <TouchableOpacity
-                      onPress={() => {
-                        setChosenProductAttribute(item);
-                      }}
+                      onPress={() => onSetChosenItem(item)}
                       style={{
                         width: (height * 4.5) / 100,
                         height: (height * 4.5) / 100,
@@ -247,11 +289,11 @@ export const ProductScreen = () => {
               <Text style={styles.description}>{productMain.description}</Text>
             </View>
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.bookMarkButton}>
+              <TouchableOpacity onPress={() => setBookmark()} style={[styles.bookMarkButton, {backgroundColor: isBookmarked?'#303030':'#E0E0E0'}]}>
                 <FontAwesome5
                   name="bookmark"
                   size={(height * 2.95) / 100}
-                  color="black"
+                  color={isBookmarked? "white":"black"}
                 />
               </TouchableOpacity>
               <TouchableOpacity style={styles.addToCartButton}>
@@ -343,7 +385,6 @@ const styles = StyleSheet.create({
     marginTop: (2.46 * height) / 100,
   },
   bookMarkButton: {
-    backgroundColor: "#E0E0E0",
     borderRadius: 16,
     width: (height * 7.4) / 100,
     height: (height * 7.4) / 100,

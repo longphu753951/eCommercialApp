@@ -6,12 +6,12 @@ import createSagaMiddleware from "redux-saga";
 import reducers, { rootSaga } from "reducers";
 
 //Use this for developing purpose098
-AsyncStorage.clear()
+//AsyncStorage.clear()
 
 const config = {
   key: "root",
   storage: AsyncStorage,
-  whitelist: ["auth", "settings"],
+  whitelist: ["auth", "settings", "user"],
 };
 
 const reducer = persistReducer(config, reducers);

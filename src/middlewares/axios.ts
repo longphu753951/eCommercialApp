@@ -52,3 +52,22 @@ axios.getWithAuth = (...params: any) => {
     }
   });
 };
+
+axios.postWithAuth = (...params: any) => {
+  let token = store.getState().auth.token.access_token;
+  return new Promise(async (resolve, reject) => {
+    try {
+      console.log(...params)
+      const response = await axios.post(
+        ...params,{
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      checkAPIResultCode(response, resolve, reject);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};

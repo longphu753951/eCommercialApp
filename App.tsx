@@ -22,7 +22,6 @@ const App = () => {
     setTimeout(() => {
       setExitApp(0);
     }, 2000); // 2 seconds to tap second-time
-    AsyncStorage.clear();
     if (exitApp === 0) {
       setExitApp(exitApp + 1);
 

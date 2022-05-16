@@ -96,7 +96,7 @@ export default createReducer(INITIAL_STATE, (builder) => {
             "http://192.168.1.13:8000/static/img/categories/2022/04/star-solid.png",
         },
       ];
-      action.payload.results.forEach((item) => state.listCategories.push(item));
+      action.payload.forEach((item) => state.listCategories.push(item));
     })
     .addCase(categoryRoutine.FAILURE, (state, action) => {
       state.loading = false;
