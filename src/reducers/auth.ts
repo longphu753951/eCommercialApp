@@ -18,7 +18,6 @@ interface authState {
 // =========================================================
 // TYPES
 export const loginRoutine = createRoutine("AUTH/LOGIN");
-export const getCurrentUser = createRoutine("AUTH/GET_CURRENT_USER");
 export const logoutRoutine = createRoutine("AUTH/LOGOUT")
 
 // =========================================================
@@ -47,22 +46,9 @@ function* loginSaga(action: any): Promise<void> {
   }
 }
 
-function* getCurrentUserSaga(): Promise<void> {
-  try {
-    const data = yield call(axios.getWithAuth, API.GET_CURRENT_USER);
-    yield put({
-      type: getCurrentUser.SUCCESS,
-      payload: data,
-    });
-  } catch (e) {
-    console.log(e);
-  }
-}
-
 export function* authSaga() {
   yield all([
     takeLatest(loginRoutine.TRIGGER, loginSaga),
-    takeLatest(getCurrentUser.TRIGGER, getCurrentUserSaga),
   ]);
 }
 
@@ -99,14 +85,5 @@ export default createReducer(INITIAL_STATE, (builder) => {
     .addCase(loginRoutine.FAILURE, (state, action) => {
       state.loading = "FAILURE";
       Alert.alert("Login failed", "Wrong password or telephone number");
-    })
-    .addCase(getCurrentUser.SUCCESS, (state, action) => {
-      let user = (({ bookmark, ...o }) => bookmark)(action.payload);
-      state.user = _.omit(action.payload,['bookmark']);
-      state.bookmark = action.payload.bookmark
-    })
-    .addCase(logoutRoutine.TRIGGER, (state, action) => {
-      state.token = undefined;
-    })
-    ;
+    });
 });

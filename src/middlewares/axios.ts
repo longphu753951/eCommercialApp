@@ -3,6 +3,7 @@ import axios from "axios";
 import store from "store";
 const postAxios = axios.post;
 const getAxios = axios.get;
+const deleteAxios = axios.delete
 
 const checkAPIResultCode = (response: any, resolve: any, reject: any) => {
   const result = response.status;
@@ -16,7 +17,6 @@ axios.getWithoutAuth = (...params: any) => {
   return new Promise(async (resolve, reject) => {
     try {
       const response = await getAxios(...params);
-      //console.log(response)
       checkAPIResultCode(response, resolve, reject);
     } catch (e) {
       reject(e);
@@ -57,8 +57,25 @@ axios.postWithAuth = (...params: any) => {
   let token = store.getState().auth.token.access_token;
   return new Promise(async (resolve, reject) => {
     try {
-      console.log(...params)
       const response = await axios.post(
+        ...params,{
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      checkAPIResultCode(response, resolve, reject);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+axios.deleteWithAuth = (...params: any) => {
+  let token = store.getState().auth.token.access_token;
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await deleteAxios(
         ...params,{
           headers: {
             Authorization: `Bearer ${token}`

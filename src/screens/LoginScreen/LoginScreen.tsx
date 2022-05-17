@@ -13,7 +13,8 @@ import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
 import { useForm, Controller } from "react-hook-form";
 import { FCKeyBoardAvoidingView } from "components";
-import { getCurrentUser, loginRoutine } from "reducers/auth";
+import { loginRoutine } from "reducers/auth";
+import { getCurrentUser } from "reducers/user";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;

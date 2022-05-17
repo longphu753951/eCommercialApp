@@ -10,7 +10,9 @@ interface Props {
   content?: React.ReactNode;
   bottomContent?: React.ReactNode;
   isRemoving?: boolean;
+  disableButton?: boolean
   cartStyle?: any;
+  onRemoving?(): void;
 }
 
 const width = Dimensions.get("window").width;
@@ -20,7 +22,7 @@ const seperate = (width * 5.33) / 100;
 const contentWidth = (width * 57.33) / 100;
 
 const CartItem: React.FC<Props> = (props: Props) => {
-  const { content, image, bottomContent, isRemoving, cartStyle } = props;
+  const { content, image, bottomContent, isRemoving, cartStyle, onRemoving, disableButton } = props;
   return (
     <View style={[styles.itemContainer, cartStyle]}>
       <Image style={styles.itemImage} source={image} />
@@ -29,10 +31,12 @@ const CartItem: React.FC<Props> = (props: Props) => {
           {content}
           {isRemoving && (
             <TouchableOpacity
+              disabled={disableButton}
               style={{
                 width: (height * 3.69) / 100,
                 alignItems: "center",
               }}
+              onPress= {onRemoving}
             >
               <FontAwesomeIcon
                 size={(height * 2.401) / 100}
@@ -50,9 +54,11 @@ const CartItem: React.FC<Props> = (props: Props) => {
 
 CartItem.defaultProps = {
   image: require(""),
+  onRemoving: () => {},
   content: undefined,
   bottomContent: undefined,
   isRemoving: true,
+  disableButton: false,
   cartStyle: {},
 };
 

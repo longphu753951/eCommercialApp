@@ -1,12 +1,20 @@
 import axios from "axios";
 import { createRoutine } from "redux-saga-routines";
 import { createReducer } from "@reduxjs/toolkit";
-import { all, takeEvery, call, put, takeLatest, actionChannel } from "redux-saga/effects";
+import {
+  all,
+  takeEvery,
+  call,
+  put,
+  takeLatest,
+  actionChannel,
+} from "redux-saga/effects";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import API from "config/API";
 import { Alert } from "react-native";
 import { Bookmark, User } from "config/types";
 import _ from "lodash";
+import store from "store";
 
 interface userState {
   bookmark: Bookmark;
@@ -48,16 +56,20 @@ function* getBookmarkSaga(): Promise<void> {
       payload: data,
     });
   } catch (e) {
-    console.log(e)
+    console.log(e);
     yield put({
       type: addBookmark.FAILURE,
     });
   }
 }
 
-function* addBookmarkSaga(action: any):Promise<void> {
+function* addBookmarkSaga(action: any): Promise<void> {
   try {
-    const data = yield call(axios.postWithAuth, API.ADD_NEW_BOOKMARK, action.data)
+    const data = yield call(
+      axios.postWithAuth,
+      API.ADD_NEW_BOOKMARK,
+      action.data
+    );
     yield put({
       type: addBookmark.SUCCESS,
       payload: data,
@@ -69,12 +81,10 @@ function* addBookmarkSaga(action: any):Promise<void> {
   }
 }
 
-function* deleteBookmarkSaga(action: any):Promise<void> {
+function* deleteBookmarkSaga(action: any): Promise<void> {
   try {
-    const data = yield call(axios.postWithAuth, API.DELETE_BOOKMARK, {
-      bookmark: action.data.bookmark,
-      productAttribute: action.data.productAttribute
-    })
+    const url = API.DELETE_BOOKMARK.replace("id", action.id);
+    const data = yield call(axios.deleteWithAuth, url);
     yield put({
       type: deleteBookmark.SUCCESS,
       payload: data,
@@ -116,27 +126,42 @@ const INITIAL_STATE: userState = {
 // REDUCER
 
 export default createReducer(INITIAL_STATE, (builder) => {
-  builder.addCase(getCurrentUser.SUCCESS, (state, action) => {
-    state.user = _.omit(action.payload, ["bookmark"]);
-    state.bookmark = action.payload.bookmark;
-    state.bookmarkId = action.payload.id;
-  })
-  .addCase(getBookmark.TRIGGER, (state) => {
-    state.loading = "LOADING"
-  })
-  .addCase(getBookmark.SUCCESS, (state, action) => {
-    state.bookmark = action.payload;
-    state.loading = "SUCCESS"
-  })
-  .addCase(getBookmark.FAILURE, (state) => {
-    state.loading = "FAILURE"
-  })
-  .addCase(addBookmark.SUCCESS, (state, action) => {
-    state.bookmark = action.payload;
-    state.loading = "SUCCESS"
-  })
-  .addCase(addBookmark.FAILURE, (state) => {
-    state.loading = "FAILURE"
-  })
-  ;
+  builder
+    .addCase(getCurrentUser.SUCCESS, (state, action) => {
+      console.log('asdasdasdasdasdasdas');
+      state.user = _.omit(action.payload, ["bookmark"]);
+      state.bookmark = action.payload.bookmark;
+      state.bookmarkId = action.payload.id;
+    })
+    .addCase(getBookmark.TRIGGER, (state) => {
+      state.loading = "LOADING";
+    })
+    .addCase(getBookmark.SUCCESS, (state, action) => {
+      state.bookmark = action.payload;
+      state.loading = "SUCCESS";
+    })
+    .addCase(getBookmark.FAILURE, (state) => {
+      state.loading = "FAILURE";
+    })
+    .addCase(addBookmark.TRIGGER, (state) => {
+      state.loading = "LOADING";
+    })
+    .addCase(addBookmark.SUCCESS, (state, action) => {
+      state.bookmark = action.payload;
+      state.loading = "SUCCESS";
+    })
+    .addCase(addBookmark.FAILURE, (state) => {
+      state.loading = "FAILURE";
+    })
+    .addCase(deleteBookmark.TRIGGER, (state) => {
+      state.loading = "LOADING";
+    })
+    .addCase(deleteBookmark.SUCCESS, (state, action) => {
+      state.bookmark = action.payload;
+      state.loading = "SUCCESS";
+    })
+    .addCase(deleteBookmark.FAILURE, (state) => {
+      state.loading = "FAILURE";
+    })
+    ;
 });

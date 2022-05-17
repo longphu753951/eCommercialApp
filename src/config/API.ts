@@ -12,7 +12,7 @@ const API = {
   BOOKMARK: '/bookmark/',
   BOOKMARK_BY_USER: '/bookmark/getBookmarkByUser/',
   ADD_NEW_BOOKMARK: '/bookmarkDetail/addBookmark/',
-  DELETE_BOOKMARK: '/bookmarkDetail/deteleBookmark/'
+  DELETE_BOOKMARK: '/bookmarkDetail/deleteBookmark/id/'
 };
 
 interface API {

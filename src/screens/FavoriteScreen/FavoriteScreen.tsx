@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   SafeAreaView,
   Text,
@@ -17,7 +17,7 @@ import { itemList } from "config/mockData";
 import _ from "lodash";
 import { CartItem, Header } from "components";
 import { useDispatch, useSelector } from "react-redux";
-import { getBookmark } from "reducers/user";
+import { deleteBookmark, getBookmark } from "reducers/user";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -28,15 +28,29 @@ const height = Dimensions.get("window").height;
 export const FavoriteScreen = () => {
   const navigation = useNavigation();
   const bookmark = useSelector( state => state.user.bookmark)
+  const [bookmarkDetailList, setBookmarkDetailList] = useState(bookmark?.bookmarkDetail)
   const loading = useSelector(state => state.user.loading)
   const dispatch = useDispatch();
   const onRefresh = useCallback(() => {
     dispatch({type: getBookmark.TRIGGER})
   }, []);
+
+  useEffect(() => {
+    setBookmarkDetailList(bookmark?.bookmarkDetail);
+  }, [bookmark])
+
   const item = (item: any): JSX.Element => {
     return (
       <CartItem
         image={{uri: item.item.productAttribute.productImage[0].image}}
+        disable ={loading === "LOADING"}
+        onRemoving = {async () => {
+          console.log(item.item.id)
+          await dispatch({
+            type: deleteBookmark.TRIGGER,
+            id: item.item.id,
+          })
+        }}
         content={
           <View style={{ flexDirection: "column" }}>
             <Text style={styles.nameText}>{item.item.productAttribute.name}</Text>
@@ -83,7 +97,7 @@ export const FavoriteScreen = () => {
           <FlatList
             showsVerticalScrollIndicator={false}
             style={styles.itemFlatList}
-            data={bookmark.bookmarkDetail}
+            data={bookmarkDetailList}
             ItemSeparatorComponent={ItemDivider}
             keyExtractor={(item) => item.id}
             renderItem={item}
