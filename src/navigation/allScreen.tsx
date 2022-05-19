@@ -11,6 +11,7 @@ import { PaymentMethodScreen } from "screens/PaymentMethodScreen/PaymentMethodSc
 import { MyReviewScreen } from "screens/MyReviewScreen/MyReviewScreen";
 import { ProductScreen } from "screens/ProductScreen/ProductScreen";
 import { MyCartScreen } from "screens/MyCartScreen/MyCartScreen";
+import { SignUpScreen } from "screens/SignUpScreen/SignUpScreen";
 import { CheckOutScreen } from "screens/CheckOutScreen/CheckOutScreen";
 import { RatingScreen } from "screens/RatingScreen/RatingScreen";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
@@ -32,6 +33,14 @@ export const allScreens = (Stack: any) => {
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
+        options={{
+          headerShown: false,
+          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="SignUpScreen"
+        component={SignUpScreen}
         options={{
           headerShown: false,
           gestureEnabled: false,
