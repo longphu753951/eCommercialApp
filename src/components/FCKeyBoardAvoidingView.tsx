@@ -21,14 +21,14 @@ interface Props {
 
 const defaultProps = {
   children: undefined,
-  loading: '',
+  loading: "",
 };
 
 const FCKeyBoardAvoidingView: React.FC<Props> = (props: Props) => {
   const { children, loading } = props;
   return (
     <>
-      {loading === 'TRIGGER' && (
+      {loading === "TRIGGER" && (
         <View
           style={{
             position: "absolute",
@@ -37,38 +37,28 @@ const FCKeyBoardAvoidingView: React.FC<Props> = (props: Props) => {
             bottom: 0,
             left: 0,
             zIndex: 1,
-            alignContent: 'center',
-            justifyContent: 'center',
+            alignContent: "center",
+            justifyContent: "center",
             width: "100%",
             height: "100%",
             backgroundColor: "rgba(52, 52, 52, 0.8)",
           }}
         >
-          <ActivityIndicator size={'large'} color= {'white'} />
+          <ActivityIndicator size={"large"} color={"white"} />
         </View>
       )}
       <SafeAreaView style={styles.container}>
-        <View
-          style={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-          }}
+        <TouchableWithoutFeedback
+          style={{ width: "100%", height: "100%" }}
+          onPress={() => Keyboard.dismiss()}
         >
-          <TouchableWithoutFeedback
-            style={{ width: "100%", height: "100%" }}
-            onPress={() => Keyboard.dismiss()}
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={{ flex: 1 }}
           >
-            <KeyboardAvoidingView
-              behavior={Platform.OS === "ios" ? "padding" : "height"}
-              style={{ flex: 1 }}
-            >
-              {children}
-            </KeyboardAvoidingView>
-          </TouchableWithoutFeedback>
-        </View>
+            {children}
+          </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
       </SafeAreaView>
     </>
   );

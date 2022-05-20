@@ -34,8 +34,10 @@ export const SignUpScreen = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
+      firstName: "",
+      lastName: "",
       telephone: "",
-      password: "",
+      email: "",
     },
   });
 
@@ -49,10 +51,46 @@ export const SignUpScreen = () => {
         <View style={{ alignItems: "center", width: "100%" }}>
           <Image
             resizeMode="contain"
-            style={{ height: height*30.66/100 }}
+            style={{ height: (height * 30.66) / 100 }}
             source={require("assets/images/image1.png")}
           />
         </View>
+        <View>
+          <Text>Step 1</Text>
+          <Text>Type your information here</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
+        >
+          <TextField
+            textInputStyle={styles.nameInput}
+            control={control}
+            label={"First name"}
+            name={"firstName"}
+          />
+          <TextField
+            textInputStyle={styles.nameInput}
+            control={control}
+            label={"Last name"}
+            name={"lastName"}
+          />
+        </View>
+        <TextField
+            textInputStyle={{width: '100%'}}
+            control={control}
+            label={"Last name"}
+            name={"lastName"}
+          />
+          <TextField
+            textInputStyle={{width: '100%'}}
+            control={control}
+            label={"Last name"}
+            name={"lastName"}
+          />
       </View>
     </FCKeyBoardAvoidingView>
   );
@@ -67,4 +105,5 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     paddingHorizontal: (width * 5.33) / 100,
   },
+  nameInput: { width: (width * 42.4) / 100 }
 });

@@ -14,10 +14,11 @@ interface Props {
   isSecure: Boolean;
   error: FieldError;
   keyboardType: String;
+  textInputStyle: any;
 }
 
 const TextField: React.FC<Props> = (props: Props) => {
-  const { name, control, isSecure, error, label, keyboardType } = props;
+  const { name, control, isSecure, error, label, keyboardType, textInputStyle } = props;
   const [isShowingPassword, setIsShowingPassword] = useState(false);
 
   const setShowPassword = () => {
@@ -32,7 +33,7 @@ const TextField: React.FC<Props> = (props: Props) => {
           <>
             <View style={styles.textInputContainer}>
               <TextInput
-                style={{ width: "100%" }}
+                style={textInputStyle}
                 mode="outlined"
                 keyboardType={keyboardType}
                 activeOutlineColor={"#303030"}

@@ -87,14 +87,16 @@ export const LoginScreen = () => {
           }}
         >
           <TextField
+            textInputStyle={{ width: "100%" }}
             control={control}
             label={"Telephone"}
             name={"telephone"}
-            keyboardType= {"phone-pad"}
+            keyboardType={"phone-pad"}
             error={errors.telephone}
           />
 
           <TextField
+            textInputStyle={{ width: "100%" }}
             control={control}
             isSecure={true}
             label={"Password"}
