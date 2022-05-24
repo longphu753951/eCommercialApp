@@ -183,26 +183,3 @@ export const tabNavigation = () => {
     </Tab.Navigator>
   );
 };
-
-const bottomTabScreen = {
-  home: {
-    component: HomeScreen,
-    fill: "home",
-    outline: "home-outline",
-  },
-  favorite: {
-    component: HomeScreen,
-    fill: "bookmark",
-    outline: "bookmark-outline",
-  },
-  notification: {
-    component: HomeScreen,
-    fill: "notifications",
-    outline: "notifications-outline",
-  },
-  profile: {
-    component: HomeScreen,
-    fill: "person",
-    outline: "person-outline",
-  },
-};

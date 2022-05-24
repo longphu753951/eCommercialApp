@@ -1,24 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  Text,
-  View,
-  Image,
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity,
-} from "react-native";
-import { TextInput } from "react-native-paper";
-import { Ionicons } from "@expo/vector-icons";
-import size from "config/size";
+import { Dimensions, ScrollView, View, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import { useSelector, useDispatch } from "react-redux";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { FCKeyBoardAvoidingView, TextField } from "components";
-import { loginRoutine } from "reducers/auth";
-import { getCurrentUser } from "reducers/user";
-
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
+import { styles, width, height } from "./SignUpStyles";
+import TypeInformationForm from "./components/TypeInformationForm";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 export const SignUpScreen = () => {
   const navigation = useNavigation();
@@ -42,68 +32,33 @@ export const SignUpScreen = () => {
   });
 
   const onSubmit = async (data) => {
-    console.log;
+    console.log(data);
   };
 
   return (
+    //<FCKeyBoardAvoidingView loading={loading} style={styles.container}>
+    // <ScrollView
+    //   horizontal={true}
+    //   bounces={true}
+    //   pagingEnabled={false}
+    //   showsHorizontalScrollIndicator={false}
+    //   contentContainerStyle={styles.contentContainerStyle}
+    //   style={styles.contentContainer}>
+    //     <TypeInformationForm/>
+
+    //     <TypeInformationForm/>
+    // </ScrollView>
+    // </FCKeyBoardAvoidingView>
     <FCKeyBoardAvoidingView loading={loading} style={styles.container}>
-      <View style={styles.contentContainer}>
-        <View style={{ alignItems: "center", width: "100%" }}>
-          <Image
-            resizeMode="contain"
-            style={{ height: (height * 30.66) / 100 }}
-            source={require("assets/images/image1.png")}
-          />
-        </View>
-        <View>
-          <Text>Step 1</Text>
-          <Text>Type your information here</Text>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            width: "100%",
-          }}
-        >
-          <TextField
-            textInputStyle={styles.nameInput}
-            control={control}
-            label={"First name"}
-            name={"firstName"}
-          />
-          <TextField
-            textInputStyle={styles.nameInput}
-            control={control}
-            label={"Last name"}
-            name={"lastName"}
-          />
-        </View>
-        <TextField
-            textInputStyle={{width: '100%'}}
-            control={control}
-            label={"Last name"}
-            name={"lastName"}
-          />
-          <TextField
-            textInputStyle={{width: '100%'}}
-            control={control}
-            label={"Last name"}
-            name={"lastName"}
-          />
-      </View>
+      <ScrollView
+        horizontal={true}
+        bounces={false}
+        pagingEnabled={true}
+        showsHorizontalScrollIndicator={false}
+      >
+        <TypeInformationForm />
+        <TypeInformationForm />
+      </ScrollView>
     </FCKeyBoardAvoidingView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  contentContainer: {
-    flex: 1,
-    alignItems: "flex-start",
-    paddingHorizontal: (width * 5.33) / 100,
-  },
-  nameInput: { width: (width * 42.4) / 100 }
-});

@@ -77,7 +77,7 @@ TextField.defaultProps = {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: (1 * height) / 100,
+    marginBottom: (0.5* height) / 100,
     height: (height * 8.86) / 100,
   },
   showHidePasswordButton: {

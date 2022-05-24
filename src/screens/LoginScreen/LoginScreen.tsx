@@ -7,12 +7,10 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import { TextInput } from "react-native-paper";
-import { Ionicons } from "@expo/vector-icons";
 import size from "config/size";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { FCKeyBoardAvoidingView, TextField } from "components";
 import { loginRoutine } from "reducers/auth";
 import { getCurrentUser } from "reducers/user";
@@ -221,7 +219,7 @@ const styles = StyleSheet.create({
   welcomeContainer: { marginTop: (4.92 * height) / 100 },
   signInText: {
     fontFamily: "Gelasio-SemiBold",
-    fontSize: 45,
+    fontSize: 43,
     color: "#303030",
     marginTop: size.h14,
   },
