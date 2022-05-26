@@ -1,26 +1,28 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-} from "react-native";
+import { Text, View, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, UseFormRegister, Control } from "react-hook-form";
 import { TextField } from "components";
 import { styles, width, height } from "../SignUpStyles";
 
-const TypeInformationForm = () => {
+interface Props {
+  submit(): void;
+}
+
+const defaultProps = {
+  submit: () => {},
+};
+
+const TypeInformationForm: React.FC<Props> = (props: Props) => {
+  const {submit} = props;
   const navigation = useNavigation();
   const loading = useSelector((state) => state.auth.loading);
 
   const {
-    register,
     setValue,
     handleSubmit,
     control,
-    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -33,10 +35,18 @@ const TypeInformationForm = () => {
 
   const onSubmit = async (data) => {
     console.log(data);
+    submit();
   };
 
   return (
-    <View style={{flexDirection:'column', width: width, flex: 1, paddingHorizontal: (width * 5.33) / 100,}}>
+    <View
+      style={{
+        flexDirection: "column",
+        width: width,
+        flex: 1,
+        paddingHorizontal: (width * 5.33) / 100,
+      }}
+    >
       <View style={{ alignItems: "center", width: "100%" }}>
         <Image
           resizeMode="contain"
@@ -156,8 +166,9 @@ const TypeInformationForm = () => {
         </View>
       </View>
     </View>
-    
   );
 };
 
-export default TypeInformationForm
+TypeInformationForm.defaultProps = defaultProps;
+
+export default TypeInformationForm;

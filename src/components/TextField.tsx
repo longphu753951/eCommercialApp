@@ -39,6 +39,7 @@ const TextField: React.FC<Props> = (props: Props) => {
                 activeOutlineColor={"#303030"}
                 label={label}
                 autoCapitalize={"none"}
+                returnKeyLabel={'next'}
                 secureTextEntry={isSecure && !isShowingPassword}
                 onChangeText={(value) => onChange(value)}
                 onBlur={onBlur}

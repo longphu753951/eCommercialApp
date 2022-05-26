@@ -35,6 +35,12 @@ export const styles = StyleSheet.create({
     marginTop: (height * 1.1) / 100,
   },
 
+  signUpButton: {
+    marginTop: (height * 1.35) / 100,
+    backgroundColor: "#767676",
+    width: "100%",
+  },
+
   orText: {
     marginVertical: (1.72 * height) / 100,
     fontSize: (1.6 * height) / 100,
@@ -54,7 +60,9 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     width: "100%",
   },
-  signUpContainer: { flexDirection: "row", marginTop: (height * 2) / 100 },
+  signUpContainer: {
+    flexDirection: "row",
+  },
   alreadyText: {
     fontSize: 16,
     fontFamily: "NunitoSans-SemiBold",
