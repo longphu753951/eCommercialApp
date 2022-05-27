@@ -9,7 +9,6 @@ import {
   takeLatest,
   actionChannel,
 } from "redux-saga/effects";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import API from "config/API";
 import { Alert } from "react-native";
 import { Bookmark, User } from "config/types";

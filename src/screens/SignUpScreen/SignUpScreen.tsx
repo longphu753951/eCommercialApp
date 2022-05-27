@@ -28,6 +28,7 @@ export const SignUpScreen = () => {
         bounces={false}
         scrollEnabled={false}
         pagingEnabled={true}
+        style={{flex:1}}
         showsHorizontalScrollIndicator={false}
       >
         <TypeInformationForm submit={() => onChangeScreen(1)} />

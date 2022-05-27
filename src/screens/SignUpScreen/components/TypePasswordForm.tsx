@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useForm, Controller, UseFormRegister, Control } from "react-hook-form";
 import { TextField } from "components";
 import { styles, width, height } from "../SignUpStyles";
+import { passwordRule } from "services/inputRuleService";
 
 interface Props {
   submit(): void;
@@ -23,6 +24,7 @@ const TypePasswordForm: React.FC<Props> = (props: Props) => {
     setValue,
     handleSubmit,
     control,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -39,10 +41,11 @@ const TypePasswordForm: React.FC<Props> = (props: Props) => {
   return (
     <View
       style={{
-        flexDirection: "column",
-        width: width,
         flex: 1,
+        alignItems: "flex-start",
+        justifyContent: "center",
         paddingHorizontal: (width * 5.33) / 100,
+        width: width,
       }}
     >
       <View style={{ alignItems: "center", width: "100%" }}>
@@ -76,16 +79,27 @@ const TypePasswordForm: React.FC<Props> = (props: Props) => {
         <TextField
           textInputStyle={{ width: "100%" }}
           control={control}
+          isSecure={true}
           label={"Password"}
           name={"password"}
           error={errors.password}
+          rules={passwordRule}
         />
         <TextField
           textInputStyle={{ width: "100%" }}
           control={control}
+          isSecure={true}
           label={"Password Confirm"}
           name={"passwordConfirm"}
           error={errors.passwordConfirm}
+          rules={{
+            required: {value: true, message: 'This field is required'},
+            validate: (val: string) => {
+              if (watch("password") != val) {
+                return "Your passwords do no match";
+              }
+            },
+          }}
         />
       </View>
       <View
@@ -97,7 +111,7 @@ const TypePasswordForm: React.FC<Props> = (props: Props) => {
           justifyContent: "space-between",
         }}
       >
-        <View style= {{width: '100%'}}>
+        <View style={{ width: "100%" }}>
           <TouchableOpacity
             style={[styles.button, styles.signInButton]}
             onPress={handleSubmit(onSubmit)}

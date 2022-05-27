@@ -1,10 +1,17 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Text, View, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
 import { useForm, Controller, UseFormRegister, Control } from "react-hook-form";
 import { TextField } from "components";
 import { styles, width, height } from "../SignUpStyles";
+import * as FirebaseRecaptcha from "expo-firebase-recaptcha";
+import {
+  getAuth,
+  PhoneAuthProvider,
+  signInWithCredential,
+} from "firebase/auth";
+import Constants from "expo-constants";
 
 interface Props {
   submit(): void;
@@ -14,11 +21,30 @@ interface Props {
 const defaultProps = {
   submit: () => {},
 };
+const auth = getAuth();
 
 const TypeOTPForm: React.FC<Props> = (props: Props) => {
   const { submit, goBack } = props;
+  const FIREBASE_CONFIG = Constants.manifest.extra.firebase;
   const navigation = useNavigation();
   const loading = useSelector((state) => state.auth.loading);
+  const recaptchaVerifier = useRef(null);
+  const [verificationId, setVerificationId] = useState("");
+
+  useEffect(async () => {
+    const phoneProvider = new PhoneAuthProvider(auth);
+    try {
+      
+      const verificationId = await phoneProvider.verifyPhoneNumber(
+        "+84933501450",
+        // @ts-ignore
+        recaptchaVerifier.current
+      );
+      
+    } catch (err) {
+      console.log('asd')
+    }
+  }, []);
 
   const {
     setValue,
@@ -42,15 +68,20 @@ const TypeOTPForm: React.FC<Props> = (props: Props) => {
   return (
     <View
       style={{
-        flexDirection: "column",
-        width: width,
         flex: 1,
+        alignItems: "stretch",
         justifyContent: "space-between",
+        flexDirection: "column",
         paddingHorizontal: (width * 5.33) / 100,
+        width: width,
       }}
     >
+      <FirebaseRecaptcha.FirebaseRecaptchaVerifierModal
+        ref={recaptchaVerifier}
+        firebaseConfig={FIREBASE_CONFIG}
+      />
       <View style={{ alignItems: "center" }}>
-        <View style={{ alignItems: "center", width: "100%", marginTop: 59 }}>
+        <View style={{ alignItems: "center", width: "100%" }}>
           <Image
             resizeMode="contain"
             style={{ height: (height * 30.66) / 100 }}

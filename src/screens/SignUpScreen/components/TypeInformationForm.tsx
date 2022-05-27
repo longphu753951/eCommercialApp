@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useForm, Controller, UseFormRegister, Control } from "react-hook-form";
 import { TextField } from "components";
 import { styles, width, height } from "../SignUpStyles";
+import * as inputRule from "services/inputRuleService";
 
 interface Props {
   submit(): void;
@@ -15,7 +16,7 @@ const defaultProps = {
 };
 
 const TypeInformationForm: React.FC<Props> = (props: Props) => {
-  const {submit} = props;
+  const { submit } = props;
   const navigation = useNavigation();
   const loading = useSelector((state) => state.auth.loading);
 
@@ -41,10 +42,11 @@ const TypeInformationForm: React.FC<Props> = (props: Props) => {
   return (
     <View
       style={{
-        flexDirection: "column",
-        width: width,
         flex: 1,
+        alignItems: "flex-start",
+        justifyContent: "center",
         paddingHorizontal: (width * 5.33) / 100,
+        width: (width),
       }}
     >
       <View style={{ alignItems: "center", width: "100%" }}>
@@ -87,6 +89,7 @@ const TypeInformationForm: React.FC<Props> = (props: Props) => {
             control={control}
             label={"First name"}
             name={"firstName"}
+            rules={inputRule.nameRule}
             error={errors.firstName}
           />
           <TextField
@@ -94,21 +97,24 @@ const TypeInformationForm: React.FC<Props> = (props: Props) => {
             control={control}
             label={"Last name"}
             name={"lastName"}
+            rules={inputRule.nameRule}
             error={errors.lastName}
           />
         </View>
         <TextField
-          textInputStyle={{ width: "100%" }}
+          textInputStyle={{ width: "100%", marginTop: (height * 0.5) / 100 }}
           control={control}
           label={"Email"}
           name={"email"}
+          rules={inputRule.emailRule}
           error={errors.email}
         />
         <TextField
-          textInputStyle={{ width: "100%" }}
+          textInputStyle={{ width: "100%", marginTop: (height * 0.5) / 100 }}
           control={control}
           label={"Telephone"}
           name={"telephone"}
+          rules={inputRule.telephoneRule}
           error={errors.telephone}
         />
       </View>

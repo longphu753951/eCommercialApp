@@ -2,7 +2,6 @@ import axios from "axios";
 import { createRoutine } from "redux-saga-routines";
 import { createReducer } from "@reduxjs/toolkit";
 import { all, takeEvery, call, put, takeLatest } from "redux-saga/effects";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import API from "config/API";
 import { Alert } from "react-native";
 import { Bookmark, User } from "config/types";
@@ -13,6 +12,7 @@ interface authState {
   token: any;
   user: User;
   bookmark: Bookmark;
+  register: User;
 }
 // =========================================================
 // =========================================================

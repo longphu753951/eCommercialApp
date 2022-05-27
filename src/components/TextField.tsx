@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { Control, Controller, FieldError } from "react-hook-form";
-import { Dimensions, TouchableOpacity, View, StyleSheet, Text } from "react-native";
+import {
+  Dimensions,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+  Text,
+} from "react-native";
 import { TextInput } from "react-native-paper";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -15,12 +21,21 @@ interface Props {
   error: FieldError;
   keyboardType: String;
   textInputStyle: any;
+  rules: any;
 }
 
 const TextField: React.FC<Props> = (props: Props) => {
-  const { name, control, isSecure, error, label, keyboardType, textInputStyle } = props;
+  const {
+    name,
+    control,
+    isSecure,
+    error,
+    label,
+    keyboardType,
+    textInputStyle,
+    rules,
+  } = props;
   const [isShowingPassword, setIsShowingPassword] = useState(false);
-
   const setShowPassword = () => {
     setIsShowingPassword(!isShowingPassword);
   };
@@ -39,7 +54,7 @@ const TextField: React.FC<Props> = (props: Props) => {
                 activeOutlineColor={"#303030"}
                 label={label}
                 autoCapitalize={"none"}
-                returnKeyLabel={'next'}
+                returnKeyLabel={"next"}
                 secureTextEntry={isSecure && !isShowingPassword}
                 onChangeText={(value) => onChange(value)}
                 onBlur={onBlur}
@@ -61,24 +76,22 @@ const TextField: React.FC<Props> = (props: Props) => {
           </>
         )}
         name={name}
-        rules={{ required: true }}
+        rules={rules}
       />
-      {error && (
-        <Text style={styles.errorText}>This is required.</Text>
-      )}
+      {error && <Text style={styles.errorText}>{error.message}</Text>}
     </View>
   );
 };
 
 TextField.defaultProps = {
-    label: 'label',
-    name: 'label',
-    isSecure: false,
-}
+  label: "label",
+  name: "label",
+  isSecure: false,
+};
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: (0.5* height) / 100,
+    marginBottom: (0.5 * height) / 100,
     height: (height * 8.86) / 100,
   },
   showHidePasswordButton: {
