@@ -88,3 +88,41 @@ axios.deleteWithAuth = (...params: any) => {
     }
   });
 };
+
+axios.formPost = (url, data, fileField = 'userfile[]') => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const formData = new FormData();
+      _.forEach(data, (val, field) => {
+        if (field === fileField) {
+          _.forEach(val, file => {
+            formData.append(field, file);
+          });
+        } else {
+          if (typeof val !== 'undefined') {
+            formData.append(field, val);
+          }
+        }
+      });
+      const config = {
+        headers: {
+          'content-type': 'multipart/form-data',
+        },
+        onUploadProgress: progressEvent => {
+          const eventLoaded = progressEvent.loaded * 100;
+          const percentCompleted = Math.round(
+            eventLoaded / progressEvent.total
+          );
+
+          console.log(percentCompleted);
+        }
+      };
+
+      const response = await axios.post(url, formData, config);
+
+      checkAPIResultCode(response, resolve, reject);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};

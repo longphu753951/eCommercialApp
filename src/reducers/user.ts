@@ -127,7 +127,6 @@ const INITIAL_STATE: userState = {
 export default createReducer(INITIAL_STATE, (builder) => {
   builder
     .addCase(getCurrentUser.SUCCESS, (state, action) => {
-      console.log('asdasdasdasdasdasdas');
       state.user = _.omit(action.payload, ["bookmark"]);
       state.bookmark = action.payload.bookmark;
       state.bookmarkId = action.payload.id;

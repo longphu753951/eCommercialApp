@@ -8,6 +8,7 @@ const API = {
   PRODUCT_BY_CATEGORY: '/categories/id/product/',
   PRODUCT_BY_ID: '/products/id/',
   LOGIN: '/o/token/',
+  SIGN_UP: '/users/',
   GET_CURRENT_USER: '/users/current-user/',
   BOOKMARK: '/bookmark/',
   BOOKMARK_BY_USER: '/bookmark/getBookmarkByUser/',

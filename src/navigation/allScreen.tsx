@@ -10,6 +10,7 @@ import { ShippingScreen } from "screens/ShippingScreen/ShippingScreen";
 import { PaymentMethodScreen } from "screens/PaymentMethodScreen/PaymentMethodScreen";
 import { MyReviewScreen } from "screens/MyReviewScreen/MyReviewScreen";
 import { ProductScreen } from "screens/ProductScreen/ProductScreen";
+import { CompleteScreen } from "screens/CompleteScreen/CompleteScreen";
 import { MyCartScreen } from "screens/MyCartScreen/MyCartScreen";
 import { SignUpScreen } from "screens/SignUpScreen/SignUpScreen";
 import { CheckOutScreen } from "screens/CheckOutScreen/CheckOutScreen";
@@ -41,6 +42,14 @@ export const allScreens = (Stack: any) => {
       <Stack.Screen
         name="SignUpScreen"
         component={SignUpScreen}
+        options={{
+          headerShown: false,
+          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="CompleteScreen"
+        component={CompleteScreen}
         options={{
           headerShown: false,
           gestureEnabled: false,

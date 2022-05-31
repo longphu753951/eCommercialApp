@@ -12,9 +12,14 @@ import {
   signInWithCredential,
 } from "firebase/auth";
 import Constants from "expo-constants";
+import { initializeApp } from "firebase/app";
+
+const FIREBASE_CONFIG: any = Constants.manifest?.extra.firebase;
+
+initializeApp(FIREBASE_CONFIG);
 
 interface Props {
-  submit(): void;
+  submit(data: string): void;
   goBack(): void;
 }
 
@@ -29,22 +34,21 @@ const TypeOTPForm: React.FC<Props> = (props: Props) => {
   const navigation = useNavigation();
   const loading = useSelector((state) => state.auth.loading);
   const recaptchaVerifier = useRef(null);
-  const [verificationId, setVerificationId] = useState("");
 
-  useEffect(async () => {
-    const phoneProvider = new PhoneAuthProvider(auth);
-    try {
-      
-      const verificationId = await phoneProvider.verifyPhoneNumber(
-        "+84933501450",
-        // @ts-ignore
-        recaptchaVerifier.current
-      );
-      
-    } catch (err) {
-      console.log('asd')
-    }
-  }, []);
+  // useEffect(async () => {
+  //   const phoneProvider = new PhoneAuthProvider(auth);
+  //   try {
+
+  //     const verificationId = await phoneProvider.verifyPhoneNumber(
+  //       "+84933501450",
+  //       // @ts-ignore
+  //       recaptchaVerifier.current
+  //     );
+
+  //   } catch (err) {
+  //     console.log('asd')
+  //   }
+  // }, []);
 
   const {
     setValue,
@@ -53,16 +57,12 @@ const TypeOTPForm: React.FC<Props> = (props: Props) => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      telephone: "",
-      email: "",
+      otp: "",
     },
   });
 
-  const onSubmit = async (data) => {
-    console.log(data);
-    submit();
+  const onSubmit = async (data: string) => {
+    submit(data.otp);
   };
 
   return (
@@ -70,7 +70,7 @@ const TypeOTPForm: React.FC<Props> = (props: Props) => {
       style={{
         flex: 1,
         alignItems: "stretch",
-        justifyContent: "space-between",
+        justifyContent: "space-evenly",
         flexDirection: "column",
         paddingHorizontal: (width * 5.33) / 100,
         width: width,
@@ -96,7 +96,7 @@ const TypeOTPForm: React.FC<Props> = (props: Props) => {
             letterSpacing: (width * 0.5) / 100,
           }}
         >
-          Almost done
+          Step 2
         </Text>
         <Text
           style={{
@@ -119,8 +119,8 @@ const TypeOTPForm: React.FC<Props> = (props: Props) => {
             textInputStyle={{ width: "100%" }}
             control={control}
             label={"OTP"}
-            name={"telephone"}
-            error={errors.telephone}
+            name={"otp"}
+            error={errors.otp}
           />
           <View style={styles.signUpContainer}>
             <Text style={styles.alreadyText}>Haven't received an OTP? </Text>
@@ -145,7 +145,7 @@ const TypeOTPForm: React.FC<Props> = (props: Props) => {
             style={[styles.button, styles.signInButton]}
             onPress={handleSubmit(onSubmit)}
           >
-            <Text style={styles.buttonText}>Finish</Text>
+            <Text style={styles.buttonText}>Next</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.signUpButton]}

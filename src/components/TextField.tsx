@@ -47,6 +47,7 @@ const TextField: React.FC<Props> = (props: Props) => {
         render={({ field: { onChange, onBlur, value } }) => (
           <>
             <View style={styles.textInputContainer}>
+            {/* @ts-ignore */}
               <TextInput
                 style={textInputStyle}
                 mode="outlined"

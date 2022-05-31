@@ -32,7 +32,6 @@ export const styles = StyleSheet.create({
   signInButton: {
     backgroundColor: "#212121",
     width: "100%",
-    marginTop: (height * 1.1) / 100,
   },
 
   signUpButton: {
@@ -42,7 +41,8 @@ export const styles = StyleSheet.create({
   },
 
   orText: {
-    marginVertical: (1.72 * height) / 100,
+    marginTop: (3.57 * height) / 100,
+    marginBottom: (1.72 * height) / 100,
     fontSize: (1.6 * height) / 100,
     alignSelf: "center",
   },
@@ -62,6 +62,7 @@ export const styles = StyleSheet.create({
   },
   signUpContainer: {
     flexDirection: "row",
+    alignSelf: 'center'
   },
   alreadyText: {
     fontSize: 16,

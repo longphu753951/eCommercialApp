@@ -4,7 +4,7 @@ import { createReducer } from "@reduxjs/toolkit";
 import { all, takeEvery, call, put, takeLatest } from "redux-saga/effects";
 import API from "config/API";
 import { Alert } from "react-native";
-import { Bookmark, User } from "config/types";
+import { Bookmark, User, UserRegister } from "config/types";
 import _ from "lodash";
 
 interface authState {
@@ -12,13 +12,13 @@ interface authState {
   token: any;
   user: User;
   bookmark: Bookmark;
-  register: User;
 }
 // =========================================================
 // =========================================================
 // TYPES
 export const loginRoutine = createRoutine("AUTH/LOGIN");
-export const logoutRoutine = createRoutine("AUTH/LOGOUT")
+export const logoutRoutine = createRoutine("AUTH/LOGOUT");
+export const signupRoutine = createRoutine("AUTH/SIGNUP");
 
 // =========================================================
 // =========================================================
@@ -40,8 +40,28 @@ function* loginSaga(action: any): Promise<void> {
       payload: data,
     });
   } catch (e) {
+    console.log(e);
     yield put({
       type: loginRoutine.FAILURE,
+    });
+  }
+}
+
+function* signupSaga(action: any): Promise<void> {
+  try {
+    const register = action.data;
+    delete register.passwordConfirm;
+    console.log(register)
+
+    const data = yield call(axios.formPost, API.SIGN_UP, register);
+    console.log(data);
+    yield put({
+      type: signupRoutine.SUCCESS,
+      payload: data,
+    });
+  } catch (e) {
+    yield put({
+      type: signupRoutine.FAILURE,
     });
   }
 }
@@ -49,6 +69,7 @@ function* loginSaga(action: any): Promise<void> {
 export function* authSaga() {
   yield all([
     takeLatest(loginRoutine.TRIGGER, loginSaga),
+    takeLatest(signupRoutine.TRIGGER, signupSaga),
   ]);
 }
 
@@ -61,16 +82,16 @@ const INITIAL_STATE: authState = {
   token: {},
   user: {
     id: 0,
-    first_name: '',
-    last_name: '',
-    email: '',
-    telephone: '',
-    avatar_path: 'empty',
+    first_name: "",
+    last_name: "",
+    email: "",
+    telephone: "",
+    avatar_path: "empty",
   },
   bookmark: {
     id: 0,
     bookmarkDetail: [],
-  }
+  },
 };
 
 export default createReducer(INITIAL_STATE, (builder) => {
