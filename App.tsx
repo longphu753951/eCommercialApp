@@ -12,7 +12,6 @@ import { StripeProvider as _StripeProvider } from "@stripe/stripe-react-native";
 import type { Props as StripeProviderProps } from "@stripe/stripe-react-native/lib/typescript/src/components/StripeProvider";
 const StripeProvider = _StripeProvider as React.FC<StripeProviderProps>;
 import { persistStore } from "redux-persist";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { initializeApp } from "firebase/app";
 
 const FIREBASE_CONFIG: any = {
@@ -28,8 +27,6 @@ const FIREBASE_CONFIG: any = {
 initializeApp(FIREBASE_CONFIG);
 
 let persistor = persistStore(store);
-
-AsyncStorage.clear();
 
 const App = () => {
   const [loaded] = useFonts(font);

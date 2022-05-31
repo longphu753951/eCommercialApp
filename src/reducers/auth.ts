@@ -103,6 +103,16 @@ export default createReducer(INITIAL_STATE, (builder) => {
       state.loading = "SUCCESS";
       state.token = action.payload;
     })
+    .addCase(logoutRoutine.TRIGGER, (state) => {
+      state.user= {
+        id: 0,
+        first_name: "",
+        last_name: "",
+        email: "",
+        telephone: "",
+        avatar_path: "empty",
+      }
+    })
     .addCase(loginRoutine.FAILURE, (state, action) => {
       state.loading = "FAILURE";
       Alert.alert("Login failed", "Wrong password or telephone number");
