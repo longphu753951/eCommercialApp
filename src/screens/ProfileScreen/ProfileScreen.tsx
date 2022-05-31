@@ -25,8 +25,7 @@ const height = Dimensions.get("window").height;
 export const ProfileScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
-  console.log(user);
+  const user = useSelector((state) => state.user.user);
   const renderCategory = (): JSX.Element => {
     const listItem = profileCategoryList.map((item) => {
       return (

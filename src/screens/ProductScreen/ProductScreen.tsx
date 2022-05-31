@@ -9,11 +9,11 @@ import {
   TouchableOpacity,
   Animated,
   useWindowDimensions,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import { product } from "config/mockData";
 import _ from "lodash";
-import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import {
   responsiveHeight,
   responsiveWidth,
@@ -23,7 +23,9 @@ import { Entypo } from "@expo/vector-icons";
 import { Rating } from "react-native-ratings";
 import { getDisplay } from "config/size";
 import { IncrementButton } from "components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { addBookmark, deleteBookmark } from "reducers/user";
+import store from "store";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -31,15 +33,21 @@ const height = Dimensions.get("window").height;
 export const ProductScreen = () => {
   const navigation = useNavigation();
   const productMain = useSelector((state) => state.item.product);
+  const bookmark: any[] = useSelector((state) => state.user.bookmark);
+  const loading = useSelector((state) => state.user.loading);
+  const dispatch = useDispatch();
+  const [isBookmarked, setIsBookmarked] = useState(false);
   const goBack = () => {
     navigation.goBack();
   };
 
   const [chosenProductAttribute, setChosenProductAttribute] = useState([]);
+  const [isShowingModal, setIsShowingModal] = useState(false);
 
   useEffect(() => {
+    console.log("abc");
     if (productMain !== null) {
-      setChosenProductAttribute(productMain.productAttribute[0]);
+      onSetChosenItem(productMain.productAttribute[0]);
     }
   }, [productMain]);
 
@@ -52,6 +60,52 @@ export const ProductScreen = () => {
 
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
   let a: number = getDisplay();
+
+  const onSetChosenItem = useCallback(
+    (item: any) => {
+      const choosenProduct = item;
+      setChosenProductAttribute(choosenProduct);
+      const listBookmarkId: string[] = bookmark.bookmarkDetail.map(
+        (item) => item.productAttribute.sku
+      );
+      setIsBookmarked(listBookmarkId.includes(item.sku));
+    },
+    [chosenProductAttribute]
+  );
+
+  const setBookmark = async () => {
+    if (!isBookmarked) {
+      await dispatch({
+        type: addBookmark.TRIGGER,
+        data: {
+          bookmark: bookmark.id,
+          productAttribute: chosenProductAttribute.sku,
+        },
+      });
+    } else {
+      const selectedBookmark = bookmark.bookmarkDetail.find((item) => {
+        return item.productAttribute.sku === chosenProductAttribute.sku;
+      });
+      await dispatch({
+        type: deleteBookmark.TRIGGER,
+        id: selectedBookmark.id,
+      });
+    }
+
+    setIsBookmarked(!isBookmarked);
+  };
+
+  const Modal = (props: any) => {
+    const { showing } = props;
+
+    return (
+      <Modal animationType="slide" transparent={true} visible={showing}>
+        <View>
+          <Text>asdasdasdasdas</Text>
+        </View>
+      </Modal>
+    );
+  };
 
   const Paginator = ({ data, scrollX }) => {
     const { width } = useWindowDimensions();
@@ -104,6 +158,23 @@ export const ProductScreen = () => {
   if (productMain !== null)
     return (
       <View style={styles.container}>
+        {/* <View
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            zIndex: 1,
+            alignContent: 'center',
+            justifyContent: 'center',
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgba(52, 52, 52, 0.8)",
+          }}
+        >
+          <ActivityIndicator size={'large'} color= {'white'} />
+        </View> */}
         <View style={styles.contentContainer}>
           <View style={{ alignItems: "flex-end" }}>
             <View
@@ -174,47 +245,56 @@ export const ProductScreen = () => {
                   color="black"
                 />
               </TouchableOpacity>
-              { productMain.productAttribute.length >= 2 && (<View
-                style={{
-                  backgroundColor: "white",
-                  marginTop: (Dimensions.get("window").height * 4.92) / 100,
-                  width: (Dimensions.get("window").height * 7.88) / 100,
-                  height: (Dimensions.get("window").height * 23.64) / 100,
-                  borderRadius: (Dimensions.get("window").height * 23.64) / 100,
-                  shadowColor: "#8A959E",
-                  shadowOffset: {
-                    width: 2,
-                    height: 3,
-                  },
-                  shadowOpacity: 0.21,
-                  shadowRadius: 10,
-                  elevation: 2,
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  paddingVertical: (height * 1.847) / 100, 
-                }}
-              >
-                {productMain.productAttribute.map((item:any) => {
-                  return (
-                    <TouchableOpacity
-                      onPress={() => {
-                        setChosenProductAttribute(item);
-                      }}
-                      style={{
-                        width: (height * 4.5) / 100,
-                        height: (height * 4.5) / 100,
-                        backgroundColor: item.hexColor,
-                        borderRadius: 500,
-                        borderWidth: (height * 0.61) / 100,
-                        borderColor:
-                          chosenProductAttribute === item
-                            ? "#909090"
-                            : "#F0F0F0",
-                      }}
-                    ></TouchableOpacity>
-                  );
-                })}
-              </View>)}
+              {productMain.productAttribute.length >= 2 && (
+                <View
+                  style={{
+                    backgroundColor: "white",
+                    marginTop: (Dimensions.get("window").height * 4.92) / 100,
+                    width: (Dimensions.get("window").height * 7.88) / 100,
+                    height: (Dimensions.get("window").height * 23.64) / 100,
+                    borderRadius:
+                      (Dimensions.get("window").height * 23.64) / 100,
+                    shadowColor: "#8A959E",
+                    shadowOffset: {
+                      width: 2,
+                      height: 3,
+                    },
+                    shadowOpacity: 0.21,
+                    shadowRadius: 10,
+                    elevation: 2,
+                    alignItems: "center",
+                    justifyContent:
+                      productMain.productAttribute.length == 2
+                        ? "flex-start"
+                        : "space-between",
+                    paddingVertical: (height * 1.847) / 100,
+                  }}
+                >
+                  {productMain.productAttribute.map((item: any) => {
+                    return (
+                      <TouchableOpacity
+                        onPress={() => onSetChosenItem(item)}
+                        disabled={loading === "LOADING"}
+                        style={{
+                          width: (height * 4.5) / 100,
+                          height: (height * 4.5) / 100,
+                          backgroundColor: item.hexColor,
+                          borderRadius: 500,
+                          marginBottom:
+                            productMain.productAttribute.length == 2
+                              ? (height * 3.69) / 100
+                              : 0,
+                          borderWidth: (height * 0.61) / 100,
+                          borderColor:
+                            chosenProductAttribute === item
+                              ? "#909090"
+                              : "#F0F0F0",
+                        }}
+                      ></TouchableOpacity>
+                    );
+                  })}
+                </View>
+              )}
             </View>
           </View>
           <View style={styles.informationContainer}>
@@ -225,8 +305,7 @@ export const ProductScreen = () => {
               </Text>
               <IncrementButton
                 defaultCount={1}
-                onChangeValue={(child: number) => {
-                }}
+                onChangeValue={(child: number) => {}}
               />
             </View>
             <TouchableOpacity
@@ -247,14 +326,24 @@ export const ProductScreen = () => {
               <Text style={styles.description}>{productMain.description}</Text>
             </View>
             <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.bookMarkButton}>
-                <FontAwesome5
-                  name="bookmark"
+              <TouchableOpacity
+                disabled={loading === "LOADING"}
+                onPress={() => setBookmark()}
+                style={[
+                  styles.bookMarkButton,
+                  { backgroundColor: isBookmarked ? "#303030" : "#E0E0E0" },
+                ]}
+              >
+                <FontAwesome
+                  name={isBookmarked ? "bookmark" : "bookmark-o"}
                   size={(height * 2.95) / 100}
-                  color="black"
+                  color={isBookmarked ? "white" : "black"}
                 />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.addToCartButton}>
+              <TouchableOpacity
+                style={styles.addToCartButton}
+                disabled={loading === "LOADING"}
+              >
                 <Text style={styles.addToCartText}>Add to cart</Text>
               </TouchableOpacity>
             </View>
@@ -263,9 +352,16 @@ export const ProductScreen = () => {
       </View>
     );
   else {
-    return <View style={[styles.container, {alignContent: 'center', justifyContent: 'center'}]}>
-      <ActivityIndicator size="large" color="#8A959E" />
-    </View>;
+    return (
+      <View
+        style={[
+          styles.container,
+          { alignContent: "center", justifyContent: "center" },
+        ]}
+      >
+        <ActivityIndicator size="large" color="#8A959E" />
+      </View>
+    );
   }
 };
 
@@ -343,7 +439,6 @@ const styles = StyleSheet.create({
     marginTop: (2.46 * height) / 100,
   },
   bookMarkButton: {
-    backgroundColor: "#E0E0E0",
     borderRadius: 16,
     width: (height * 7.4) / 100,
     height: (height * 7.4) / 100,

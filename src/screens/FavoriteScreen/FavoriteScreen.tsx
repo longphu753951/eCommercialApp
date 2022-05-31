@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   SafeAreaView,
   Text,
@@ -16,7 +16,8 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { itemList } from "config/mockData";
 import _ from "lodash";
 import { CartItem, Header } from "components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteBookmark, getBookmark } from "reducers/user";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -26,20 +27,30 @@ const height = Dimensions.get("window").height;
 
 export const FavoriteScreen = () => {
   const navigation = useNavigation();
-  const bookmark = useSelector( state => state.auth.user.bookmark.bookmarkDetail)
-  const [refreshing, setRefreshing] = useState(false);
-  const [chooseCat, setChooseCat] = useState("Popular");
-
+  const bookmark = useSelector( state => state.user.bookmark)
+  const [bookmarkDetailList, setBookmarkDetailList] = useState(bookmark?.bookmarkDetail)
+  const loading = useSelector(state => state.user.loading)
+  const dispatch = useDispatch();
   const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
+    dispatch({type: getBookmark.TRIGGER})
   }, []);
 
+  useEffect(() => {
+    setBookmarkDetailList(bookmark?.bookmarkDetail);
+  }, [bookmark])
+
   const item = (item: any): JSX.Element => {
-    console.log('item',item.item.productAttribute.price)
     return (
       <CartItem
         image={{uri: item.item.productAttribute.productImage[0].image}}
+        disable ={loading === "LOADING"}
+        onRemoving = {async () => {
+          console.log(item.item.id)
+          await dispatch({
+            type: deleteBookmark.TRIGGER,
+            id: item.item.id,
+          })
+        }}
         content={
           <View style={{ flexDirection: "column" }}>
             <Text style={styles.nameText}>{item.item.productAttribute.name}</Text>
@@ -86,12 +97,12 @@ export const FavoriteScreen = () => {
           <FlatList
             showsVerticalScrollIndicator={false}
             style={styles.itemFlatList}
-            data={bookmark}
+            data={bookmarkDetailList}
             ItemSeparatorComponent={ItemDivider}
             keyExtractor={(item) => item.id}
             renderItem={item}
             refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              <RefreshControl refreshing={loading === "LOADING"} onRefresh={onRefresh} />
             }
           />
           <TouchableOpacity style={styles.addAllButton}>

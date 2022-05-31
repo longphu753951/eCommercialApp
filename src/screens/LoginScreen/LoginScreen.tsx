@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -7,13 +7,13 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import { TextInput } from "react-native-paper";
 import size from "config/size";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
-import { useForm, Controller } from "react-hook-form";
-import { FCKeyBoardAvoidingView } from "components";
-import { getCurrentUser, loginRoutine } from "reducers/auth";
+import { useForm } from "react-hook-form";
+import { FCKeyBoardAvoidingView, TextField } from "components";
+import { loginRoutine } from "reducers/auth";
+import { getCurrentUser } from "reducers/user";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -22,6 +22,7 @@ export const LoginScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.auth.loading);
+  const [isShowingPassword, setIsShowingPassword] = useState(false);
 
   const timeOfDay = () => {
     const today = new Date();
@@ -45,19 +46,22 @@ export const LoginScreen = () => {
   });
 
   const loginSuccess = useCallback(async () => {
-    if(loading === 'SUCCESS'){
+    if (loading === "SUCCESS") {
       await dispatch({ type: getCurrentUser.TRIGGER });
-      navigation.navigate("tabNavigation")
+      navigation.navigate("tabNavigation");
     }
-  },[loading]);
+  }, [loading]);
 
   useEffect(() => {
-    loginSuccess()
-  }, [loginSuccess])
+    loginSuccess();
+  }, [loginSuccess]);
 
   const onSubmit = async (data) => {
     await dispatch({ type: loginRoutine.TRIGGER, data: data });
-    
+  };
+
+  const setShowPassword = () => {
+    setIsShowingPassword(!isShowingPassword);
   };
 
   return (
@@ -80,55 +84,27 @@ export const LoginScreen = () => {
             width: "100%",
           }}
         >
-          <View style={{ height: (height * 8.9) / 100 }}>
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  mode="outlined"
-                  activeOutlineColor={"#303030"}
-                  label="Telephone"
-                  keyboardType="phone-pad"
-                  onChangeText={(value) => onChange(value)}
-                  onBlur={onBlur}
-                  value={value}
-                />
-              )}
-              name="telephone"
-              rules={{ required: true }}
-            />
-            {errors.telephone && (
-              <Text style={styles.errorText}>This is required.</Text>
-            )}
-          </View>
+          <TextField
+            textInputStyle={{ width: "100%" }}
+            control={control}
+            label={"Telephone"}
+            name={"telephone"}
+            keyboardType={"phone-pad"}
+            error={errors.telephone}
+          />
 
-          <View style={{ height: (height * 8.9) / 100 }}>
-            <Controller
-              control={control}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={{ marginTop: (1 * height) / 100 }}
-                  mode="outlined"
-                  activeOutlineColor={"#303030"}
-                  label="Password"
-                  autoCapitalize={"none"}
-                  secureTextEntry={true}
-                  onChangeText={(value) => onChange(value)}
-                  onBlur={onBlur}
-                  value={value}
-                />
-              )}
-              name="password"
-              rules={{ required: true }}
-            />
-            {errors.password && (
-              <Text style={styles.errorText}>This is required.</Text>
-            )}
-          </View>
+          <TextField
+            textInputStyle={{ width: "100%" }}
+            control={control}
+            isSecure={true}
+            label={"Password"}
+            name={"password"}
+            error={errors.password}
+          />
 
           <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
             <TouchableOpacity
-              style={{ marginVertical: (height * 1.01) / 100 }}
+              style={{ marginBottom: (height * 1.01) / 100 }}
               onPress={() => {
                 console.log("forgot the password");
               }}
@@ -152,7 +128,7 @@ export const LoginScreen = () => {
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, styles.signUpButton]}
-              onPress={() => navigation.navigate("tabNavigation")}
+              onPress={() => navigation.navigate("SignUpScreen")}
             >
               <Text style={styles.buttonText}>Sign up</Text>
             </TouchableOpacity>
@@ -243,7 +219,7 @@ const styles = StyleSheet.create({
   welcomeContainer: { marginTop: (4.92 * height) / 100 },
   signInText: {
     fontFamily: "Gelasio-SemiBold",
-    fontSize: 45,
+    fontSize: 43,
     color: "#303030",
     marginTop: size.h14,
   },
@@ -286,5 +262,4 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     marginBottom: (1.35 * height) / 100,
   },
-  errorText: { marginTop: (height * 0.6) / 100 },
 });

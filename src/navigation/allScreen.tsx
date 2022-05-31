@@ -10,7 +10,9 @@ import { ShippingScreen } from "screens/ShippingScreen/ShippingScreen";
 import { PaymentMethodScreen } from "screens/PaymentMethodScreen/PaymentMethodScreen";
 import { MyReviewScreen } from "screens/MyReviewScreen/MyReviewScreen";
 import { ProductScreen } from "screens/ProductScreen/ProductScreen";
+import { CompleteScreen } from "screens/CompleteScreen/CompleteScreen";
 import { MyCartScreen } from "screens/MyCartScreen/MyCartScreen";
+import { SignUpScreen } from "screens/SignUpScreen/SignUpScreen";
 import { CheckOutScreen } from "screens/CheckOutScreen/CheckOutScreen";
 import { RatingScreen } from "screens/RatingScreen/RatingScreen";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
@@ -32,6 +34,22 @@ export const allScreens = (Stack: any) => {
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
+        options={{
+          headerShown: false,
+          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="SignUpScreen"
+        component={SignUpScreen}
+        options={{
+          headerShown: false,
+          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="CompleteScreen"
+        component={CompleteScreen}
         options={{
           headerShown: false,
           gestureEnabled: false,
@@ -173,27 +191,4 @@ export const tabNavigation = () => {
       {allTabScreens(Tab)}
     </Tab.Navigator>
   );
-};
-
-const bottomTabScreen = {
-  home: {
-    component: HomeScreen,
-    fill: "home",
-    outline: "home-outline",
-  },
-  favorite: {
-    component: HomeScreen,
-    fill: "bookmark",
-    outline: "bookmark-outline",
-  },
-  notification: {
-    component: HomeScreen,
-    fill: "notifications",
-    outline: "notifications-outline",
-  },
-  profile: {
-    component: HomeScreen,
-    fill: "person",
-    outline: "person-outline",
-  },
 };

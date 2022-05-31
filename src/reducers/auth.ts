@@ -2,10 +2,10 @@ import axios from "axios";
 import { createRoutine } from "redux-saga-routines";
 import { createReducer } from "@reduxjs/toolkit";
 import { all, takeEvery, call, put, takeLatest } from "redux-saga/effects";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import API from "config/API";
 import { Alert } from "react-native";
-import { Bookmark, User } from "config/types";
+import { Bookmark, User, UserRegister } from "config/types";
+import _ from "lodash";
 
 interface authState {
   loading: string;
@@ -17,8 +17,8 @@ interface authState {
 // =========================================================
 // TYPES
 export const loginRoutine = createRoutine("AUTH/LOGIN");
-export const getCurrentUser = createRoutine("AUTH/GET_CURRENT_USER");
-export const logoutRoutine = createRoutine("AUTH/LOGOUT")
+export const logoutRoutine = createRoutine("AUTH/LOGOUT");
+export const signupRoutine = createRoutine("AUTH/SIGNUP");
 
 // =========================================================
 // =========================================================
@@ -40,29 +40,36 @@ function* loginSaga(action: any): Promise<void> {
       payload: data,
     });
   } catch (e) {
+    console.log(e);
     yield put({
       type: loginRoutine.FAILURE,
     });
   }
 }
 
-function* getCurrentUserSaga(): Promise<void> {
+function* signupSaga(action: any): Promise<void> {
   try {
-    const data = yield call(axios.getWithAuth, API.GET_CURRENT_USER);
+    const register = action.data;
+    delete register.passwordConfirm;
+    console.log(register)
 
+    const data = yield call(axios.formPost, API.SIGN_UP, register);
+    console.log(data);
     yield put({
-      type: getCurrentUser.SUCCESS,
+      type: signupRoutine.SUCCESS,
       payload: data,
     });
   } catch (e) {
-    console.log(e);
+    yield put({
+      type: signupRoutine.FAILURE,
+    });
   }
 }
 
 export function* authSaga() {
   yield all([
     takeLatest(loginRoutine.TRIGGER, loginSaga),
-    takeLatest(getCurrentUser.TRIGGER, getCurrentUserSaga),
+    takeLatest(signupRoutine.TRIGGER, signupSaga),
   ]);
 }
 
@@ -75,16 +82,16 @@ const INITIAL_STATE: authState = {
   token: {},
   user: {
     id: 0,
-    first_name: '',
-    last_name: '',
-    email: '',
-    telephone: '',
-    avatar_path: 'empty',
+    first_name: "",
+    last_name: "",
+    email: "",
+    telephone: "",
+    avatar_path: "empty",
   },
   bookmark: {
     id: 0,
     bookmarkDetail: [],
-  }
+  },
 };
 
 export default createReducer(INITIAL_STATE, (builder) => {
@@ -99,13 +106,5 @@ export default createReducer(INITIAL_STATE, (builder) => {
     .addCase(loginRoutine.FAILURE, (state, action) => {
       state.loading = "FAILURE";
       Alert.alert("Login failed", "Wrong password or telephone number");
-    })
-    .addCase(getCurrentUser.SUCCESS, (state, action) => {
-      state.user = action.payload;
-    })
-    .addCase(logoutRoutine.TRIGGER, (state, action) => {
-      console.log(state.token);
-      state.token = undefined;
-    })
-    ;
+    });
 });
