@@ -119,7 +119,6 @@ export const SignUpScreen = () => {
         style={{ flex: 1 }}
         showsHorizontalScrollIndicator={false}
       >
-        
         <TypeInformationForm
           submit={(telephone) => onSubmitTelephone(telephone)}
         />
