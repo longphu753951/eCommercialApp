@@ -100,6 +100,8 @@ export const SignUpScreen = () => {
   const onSubmitInfo = async (data: object): Promise<void> => {
     data['telephone']= telephone;
     data['username'] = username;
+    data["avatar"] = avatar;
+    console.log(data);
     await dispatch({type: signupRoutine.TRIGGER, data});
     navigation.navigate('CompleteScreen');
   }
