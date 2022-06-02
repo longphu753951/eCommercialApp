@@ -42,8 +42,13 @@ export const CameraScreen = (props: any) => {
 
   const _takePhoto = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    const photo = await cameraRef.current.takePictureAsync();
-    setTokenCamera(photo);
+    try {
+      const photo = await cameraRef.current.takePictureAsync();
+    
+      setTokenCamera(photo);
+    }catch(e){
+      console.log(e)
+    }
   };
 
 

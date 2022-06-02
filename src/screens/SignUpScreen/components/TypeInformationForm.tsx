@@ -64,7 +64,7 @@ const TypePasswordForm: React.FC<Props> = (props: Props) => {
             color: "#303030",
           }}
         >
-          Step 2
+          Step 4
         </Text>
         <Text
           style={{
@@ -73,7 +73,7 @@ const TypePasswordForm: React.FC<Props> = (props: Props) => {
             color: "#606060",
           }}
         >
-          Type password
+          Type your information here
         </Text>
       </View>
       <View style={{ width: "100%", marginTop: (1 * height) / 100 }}>

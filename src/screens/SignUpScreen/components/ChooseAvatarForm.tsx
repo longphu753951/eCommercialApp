@@ -8,10 +8,14 @@ import {
   useActionSheet,
   ActionSheetOptions,
 } from "@expo/react-native-action-sheet";
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from "expo-image-picker";
 
+interface Props {
+  onSubmitAva: (photo: any) => {};
+}
 
-const ChooseAvatarForm = () => {
+const ChooseAvatarForm = (props: Props) => {
+  const { onSubmitAva } = props;
   const [photo, setPhoto] = useState("");
   const navigation = useNavigation();
   const { showActionSheetWithOptions } = useActionSheet();
@@ -23,12 +27,30 @@ const ChooseAvatarForm = () => {
   const destructiveButtonIndex = -1;
   const cancelButtonIndex = 2;
 
+  const showActionSheet = () => {
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        destructiveButtonIndex,
+      },
+      (buttonIndex) => {
+        if (buttonIndex === 1) {
+          navigation.navigate("CameraScreen", {
+            getImageFromCamera: getImageFromCamera,
+          });
+        } else if (buttonIndex === 0) {
+          pickImage();
+        }
+      }
+    );
+  };
+
   const setImage = (): any => {
     return photo ? { uri: photo.uri } : require("assets/images/avatar.png");
   };
 
   const getImageFromCamera = async (data: any) => {
-    
     const seperatedUri = data.uri.split("/");
     const imageName = seperatedUri[seperatedUri.length - 1];
     const photo = {
@@ -48,8 +70,6 @@ const ChooseAvatarForm = () => {
       aspect: [4, 3],
       quality: 1,
     });
-
-    console.log(result);
     const seperatedUri = result.uri.split("/");
     const imageName = seperatedUri[seperatedUri.length - 1];
     const photo = {
@@ -63,7 +83,6 @@ const ChooseAvatarForm = () => {
       setImage(result.uri);
     }
   };
-
 
   return (
     <View
@@ -85,29 +104,11 @@ const ChooseAvatarForm = () => {
             marginBottom: (height * 4.92) / 100,
           }}
         >
-          Step 2
+          Step 3
         </Text>
         <TouchableOpacity
           style={{ borderWidth: 2, borderRadius: 200 }}
-          onPress={() => {
-            showActionSheetWithOptions(
-              {
-                options,
-                cancelButtonIndex,
-                destructiveButtonIndex,
-              },
-              (buttonIndex) => {
-                if (buttonIndex === 1) {
-                  navigation.navigate("CameraScreen", {
-                    getImageFromCamera: getImageFromCamera,
-                  });
-                }
-                else if(buttonIndex === 0){
-                  pickImage();
-                }
-              }
-            );
-          }}
+          onPress={() => showActionSheet()}
         >
           <Image
             resizeMode="cover"
@@ -118,6 +119,27 @@ const ChooseAvatarForm = () => {
             }}
             source={setImage()}
           />
+          <View
+            style={{
+              borderWidth: 2,
+              borderRadius: 200,
+              aspectRatio: 1,
+              padding: 5,
+              position: "absolute",
+              backgroundColor: 'white',
+              top: (height * 26.1) / 100 - (height * 2) / 100,
+              left: (height * 26.1) / 100 - (height * 14.6) / 100,
+            }}
+          >
+            <Image
+              style={{
+                height: (height * 2.46) / 100,
+                width: (height * 2.46) / 100,
+              }}
+              resizeMode={"contain"}
+              source={require("assets/images/cameraIcon.png")}
+            />
+          </View>
         </TouchableOpacity>
         <Text
           style={{
@@ -135,16 +157,13 @@ const ChooseAvatarForm = () => {
         <View style={{ width: "100%" }}>
           <TouchableOpacity
             style={[styles.button, styles.signInButton]}
-            onPress={() => {}}
+            onPress={() => {
+              onSubmitAva(photo);
+            }}
           >
             <Text style={styles.buttonText}>Next</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={{ marginTop: 20 }}
-            onPress={() => {
-              showActionSheetWithOptions(options, () => {});
-            }}
-          >
+          <TouchableOpacity style={{ marginTop: 20 }} onPress={() => {onSubmitAva(null);}}>
             <Text style={[styles.buttonText, { color: "#303030" }]}>
               I'll do it later
             </Text>
