@@ -1,6 +1,15 @@
 {
   "expo": {
     "name": "eCommercialAppExpo",
+    "plugins": [
+      "expo-camera",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ],
     "slug": "eCommercialApp",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -13,9 +22,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.phutl.ecommercialapp",

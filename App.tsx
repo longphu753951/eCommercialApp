@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BackHandler, ToastAndroid } from "react-native";
+import { BackHandler, ToastAndroid, LogBox } from "react-native";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import Navigation from "navigation/Navigations";
@@ -11,20 +11,12 @@ import "middlewares";
 import { StripeProvider as _StripeProvider } from "@stripe/stripe-react-native";
 import type { Props as StripeProviderProps } from "@stripe/stripe-react-native/lib/typescript/src/components/StripeProvider";
 const StripeProvider = _StripeProvider as React.FC<StripeProviderProps>;
+import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import { persistStore } from "redux-persist";
-import { initializeApp } from "firebase/app";
 
-const FIREBASE_CONFIG: any = {
-  apiKey: "AIzaSyBOJw-7JcmZrua6IS0OWWKCyOwV6LtFt2s",
-  authDomain: "ecommercial-8d9ee.firebaseapp.com",
-  projectId: "ecommercial-8d9ee",
-  storageBucket: "ecommercial-8d9ee.appspot.com",
-  messagingSenderId: "213082501110",
-  appId: "1:213082501110:web:f93b9dad0ed631ae2a21d7",
-  measurementId: "G-BRSDBV7BPE",
-};
-
-initializeApp(FIREBASE_CONFIG);
+LogBox.ignoreLogs([
+  "AsyncStorage has been extracted from react-native core and will be removed in a future release.",
+]);
 
 let persistor = persistStore(store);
 
@@ -56,17 +48,19 @@ const App = () => {
     return null;
   }
   return (
-    <StripeProvider
-      publishableKey={
-        "pk_test_51KAS9GEAPiKpbC1N48OEYp3ofa5Ll0aDuPI6Y8waDoh1x6otOE4bljUQa5aJY3i5lt2dH46owJRV3w9R9sbh1O7c00oZ7xp778"
-      }
-    >
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <Navigation />
-        </PersistGate>
-      </Provider>
-    </StripeProvider>
+    <ActionSheetProvider>
+      <StripeProvider
+        publishableKey={
+          "pk_test_51KAS9GEAPiKpbC1N48OEYp3ofa5Ll0aDuPI6Y8waDoh1x6otOE4bljUQa5aJY3i5lt2dH46owJRV3w9R9sbh1O7c00oZ7xp778"
+        }
+      >
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <Navigation />
+          </PersistGate>
+        </Provider>
+      </StripeProvider>
+    </ActionSheetProvider>
   );
 };
 
