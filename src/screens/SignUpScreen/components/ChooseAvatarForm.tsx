@@ -8,10 +8,14 @@ import {
   useActionSheet,
   ActionSheetOptions,
 } from "@expo/react-native-action-sheet";
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from "expo-image-picker";
 
+interface Props {
+  onSubmitAva: (photo: any) => {};
+}
 
-const ChooseAvatarForm = () => {
+const ChooseAvatarForm = (props: Props) => {
+  const { onSubmitAva } = props;
   const [photo, setPhoto] = useState("");
   const navigation = useNavigation();
   const { showActionSheetWithOptions } = useActionSheet();
@@ -28,7 +32,6 @@ const ChooseAvatarForm = () => {
   };
 
   const getImageFromCamera = async (data: any) => {
-    
     const seperatedUri = data.uri.split("/");
     const imageName = seperatedUri[seperatedUri.length - 1];
     const photo = {
@@ -63,7 +66,6 @@ const ChooseAvatarForm = () => {
       setImage(result.uri);
     }
   };
-
 
   return (
     <View
@@ -101,8 +103,7 @@ const ChooseAvatarForm = () => {
                   navigation.navigate("CameraScreen", {
                     getImageFromCamera: getImageFromCamera,
                   });
-                }
-                else if(buttonIndex === 0){
+                } else if (buttonIndex === 0) {
                   pickImage();
                 }
               }
@@ -135,7 +136,7 @@ const ChooseAvatarForm = () => {
         <View style={{ width: "100%" }}>
           <TouchableOpacity
             style={[styles.button, styles.signInButton]}
-            onPress={() => {}}
+            onPress={() => {onSubmitAva(photo)}}
           >
             <Text style={styles.buttonText}>Next</Text>
           </TouchableOpacity>

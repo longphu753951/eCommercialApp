@@ -47,6 +47,7 @@ export const SignUpScreen = () => {
   const [screenIndex, setScreenIndex] = useState(0);
   const [verificationId, setVerificationId] = React.useState("");
   const [telephone, setTelephone] = useState("");
+  const [avatar, setAvatar] = useState(null);
   const [username, setUsername] = useState("");
   const loading = useSelector((state) => state.auth.loading);
   const scrollViewRef = useRef<ScrollView | null>(null);
@@ -57,6 +58,11 @@ export const SignUpScreen = () => {
     scrollViewRef.current.scrollTo({ x: width * index, animated: true });
     setScreenIndex(index);
   };
+
+  const onSubmitAva = (ava: React.SetStateAction<null>) => {
+    setAvatar(ava);
+    onChangeScreen(1);
+  }
 
   const onSubmitTelephone = async (telephone: any): Promise<void> => {
     const phoneProvider = new PhoneAuthProvider(auth);
@@ -113,7 +119,7 @@ export const SignUpScreen = () => {
         style={{ flex: 1 }}
         showsHorizontalScrollIndicator={false}
       >
-        <ChooseAvatarForm />
+        
         <TypeInformationForm
           submit={(telephone) => onSubmitTelephone(telephone)}
         />
@@ -121,9 +127,10 @@ export const SignUpScreen = () => {
           submit={(otp) => onSubmitOTP(otp)}
           goBack={() => onChangeScreen(-1)}
         />
+        <ChooseAvatarForm onSubmitAva={async (ava) => onSubmitAva(ava)} />
         <TypePasswordForm
           submit={(data) => onSubmitInfo(data)}
-          goBack={() => onChangeScreen(-2)}
+          goBack={() => onChangeScreen(-1)}
         />
       </ScrollView>
     </FCKeyBoardAvoidingView>
