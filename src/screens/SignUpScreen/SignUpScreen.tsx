@@ -6,6 +6,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { FCKeyBoardAvoidingView } from "components";
 import { styles, width, height } from "./SignUpStyles";
 import {
+  ChooseAvatarForm,
   TypeInformationForm,
   TypeOTPForm,
   TypePasswordForm,
@@ -112,6 +113,7 @@ export const SignUpScreen = () => {
         style={{ flex: 1 }}
         showsHorizontalScrollIndicator={false}
       >
+        <ChooseAvatarForm />
         <TypeInformationForm
           submit={(telephone) => onSubmitTelephone(telephone)}
         />
