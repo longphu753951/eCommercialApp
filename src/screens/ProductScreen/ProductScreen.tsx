@@ -7,8 +7,6 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
-  Animated,
-  useWindowDimensions,
   ActivityIndicator,
 } from "react-native";
 import { product } from "config/mockData";
@@ -25,13 +23,14 @@ import { getDisplay } from "config/size";
 import { IncrementButton } from "components";
 import { useDispatch, useSelector } from "react-redux";
 import { addBookmark, deleteBookmark } from "reducers/user";
-import store from "store";
+import { PageControl, Colors } from "react-native-ui-lib";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 export const ProductScreen = () => {
   const navigation = useNavigation();
+  const [currentIndex, setCurrentIndex] = useState(1);
   const productMain = useSelector((state) => state.item.product);
   const bookmark: any[] = useSelector((state) => state.user.bookmark);
   const loading = useSelector((state) => state.user.loading);
@@ -45,20 +44,11 @@ export const ProductScreen = () => {
   const [isShowingModal, setIsShowingModal] = useState(false);
 
   useEffect(() => {
-    console.log("abc");
     if (productMain !== null) {
       onSetChosenItem(productMain.productAttribute[0]);
     }
   }, [productMain]);
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const scrollX = useRef(new Animated.Value(0)).current;
-  const slidesRef = useRef(null);
-  const viewableItemsChanged = useRef(({ viewableItems }) => {
-    setCurrentIndex(viewableItems[0].index);
-  }).current;
-
-  const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
   let a: number = getDisplay();
 
   const onSetChosenItem = useCallback(
@@ -107,74 +97,9 @@ export const ProductScreen = () => {
     );
   };
 
-  const Paginator = ({ data, scrollX }) => {
-    const { width } = useWindowDimensions();
-    return (
-      <View
-        style={{
-          flexDirection: "row",
-          position: "absolute",
-          bottom: 30,
-          right: 50,
-        }}
-      >
-        {data.map((_, index) => {
-          const inputRange = [
-            (index - 1) * ((Dimensions.get("window").width * 86.13) / 100),
-            (Dimensions.get("window").width * 86.13) / 100,
-            (index + 1) * ((Dimensions.get("window").width * 86.13) / 100),
-          ];
-
-          const dotWidth = scrollX.interpolate({
-            inputRange,
-            outputRange: [15, 30, 15],
-            extrapolate: "clamp",
-          });
-
-          const backgroundColor = scrollX.interpolate({
-            inputRange,
-            outputRange: ["#F0F0F0", "#303030", "#F0F0F0"],
-            extrapolate: "clamp",
-          });
-          return (
-            <Animated.View
-              key={index.toString()}
-              style={[
-                { width: dotWidth, backgroundColor },
-                {
-                  height: 4,
-                  borderRadius: 4,
-                  marginHorizontal:
-                    (Dimensions.get("window").width * 0.66) / 100,
-                },
-              ]}
-            />
-          );
-        })}
-      </View>
-    );
-  };
-
   if (productMain !== null)
     return (
       <View style={styles.container}>
-        {/* <View
-          style={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-            zIndex: 1,
-            alignContent: 'center',
-            justifyContent: 'center',
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(52, 52, 52, 0.8)",
-          }}
-        >
-          <ActivityIndicator size={'large'} color= {'white'} />
-        </View> */}
         <View style={styles.contentContainer}>
           <View style={{ alignItems: "flex-end" }}>
             <View
@@ -209,9 +134,23 @@ export const ProductScreen = () => {
                   );
                 }}
               />
-              <Paginator data={product.images} scrollX={scrollX} />
             </View>
-
+            <PageControl
+              size={20}
+              spacing={8}
+              limitShownPages={true}
+              containerStyle={{
+                position: "absolute",
+                bottom: 30,
+                right: 50,
+                flexWrap: "wrap",
+              }}
+              inactiveColor={'#d4d4d4'}
+              color={Colors.grey20}
+              numOfPages={20}
+              currentPage={currentIndex}
+              onPagePress={(index) => {setCurrentIndex(index)}}
+            />
             <View
               style={{
                 position: "absolute",

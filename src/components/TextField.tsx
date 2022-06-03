@@ -47,7 +47,7 @@ const TextField: React.FC<Props> = (props: Props) => {
         render={({ field: { onChange, onBlur, value } }) => (
           <>
             <View style={styles.textInputContainer}>
-            {/* @ts-ignore */}
+              {/* @ts-ignore */}
               <TextInput
                 style={textInputStyle}
                 mode="outlined"
@@ -56,23 +56,21 @@ const TextField: React.FC<Props> = (props: Props) => {
                 label={label}
                 autoCapitalize={"none"}
                 returnKeyLabel={"next"}
+                autoCorrect={false} 
+                right={
+                  isSecure && (
+                    <TextInput.Icon
+                      color="#303030"
+                      onPress={() => setShowPassword()}
+                      name={isShowingPassword ? "eye" : "eye-off"}
+                    />
+                  )
+                }
                 secureTextEntry={isSecure && !isShowingPassword}
                 onChangeText={(value) => onChange(value)}
                 onBlur={onBlur}
                 value={value}
               />
-              {isSecure && (
-                <TouchableOpacity
-                  style={styles.showHidePasswordButton}
-                  onPress={() => setShowPassword()}
-                >
-                  <Ionicons
-                    name={isShowingPassword ? "eye" : "eye-off"}
-                    size={24}
-                    color="#303030"
-                  />
-                </TouchableOpacity>
-              )}
             </View>
           </>
         )}

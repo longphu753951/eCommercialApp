@@ -27,34 +27,95 @@ const height = Dimensions.get("window").height;
 
 export const FavoriteScreen = () => {
   const navigation = useNavigation();
-  const bookmark = useSelector( state => state.user.bookmark)
-  const [bookmarkDetailList, setBookmarkDetailList] = useState(bookmark?.bookmarkDetail)
-  const loading = useSelector(state => state.user.loading)
+  const bookmark = useSelector((state) => state.user.bookmark);
+  const [bookmarkDetailList, setBookmarkDetailList] = useState(
+    bookmark?.bookmarkDetail
+  );
+  const loading = useSelector((state) => state.user.loading);
   const dispatch = useDispatch();
   const onRefresh = useCallback(() => {
-    dispatch({type: getBookmark.TRIGGER})
+    dispatch({ type: getBookmark.TRIGGER });
   }, []);
 
   useEffect(() => {
     setBookmarkDetailList(bookmark?.bookmarkDetail);
-  }, [bookmark])
+  }, [bookmark]);
+
+  const listFavorite = () => {
+    return bookmarkDetailList.length > 0 ? (
+      <>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          style={styles.itemFlatList}
+          data={bookmarkDetailList}
+          ItemSeparatorComponent={ItemDivider}
+          keyExtractor={(item) => item.id}
+          renderItem={item}
+          refreshControl={
+            <RefreshControl
+              refreshing={loading === "LOADING"}
+              onRefresh={onRefresh}
+            />
+          }
+        />
+        <TouchableOpacity style={styles.addAllButton}>
+          <Text style={styles.addAllText}>Add all to my cart</Text>
+        </TouchableOpacity>
+      </>
+    ) : (
+      <View style={{ alignItems: "center" }}>
+        <Image
+          resizeMode="contain"
+          style={{ height: (height * 30.66) / 100 }}
+          source={require("assets/images/emptyCart.png")}
+        />
+        <Text
+          style={{
+            fontFamily: "Gelasio-SemiBold",
+            fontSize: (3.5 * height) / 100,
+            color: "#303030",
+            marginTop: (4 * height) / 100,
+            letterSpacing: (width * 0.5) / 100,
+          }}
+        >
+          Collect love!
+        </Text>
+        <Text
+          style={{
+            fontFamily: "NunitoSans-SemiBold",
+            fontSize: (2.21 * height) / 100,
+            color: "#606060",
+            letterSpacing: (width * 0.13) / 100,
+            textAlign: 'center',
+            marginTop: (1.3 * height) / 100
+          }}
+        >
+          Like a product you see ? save them here to your favourites
+        </Text>
+      </View>
+    );
+  };
 
   const item = (item: any): JSX.Element => {
     return (
       <CartItem
-        image={{uri: item.item.productAttribute.productImage[0].image}}
-        disable ={loading === "LOADING"}
-        onRemoving = {async () => {
-          console.log(item.item.id)
+        image={{ uri: item.item.productAttribute.productImage[0].image }}
+        disable={loading === "LOADING"}
+        onRemoving={async () => {
+          console.log(item.item.id);
           await dispatch({
             type: deleteBookmark.TRIGGER,
             id: item.item.id,
-          })
+          });
         }}
         content={
           <View style={{ flexDirection: "column" }}>
-            <Text style={styles.nameText}>{item.item.productAttribute.name}</Text>
-            <Text style={styles.priceText}>$ {item.item.productAttribute.price}</Text>
+            <Text style={styles.nameText}>
+              {item.item.productAttribute.name}
+            </Text>
+            <Text style={styles.priceText}>
+              $ {item.item.productAttribute.price}
+            </Text>
           </View>
         }
         bottomContent={
@@ -93,22 +154,7 @@ export const FavoriteScreen = () => {
             navigation.navigate("MyCartScreen");
           }}
         />
-        <View style={styles.bodyContainer}>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            style={styles.itemFlatList}
-            data={bookmarkDetailList}
-            ItemSeparatorComponent={ItemDivider}
-            keyExtractor={(item) => item.id}
-            renderItem={item}
-            refreshControl={
-              <RefreshControl refreshing={loading === "LOADING"} onRefresh={onRefresh} />
-            }
-          />
-          <TouchableOpacity style={styles.addAllButton}>
-            <Text style={styles.addAllText}>Add all to my cart</Text>
-          </TouchableOpacity>
-        </View>
+        <View style={styles.bodyContainer}>{listFavorite()}</View>
       </View>
     </SafeAreaView>
   );
