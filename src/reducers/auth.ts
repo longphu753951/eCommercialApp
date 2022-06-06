@@ -51,10 +51,7 @@ function* signupSaga(action: any): Promise<void> {
   try {
     const register = action.data;
     delete register.passwordConfirm;
-    console.log(register)
-
     const data = yield call(axios.formPost, API.SIGN_UP, register);
-    console.log(data);
     yield put({
       type: signupRoutine.SUCCESS,
       payload: data,

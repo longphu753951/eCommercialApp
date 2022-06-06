@@ -19,7 +19,7 @@ export interface UserRegister {
   last_name: string;
   email: string;
   telephone: string;
-  avatar?: File;
+  avatar?: any;
 }
 
 export interface ShippingContact {

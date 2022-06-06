@@ -11,7 +11,6 @@ import "middlewares";
 import { StripeProvider as _StripeProvider } from "@stripe/stripe-react-native";
 import type { Props as StripeProviderProps } from "@stripe/stripe-react-native/lib/typescript/src/components/StripeProvider";
 const StripeProvider = _StripeProvider as React.FC<StripeProviderProps>;
-import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import { persistStore } from "redux-persist";
 
 LogBox.ignoreLogs([
@@ -19,6 +18,8 @@ LogBox.ignoreLogs([
 ]);
 
 let persistor = persistStore(store);
+
+
 
 const App = () => {
   const [loaded] = useFonts(font);
@@ -41,26 +42,28 @@ const App = () => {
       "hardwareBackPress",
       backAction
     );
-    return () => backHandler.remove();
+
+    return () => {
+      backHandler.remove();
+    };
   });
 
   if (!loaded) {
     return null;
   }
   return (
-    <ActionSheetProvider>
-      <StripeProvider
-        publishableKey={
-          "pk_test_51KAS9GEAPiKpbC1N48OEYp3ofa5Ll0aDuPI6Y8waDoh1x6otOE4bljUQa5aJY3i5lt2dH46owJRV3w9R9sbh1O7c00oZ7xp778"
-        }
-      >
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <Navigation />
-          </PersistGate>
-        </Provider>
-      </StripeProvider>
-    </ActionSheetProvider>
+    <StripeProvider
+      publishableKey={
+        "pk_test_51KAS9GEAPiKpbC1N48OEYp3ofa5Ll0aDuPI6Y8waDoh1x6otOE4bljUQa5aJY3i5lt2dH46owJRV3w9R9sbh1O7c00oZ7xp778"
+      }
+    >
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          
+          <Navigation />
+        </PersistGate>
+      </Provider>
+    </StripeProvider>
   );
 };
 

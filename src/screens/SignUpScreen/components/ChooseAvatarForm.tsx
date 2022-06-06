@@ -1,13 +1,9 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { Text, View, TouchableOpacity, Image } from "react-native";
+import { ActionSheet } from "react-native-ui-lib";
 import { useNavigation } from "@react-navigation/native";
 import _ from "lodash";
-import ActionSheet from "react-native-actionsheet";
 import { styles, width, height } from "../SignUpStyles";
-import {
-  useActionSheet,
-  ActionSheetOptions,
-} from "@expo/react-native-action-sheet";
 import * as ImagePicker from "expo-image-picker";
 
 interface Props {
@@ -17,34 +13,27 @@ interface Props {
 const ChooseAvatarForm = (props: Props) => {
   const { onSubmitAva } = props;
   const [photo, setPhoto] = useState("");
+  const [showActionSheet, setShowActionSheet] = useState(false);
   const navigation = useNavigation();
-  const { showActionSheetWithOptions } = useActionSheet();
-  const options: ActionSheetOptions = [
-    "Choose from gallery",
-    "Take a picture",
-    "Cancel",
-  ];
-  const destructiveButtonIndex = -1;
-  const cancelButtonIndex = 2;
 
-  const showActionSheet = () => {
-    showActionSheetWithOptions(
-      {
-        options,
-        cancelButtonIndex,
-        destructiveButtonIndex,
-      },
-      (buttonIndex) => {
-        if (buttonIndex === 1) {
-          navigation.navigate("CameraScreen", {
-            getImageFromCamera: getImageFromCamera,
-          });
-        } else if (buttonIndex === 0) {
-          pickImage();
-        }
-      }
-    );
-  };
+  // const showActionSheet = () => {
+  //   showActionSheetWithOptions(
+  //     {
+  //       options,
+  //       cancelButtonIndex,
+  //       destructiveButtonIndex,
+  //     },
+  //     (buttonIndex) => {
+  //       if (buttonIndex === 1) {
+  //         navigation.navigate("CameraScreen", {
+  //           getImageFromCamera: getImageFromCamera,
+  //         });
+  //       } else if (buttonIndex === 0) {
+  //         pickImage();
+  //       }
+  //     }
+  //   );
+  // };
 
   const setImage = (): any => {
     return photo ? { uri: photo.uri } : require("assets/images/avatar.png");
@@ -94,6 +83,27 @@ const ChooseAvatarForm = (props: Props) => {
         width: width,
       }}
     >
+      <ActionSheet
+        cancelButtonIndex={2}
+        useNativeIOS={true}
+        options={[
+          {
+            label: "Take a picture",
+            onPress: () => {
+              navigation.navigate("CameraScreen", {
+                getImageFromCamera: getImageFromCamera,
+              });
+            },
+          },
+          { label: "Choose from gallery", onPress: () => pickImage() },
+          {
+            label: "cancel",
+            onPress: () => setShowActionSheet(!showActionSheet),
+          },
+        ]}
+        visible={showActionSheet}
+        onDismiss={() => setShowActionSheet(false)}
+      />
       <View style={{ alignItems: "center", width: "100%" }}>
         <Text
           style={{
@@ -108,7 +118,9 @@ const ChooseAvatarForm = (props: Props) => {
         </Text>
         <TouchableOpacity
           style={{ borderWidth: 2, borderRadius: 200 }}
-          onPress={() => showActionSheet()}
+          onPress={() => {
+            setShowActionSheet(!showActionSheet);
+          }}
         >
           <Image
             resizeMode="cover"
@@ -126,7 +138,7 @@ const ChooseAvatarForm = (props: Props) => {
               aspectRatio: 1,
               padding: 5,
               position: "absolute",
-              backgroundColor: 'white',
+              backgroundColor: "white",
               top: (height * 26.1) / 100 - (height * 2) / 100,
               left: (height * 26.1) / 100 - (height * 14.6) / 100,
             }}
@@ -163,7 +175,12 @@ const ChooseAvatarForm = (props: Props) => {
           >
             <Text style={styles.buttonText}>Next</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{ marginTop: 20 }} onPress={() => {onSubmitAva(null);}}>
+          <TouchableOpacity
+            style={{ marginTop: 20 }}
+            onPress={() => {
+              onSubmitAva(null);
+            }}
+          >
             <Text style={[styles.buttonText, { color: "#303030" }]}>
               I'll do it later
             </Text>
