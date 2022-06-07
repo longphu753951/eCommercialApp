@@ -50,7 +50,7 @@ function* loginSaga(action: any): Promise<void> {
 function* signupSaga(action: any): Promise<void> {
   try {
     const register = action.data;
-    delete register.passwordConfirm;
+    console.log(register)
     const data = yield call(axios.formPost, API.SIGN_UP, register);
     yield put({
       type: signupRoutine.SUCCESS,
@@ -84,6 +84,7 @@ const INITIAL_STATE: authState = {
     email: "",
     telephone: "",
     avatar_path: "empty",
+    payment_info: {}
   },
   bookmark: {
     id: 0,
@@ -108,6 +109,7 @@ export default createReducer(INITIAL_STATE, (builder) => {
         email: "",
         telephone: "",
         avatar_path: "empty",
+        payment_info: {}
       }
     })
     .addCase(loginRoutine.FAILURE, (state, action) => {

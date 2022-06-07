@@ -7,9 +7,10 @@ import { FCKeyBoardAvoidingView } from "components";
 import { styles, width, height } from "./SignUpStyles";
 import {
   ChooseAvatarForm,
-  TypeInformationForm,
+  TypeTelephoneForm,
   TypeOTPForm,
   TypePasswordForm,
+  TypeInformationForm
 } from "./components";
 
 import * as FirebaseRecaptcha from "expo-firebase-recaptcha";
@@ -48,6 +49,7 @@ export const SignUpScreen = () => {
   const [verificationId, setVerificationId] = React.useState("");
   const [telephone, setTelephone] = useState("");
   const [avatar, setAvatar] = useState(null);
+  const [data, setData]= useState({});
   const [username, setUsername] = useState("");
   const loading = useSelector((state) => state.auth.loading);
   const scrollViewRef = useRef<ScrollView | null>(null);
@@ -97,14 +99,20 @@ export const SignUpScreen = () => {
     }
   };
 
-  const onSubmitInfo = async (data: object): Promise<void> => {
-    data['telephone']= telephone;
-    data['username'] = username;
-    data["avatar"] = avatar;
-    console.log(data);
-    await dispatch({type: signupRoutine.TRIGGER, data});
-    navigation.navigate('CompleteScreen');
+  const onSubmitInfo = (data: object) => {
+    setData(data);
+    onChangeScreen(1);
   }
+
+  const onRegister = async (password: string): Promise<void> => {
+    let dataRegister = data;
+    dataRegister["password"] = password;
+    dataRegister['username'] = username;
+    dataRegister["telephone"] = telephone;
+    dataRegister["avatar"] = avatar;
+    await dispatch({type: signupRoutine.TRIGGER, data: dataRegister});
+    navigation.navigate('CompleteScreen');
+  }  
 
   return (
     <FCKeyBoardAvoidingView loading={loading} style={styles.container}>
@@ -121,7 +129,7 @@ export const SignUpScreen = () => {
         style={{ flex: 1 }}
         showsHorizontalScrollIndicator={false}
       >
-        <TypeInformationForm
+        <TypeTelephoneForm
           submit={(telephone) => onSubmitTelephone(telephone)}
         />
         <TypeOTPForm
@@ -129,8 +137,12 @@ export const SignUpScreen = () => {
           goBack={() => onChangeScreen(-1)}
         />
         <ChooseAvatarForm onSubmitAva={async (ava) => onSubmitAva(ava)} />
-        <TypePasswordForm
+        <TypeInformationForm
           submit={(data) => onSubmitInfo(data)}
+          goBack={() => onChangeScreen(-1)}
+        />
+        <TypePasswordForm 
+          submit={(data) => onRegister(data)}
           goBack={() => onChangeScreen(-1)}
         />
       </ScrollView>

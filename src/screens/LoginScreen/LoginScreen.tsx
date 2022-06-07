@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import { FCKeyBoardAvoidingView, TextField } from "components";
 import { loginRoutine } from "reducers/auth";
 import { getCurrentUser } from "reducers/user";
+import { getAllPaymentMethod } from "reducers/payment";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -48,6 +49,7 @@ export const LoginScreen = () => {
   const loginSuccess = useCallback(async () => {
     if (loading === "SUCCESS") {
       await dispatch({ type: getCurrentUser.TRIGGER });
+      await dispatch({type: getAllPaymentMethod.TRIGGER})
       navigation.navigate("tabNavigation");
     }
   }, [loading]);

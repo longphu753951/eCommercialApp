@@ -1,4 +1,4 @@
-import { Dimensions } from "react-native";
+import { Dimensions, ImageSourcePropType } from "react-native";
 
 export const categoryList = [
   {
@@ -166,18 +166,18 @@ export const creditCard = [
   },
 ];
 
-export const card = {
-  "4": require("assets/images/visa.png"),
-  "5": require("assets/images/mastercard.png"),
+export const cardType = {
+  "visa": require("assets/images/visa.png"),
+  "mastercard": require("assets/images/mastercard.png"),
 };
 
 export const cardStyle = {
-  "4": {
+  "visa": {
     height: (Dimensions.get("window").height * 1.97) / 100,
     width: (Dimensions.get("window").height * 6.15) / 100,
     marginBottom: (Dimensions.get("window").height * 3.277) / 100,
   },
-  "5": {
+  "mastercard": {
     height: (Dimensions.get("window").height * 3) / 100,
     width: (Dimensions.get("window").height * 3.82) / 100,
     marginBottom: (Dimensions.get("window").height * 2.25) / 100,

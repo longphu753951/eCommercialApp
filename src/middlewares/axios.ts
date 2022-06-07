@@ -119,10 +119,12 @@ axios.formPost = (url, data, fileField = 'userfile[]') => {
       };
 
       const response = await axios.post(url, formData, config);
+      
 
       checkAPIResultCode(response, resolve, reject);
-    } catch (e) {
-      reject(e);
+    } catch (error) {
+      console.log(error.headers)
+      reject(error);
     }
   });
 };

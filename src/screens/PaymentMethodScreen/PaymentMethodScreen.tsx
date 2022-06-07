@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   SafeAreaView,
   Text,
@@ -10,10 +10,11 @@ import {
   RefreshControl,
   ImageBackground,
   Platform,
+  ImageSourcePropType,
 } from "react-native";
 import { FAB } from "react-native-paper";
 import Checkbox from "expo-checkbox";
-import { creditCard, card, cardStyle } from "config/mockData";
+import { cardStyle, cardType } from "config/mockData";
 import { Feather } from "@expo/vector-icons";
 import { isIphoneX, ifIphoneX } from "react-native-iphone-x-helper";
 import _ from "lodash";
@@ -21,6 +22,8 @@ import { ScrollView } from "react-native-gesture-handler";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { Header } from "components";
+import { useSelector } from "react-redux";
+import { Card } from "config/types";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -28,6 +31,14 @@ const wait = (timeout: number) => {
 export const PaymentMethodScreen = () => {
   const [number, setNumber] = useState("");
   const [refreshing, setRefreshing] = useState(false);
+  const listPayment = useSelector((state) => state.payment.payment_list);
+  const defaultPayment = useSelector(state => state.user.user.payment_info.default_source);
+  
+  
+  useEffect(() => {
+    setNumber(defaultPayment);
+  }, [])
+
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -35,26 +46,29 @@ export const PaymentMethodScreen = () => {
   }, []);
 
   const onChangeDefaulPayment = (number: string): void => {
+    console.log(number)
     setNumber(number);
   };
 
-  const hideCreditCard = (number: string): string => {
-    const r = /\b(?:\d{4}[ -]?){3}(?=\d{4}\b)/gm;
-    const subst = `**** **** **** `;
-    return number.replace(r, subst);
+  const setCardNumber = (number: string): string => {
+    return "**** **** "+ number
   };
 
-  const getImageTypeCard = (number: string): NodeRequire => {
-    return card[number.charAt(0)];
+  const getImageTypeCard = (brand: string): ImageSourcePropType => {
+    return cardType[brand];
   };
 
-  const getCardStyle = (number: string): StyleSheet => {
-    return cardStyle[number.charAt(0)];
+  const getCardStyle = (brand: string): StyleSheet => {
+    return cardStyle[brand];
   };
 
   const getSize = (): number => {
     return Platform.OS === "android" ? 24 : isIphoneX() ? 23 : 28.5;
   };
+
+  const getCardExp = (item: Card): string=> {
+    return item.exp_month+ "/" + item.exp_year;
+  }
 
   const item = (item: any): JSX.Element => {
     return (
@@ -78,8 +92,8 @@ export const PaymentMethodScreen = () => {
             <View>
               <Image
                 resizeMode="contain"
-                source={getImageTypeCard(item.item.number)}
-                style={getCardStyle(item.item.number)}
+                source={getImageTypeCard(item.item.brand)}
+                style={getCardStyle(item.item.brand)}
               />
               <Text
                 style={{
@@ -90,7 +104,7 @@ export const PaymentMethodScreen = () => {
                   letterSpacing: 3,
                 }}
               >
-                {hideCreditCard(item.item.number)}
+                {setCardNumber(item.item.number)}
               </Text>
             </View>
             <View
@@ -102,11 +116,11 @@ export const PaymentMethodScreen = () => {
             >
               <View>
                 <Text style={styles.nameText}>Card Holder Name</Text>
-                <Text style={styles.contentText}>{item.item.name}</Text>
+                <Text style={styles.contentText}>{item.item.fullName}</Text>
               </View>
               <View>
                 <Text style={styles.nameText}>Expiry Date</Text>
-                <Text style={styles.contentText}>{item.item.expiryDate}</Text>
+                <Text style={styles.contentText}>{getCardExp(item.item)}</Text>
               </View>
             </View>
           </View>
@@ -122,9 +136,9 @@ export const PaymentMethodScreen = () => {
         >
           <Checkbox
             style={styles.checkbox}
-            color={number === item.item.number ? "#303030" : "#808080"}
-            value={number === item.item.number ? true : false}
-            onValueChange={() => onChangeDefaulPayment(item.item.number)}
+            color={number === item.item.id ? "#303030" : "#808080"}
+            value={number === item.item.id ? true : false}
+            onValueChange={() => onChangeDefaulPayment(item.item.id)}
           />
           <Text style={styles.useAsAddText}>Use as default payment method</Text>
         </View>
@@ -138,9 +152,9 @@ export const PaymentMethodScreen = () => {
         <Header title={"SHIPPING ADDRESS"} />
         <FlatList
           style={styles.itemFlatList}
-          data={creditCard}
+          data={listPayment}
           showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item.number}
+          keyExtractor={(item) => item.id}
           renderItem={item}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
