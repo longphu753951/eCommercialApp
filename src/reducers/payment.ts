@@ -7,6 +7,7 @@ import { Card } from "config/types";
 import _ from "lodash";
 
 interface paymentState {
+  stripe_customer: any;
   payment_list: Card[];
   loading: string;
 }
@@ -25,8 +26,17 @@ export const getAllPaymentMethod = createRoutine(
 
 function* getPaymentMethod(): Promise<void> {
   try {
-    const response = yield call(axios.getWithAuth, API.GET_ALL_PAYMENT_METHOD);
-    const listCard: Card[] = response.data.map((billing: any) => {
+    const { cardListResponse, stripeCustomerResponse } = yield all({
+      cardListResponse: yield call(
+        axios.getWithAuth,
+        API.GET_ALL_PAYMENT_METHOD
+      ),
+      stripeCustomerResponse: yield call(
+        axios.getWithAuth,
+        API.GET_STRIPE_CUSTOMER
+      ),
+    });
+    const listCard: Card[] = cardListResponse.data.map((billing: any) => {
       const card: Card = {
         id: billing.id,
         fullName: billing.billing_details.name,
@@ -37,9 +47,10 @@ function* getPaymentMethod(): Promise<void> {
       };
       return card;
     });
+
     yield put({
       type: getAllPaymentMethod.SUCCESS,
-      payload: listCard,
+      payload: { listCard, stripeCustomerResponse },
     });
   } catch (e) {
     console.log(e);
@@ -53,6 +64,7 @@ export function* paymentSaga() {
 const INITIAL_STATE: paymentState = {
   payment_list: [],
   loading: "",
+  stripe_customer: {},
 };
 
 // =========================================================
@@ -61,6 +73,7 @@ const INITIAL_STATE: paymentState = {
 
 export default createReducer(INITIAL_STATE, (builder) => {
   builder.addCase(getAllPaymentMethod.SUCCESS, (state, action) => {
-    state.payment_list = action.payload;
+    state.payment_list = action.payload.listCard;
+    state.stripe_customer = action.payload.stripeCustomerResponse
   });
 });

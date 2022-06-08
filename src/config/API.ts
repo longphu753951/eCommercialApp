@@ -14,7 +14,8 @@ const API = {
   BOOKMARK_BY_USER: '/bookmark/getBookmarkByUser/',
   ADD_NEW_BOOKMARK: '/bookmarkDetail/addBookmark/',
   DELETE_BOOKMARK: '/bookmarkDetail/deleteBookmark/id/',
-  GET_ALL_PAYMENT_METHOD: '/stripe/get_payment_method'
+  GET_ALL_PAYMENT_METHOD: '/stripe/get_payment_method',
+  GET_STRIPE_CUSTOMER: '/stripe/get_stripe_costumer'
 };
 
 interface API {

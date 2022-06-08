@@ -13,76 +13,32 @@ import Checkbox from "expo-checkbox";
 import {  ifIphoneX } from "react-native-iphone-x-helper";
 import _ from "lodash";
 import { Header } from "components";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Card } from "config/types";
 import { PaymentCard } from "components";
-import { getAllPaymentMethod } from "reducers/payment";
+import { FCKeyBoardAvoidingView } from "components/";
+const wait = (timeout: number) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
 
-export const PaymentMethodScreen = () => {
-  const [number, setNumber] = useState("");
-  const [refreshing, setRefreshing] = useState(false);
-  const listPayment = useSelector((state) => state.payment.payment_list);
-  const dispatch = useDispatch();
-  const defaultPayment = useSelector(
-    (state) => state.payment.stripe_customer.default_source
-  );
+export const AddPaymentScreen = () => {
+  
 
-  useEffect(() => {
-    setNumber(defaultPayment);
-  }, []);
-
-  const onRefresh = useCallback(async () => {
-    await dispatch({type: getAllPaymentMethod.TRIGGER});
-  }, []);
-
-  const onChangeDefaulPayment = (number: string): void => {
-    console.log(number);
-    setNumber(number);
-  };
-
-  const item = (item: any): JSX.Element => {
-    return (
-      <View
-        style={{ marginTop: (Dimensions.get("window").height * 3.69) / 100 }}
-      >
-        <PaymentCard card={item.item} />
-        <View
-          style={styles.checkBoxContainer}
-        >
-          <Checkbox
-            style={styles.checkbox}
-            color={number === item.item.id ? "#303030" : "#808080"}
-            value={number === item.item.id ? true : false}
-            onValueChange={() => onChangeDefaulPayment(item.item.id)}
-          />
-          <Text style={styles.useAsAddText}>Use as default payment method</Text>
-        </View>
-      </View>
-    );
-  };
-
+  
   return (
-    <SafeAreaView style={styles.container}>
+    <FCKeyBoardAvoidingView loading={false} style={styles.container}>
       <View style={styles.contentContainer}>
-        <Header title={"SHIPPING ADDRESS"} />
-        <FlatList
-          style={styles.itemFlatList}
-          data={listPayment}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item.id}
-          renderItem={item}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        />
-        <FAB
-          style={styles.fab}
-          icon="plus"
-          onPress={() => console.log("Pressed")}
-          color={"#0D1C2E"}
-        />
+        <Header title={"ADD PAYMENT METHOD"} />
+          <PaymentCard card ={{
+            "brand": "visa",
+            "exp_month": 12,
+            "exp_year": 2025,
+            "fullName": "Tran Long Phu",
+            "id": "card_1L7xJHEAPiKpbC1Nu5S0UkAd",
+            "number": "XXXX",
+          }}/>
       </View>
-    </SafeAreaView>
+    </FCKeyBoardAvoidingView>
   );
 };
 

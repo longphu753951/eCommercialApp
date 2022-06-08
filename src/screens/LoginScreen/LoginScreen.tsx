@@ -49,7 +49,7 @@ export const LoginScreen = () => {
   const loginSuccess = useCallback(async () => {
     if (loading === "SUCCESS") {
       await dispatch({ type: getCurrentUser.TRIGGER });
-      await dispatch({type: getAllPaymentMethod.TRIGGER})
+      await dispatch({type: getAllPaymentMethod.TRIGGER});
       navigation.navigate("tabNavigation");
     }
   }, [loading]);
@@ -60,10 +60,6 @@ export const LoginScreen = () => {
 
   const onSubmit = async (data) => {
     await dispatch({ type: loginRoutine.TRIGGER, data: data });
-  };
-
-  const setShowPassword = () => {
-    setIsShowingPassword(!isShowingPassword);
   };
 
   return (

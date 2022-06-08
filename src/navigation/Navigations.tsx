@@ -30,11 +30,11 @@ const Navigation = (props) => {
       />
 
       <Stack.Navigator
-        initialRouteName={
-          isEmpty(store.getState().auth.token)
-            ? "BoardingScreen"
-            : "tabNavigation"
-        }
+        // initialRouteName={
+        //   isEmpty(store.getState().auth.token)
+        //     ? "BoardingScreen"
+        //     : "tabNavigation"
+        // }
       >
         {allScreens(Stack)}
       </Stack.Navigator>
