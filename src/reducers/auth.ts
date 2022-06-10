@@ -100,6 +100,7 @@ export default createReducer(INITIAL_STATE, (builder) => {
     .addCase(loginRoutine.SUCCESS, (state, action) => {
       state.loading = "SUCCESS";
       state.token = action.payload;
+      console.log(action.payload);
     })
     .addCase(logoutRoutine.TRIGGER, (state) => {
       state.user= {

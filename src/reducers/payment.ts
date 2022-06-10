@@ -20,11 +20,15 @@ export const getAllPaymentMethod = createRoutine(
   "PAYMENT/GET_ALL_PAYMENT_METHOD"
 );
 
+export const updateDefaultPaymentMethod = createRoutine(
+  "PAYMENT/UPDATE_DEFAULT_PAYMENT"
+);
+
 // =========================================================
 // =========================================================
 // SAGAS
 
-function* getPaymentMethod(): Promise<void> {
+function* getPaymentMethodSaga(): Promise<void> {
   try {
     const { cardListResponse, stripeCustomerResponse } = yield all({
       cardListResponse: yield call(
@@ -36,21 +40,25 @@ function* getPaymentMethod(): Promise<void> {
         API.GET_STRIPE_CUSTOMER
       ),
     });
-    const listCard: Card[] = cardListResponse.data.map((billing: any) => {
-      const card: Card = {
-        id: billing.id,
-        fullName: billing.billing_details.name,
-        brand: billing.card.brand,
-        number: billing.card.last4,
-        exp_month: billing.card.exp_month,
-        exp_year: billing.card.exp_year,
-      };
-      return card;
-    });
 
     yield put({
       type: getAllPaymentMethod.SUCCESS,
-      payload: { listCard, stripeCustomerResponse },
+      payload: { cardListResponse, stripeCustomerResponse },
+    });
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function* updateDefaultPaymentSaga(action: any): Promise<void> {
+  try {
+    const register = action.data;
+    const response = yield call(axios.putWithAuth, API.UPDATE_DEFAULT_PAYMENT, {
+      card_id: register,
+    });
+    yield put({
+      type: updateDefaultPaymentMethod.SUCCESS,
+      payload: response,
     });
   } catch (e) {
     console.log(e);
@@ -58,7 +66,10 @@ function* getPaymentMethod(): Promise<void> {
 }
 
 export function* paymentSaga() {
-  yield all([takeLatest(getAllPaymentMethod.TRIGGER, getPaymentMethod)]);
+  yield all([
+    takeLatest(getAllPaymentMethod.TRIGGER, getPaymentMethodSaga),
+    takeLatest(updateDefaultPaymentMethod.TRIGGER, updateDefaultPaymentSaga),
+  ]);
 }
 
 const INITIAL_STATE: paymentState = {
@@ -72,8 +83,13 @@ const INITIAL_STATE: paymentState = {
 // REDUCER
 
 export default createReducer(INITIAL_STATE, (builder) => {
-  builder.addCase(getAllPaymentMethod.SUCCESS, (state, action) => {
-    state.payment_list = action.payload.listCard;
-    state.stripe_customer = action.payload.stripeCustomerResponse
-  });
+  builder
+    .addCase(getAllPaymentMethod.SUCCESS, (state, action) => {
+      state.payment_list = action.payload.cardListResponse.data;
+      state.stripe_customer = action.payload.stripeCustomerResponse;
+      console.log(action.payload.cardListResponse);
+    })
+    .addCase(updateDefaultPaymentMethod.SUCCESS, (state, action) => {
+      state.stripe_customer = action.payload;
+    });
 });

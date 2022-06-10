@@ -10,33 +10,36 @@ import {
 } from "react-native";
 import { FAB } from "react-native-paper";
 import Checkbox from "expo-checkbox";
-import {  ifIphoneX } from "react-native-iphone-x-helper";
+import { ifIphoneX } from "react-native-iphone-x-helper";
 import _ from "lodash";
 import { Header } from "components";
 import { useDispatch, useSelector } from "react-redux";
 import { Card } from "config/types";
 import { PaymentCard } from "components";
-import { getAllPaymentMethod } from "reducers/payment";
+import { getAllPaymentMethod, updateDefaultPaymentMethod } from "reducers/payment";
+import { useNavigation } from "@react-navigation/native";
 
 export const PaymentMethodScreen = () => {
   const [number, setNumber] = useState("");
   const [refreshing, setRefreshing] = useState(false);
   const listPayment = useSelector((state) => state.payment.payment_list);
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const defaultPayment = useSelector(
-    (state) => state.payment.stripe_customer.default_source
+    (state) => state.payment.stripe_customer.invoice_settings.default_payment_method
   );
 
   useEffect(() => {
+    console.log(defaultPayment);
     setNumber(defaultPayment);
   }, []);
 
   const onRefresh = useCallback(async () => {
-    await dispatch({type: getAllPaymentMethod.TRIGGER});
+    await dispatch({ type: getAllPaymentMethod.TRIGGER });
   }, []);
 
-  const onChangeDefaulPayment = (number: string): void => {
-    console.log(number);
+  const onChangeDefaulPayment = async (number: string): Promise<void> => {
+    await dispatch({ type: updateDefaultPaymentMethod.TRIGGER, data: number });
     setNumber(number);
   };
 
@@ -45,10 +48,19 @@ export const PaymentMethodScreen = () => {
       <View
         style={{ marginTop: (Dimensions.get("window").height * 3.69) / 100 }}
       >
-        <PaymentCard card={item.item} />
-        <View
-          style={styles.checkBoxContainer}
-        >
+        <PaymentCard
+          card={item.item}
+          isPressable={true}
+          onPressCard={() =>
+            navigation.navigate({
+              name: "EditPaymentScreen",
+              params: {
+                card: item.item,
+              },
+            })
+          }
+        />
+        <View style={styles.checkBoxContainer}>
           <Checkbox
             style={styles.checkbox}
             color={number === item.item.id ? "#303030" : "#808080"}
@@ -64,7 +76,7 @@ export const PaymentMethodScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
-        <Header title={"SHIPPING ADDRESS"} />
+        <Header title={"PAYMENT METHOD"} />
         <FlatList
           style={styles.itemFlatList}
           data={listPayment}
@@ -78,7 +90,7 @@ export const PaymentMethodScreen = () => {
         <FAB
           style={styles.fab}
           icon="plus"
-          onPress={() => console.log("Pressed")}
+          onPress={() => navigation.navigate("AddPaymentScreen")}
           color={"#0D1C2E"}
         />
       </View>
@@ -149,5 +161,5 @@ const styles = StyleSheet.create({
     marginBottom: (Dimensions.get("window").height * 1.85) / 100,
     paddingHorizontal: (Dimensions.get("window").width * 5.33) / 100,
     marginTop: (Dimensions.get("window").height * 2.46) / 100,
-  }
+  },
 });

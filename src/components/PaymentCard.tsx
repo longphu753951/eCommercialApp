@@ -1,26 +1,32 @@
 import React, { useState, useCallback, useEffect } from "react";
 import {
   Text,
-  View, 
+  View,
   StyleSheet,
   Dimensions,
   Image,
   ImageBackground,
   Platform,
   ImageSourcePropType,
+  TouchableOpacity,
 } from "react-native";
 import { cardStyle, cardType } from "config/mockData";
 import { isIphoneX } from "react-native-iphone-x-helper";
 import _ from "lodash";
 import { Card } from "config/types";
 
+type Purpose = "non_edit" | "editable";
+
 interface Props {
   card: Card;
   isPressable: boolean;
+  onPressCard(): void;
+  purpose: Purpose;
 }
 
 const PaymentCard = (props: Props) => {
-  const { card, isPressable } = props;
+  const { card, isPressable, onPressCard, purpose } = props;
+  console.log(card);
 
   const setCardNumber = (number: string): string => {
     return "**** **** " + number;
@@ -43,34 +49,37 @@ const PaymentCard = (props: Props) => {
   };
 
   return (
-    <ImageBackground
-      resizeMode="cover"
-      style={{
-        height: (Dimensions.get("window").height * getSize()) / 100,
-      }}
-      source={require("assets/images/creditCard.png")}
-    >
-      <View style={styles.header}>
-        <View>
-          <Image
-            resizeMode="contain"
-            source={getImageTypeCard(card.brand)}
-            style={getCardStyle(card.brand)}
-          />
-          <Text style={styles.number}>{setCardNumber(card.number)}</Text>
-        </View>
-        <View style={styles.bottom}>
+    <TouchableOpacity disabled={!isPressable} onPress={() => onPressCard()}>
+      <ImageBackground
+        resizeMode="cover"
+        style={{
+          height: (Dimensions.get("window").height * getSize()) / 100,
+        }}
+        source={require("assets/images/creditCard.png")}
+      >
+        <View style={styles.header}>
           <View>
-            <Text style={styles.nameText}>Card Holder Name</Text>
-            <Text style={styles.contentText}>{card.fullName}</Text>
+            <Image
+              resizeMode="contain"
+              source={getImageTypeCard(card.brand)}
+              style={getCardStyle(card.brand)}
+            />
+            <Text style={styles.number}>{setCardNumber(card.last4)}</Text>
           </View>
-          <View>
-            <Text style={styles.nameText}>Expiry Date</Text>
-            <Text style={styles.contentText}>{getCardExp(card)}</Text>
+
+          <View style={styles.bottom}>
+            <View>
+              <Text style={styles.nameText}>Card Holder Name</Text>
+              <Text style={styles.contentText}>{card.fullName}</Text>
+            </View>
+            <View>
+              <Text style={styles.nameText}>Expiry Date</Text>
+              <Text style={styles.contentText}>{getCardExp(card)}</Text>
+            </View>
           </View>
         </View>
-      </View>
-    </ImageBackground>
+      </ImageBackground>
+    </TouchableOpacity>
   );
 };
 
@@ -104,5 +113,18 @@ const styles = StyleSheet.create({
     marginTop: (Dimensions.get("window").height * 3.44) / 100,
   },
 });
+
+PaymentCard.defaultProps = {
+  card: {
+    brand: 'Visa',
+    fullName: 'XXXXXXXXXX',
+    last4: '',
+    exp_month: 'XX',
+    exp_year: 'XXXX',
+  },
+  isPressable: false,
+  onPressCard: () => {},
+  purpose: "non_edit",
+};
 
 export default PaymentCard;

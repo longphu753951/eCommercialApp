@@ -14,14 +14,15 @@ const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 interface Props {
-  label: String;
-  name: String;
+  label: string;
+  name: string;
   control?: Control<any>;
   isSecure: Boolean;
   error: FieldError;
-  keyboardType: String;
+  keyboardType: string;
   textInputStyle: any;
   rules: any;
+  mode: string;
 }
 
 const TextField: React.FC<Props> = (props: Props) => {
@@ -34,6 +35,7 @@ const TextField: React.FC<Props> = (props: Props) => {
     keyboardType,
     textInputStyle,
     rules,
+    mode
   } = props;
   const [isShowingPassword, setIsShowingPassword] = useState(false);
   const setShowPassword = () => {
@@ -50,7 +52,7 @@ const TextField: React.FC<Props> = (props: Props) => {
               {/* @ts-ignore */}
               <TextInput
                 style={textInputStyle}
-                mode="outlined"
+                mode={mode}
                 keyboardType={keyboardType}
                 activeOutlineColor={"#303030"}
                 label={label}
@@ -86,6 +88,7 @@ TextField.defaultProps = {
   label: "label",
   name: "label",
   isSecure: false,
+  mode: "outlined"
 };
 
 const styles = StyleSheet.create({

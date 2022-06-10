@@ -74,9 +74,9 @@ export interface Card {
   id: string;
   brand: string,
   fullName: string;
-  number: string;
-  exp_month: number;
-  exp_year: number;
+  last4: string;
+  exp_month: string;
+  exp_year: string;
 }
 
 export interface ShippingUnit {

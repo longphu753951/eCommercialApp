@@ -153,31 +153,18 @@ export const addressList = [
   },
 ];
 
-export const creditCard = [
-  {
-    number: "5412 4242 4242 4242",
-    name: "Tran Long Phu",
-    expiryDate: "05/23",
-  },
-  {
-    number: "4242 4242 4242 4242",
-    name: "Tran Long Phu",
-    expiryDate: "05/23",
-  },
-];
-
 export const cardType = {
-  "visa": require("assets/images/visa.png"),
-  "mastercard": require("assets/images/mastercard.png"),
+  "Visa": require("assets/images/visa.png"),
+  "MasterCard": require("assets/images/mastercard.png"),
 };
 
 export const cardStyle = {
-  "visa": {
+  "Visa": {
     height: (Dimensions.get("window").height * 1.97) / 100,
     width: (Dimensions.get("window").height * 6.15) / 100,
     marginBottom: (Dimensions.get("window").height * 3.277) / 100,
   },
-  "mastercard": {
+  "MasterCard": {
     height: (Dimensions.get("window").height * 3) / 100,
     width: (Dimensions.get("window").height * 3.82) / 100,
     marginBottom: (Dimensions.get("window").height * 2.25) / 100,
@@ -254,21 +241,6 @@ export const myCart = [
     quantity: 4,
   },
 ];
-
-export const product = {
-  name: "Minimal Stand",
-  price: 50,
-  rating: 4.5,
-  reviews: 50,
-  description:
-    "Minimal Stand is made of by natural wood. The design that is very simple and minimal. This is truly one of the best furnitures in any family for now. With 3 different colors, you can easily select the best match for your home. ",
-  colors: ["#ffffff", "#B4916C", "#E4CBAD"],
-  images: [
-    require("assets/images/demo-item/stand.png"),
-    require("assets/images/demo-item/stand.png"),
-    require("assets/images/demo-item/stand.png"),
-  ],
-};
 
 export const checkOutInfo = [
   {

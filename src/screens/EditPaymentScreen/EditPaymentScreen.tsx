@@ -1,24 +1,19 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   Text,
   View,
   StyleSheet,
   Dimensions,
   TouchableOpacity,
-  Pressable,
 } from "react-native";
+import { ifIphoneX } from "react-native-iphone-x-helper";
 import _ from "lodash";
-import {
-  FCKeyBoardAvoidingView,
-  TextField,
-  PaymentCard,
-  Header,
-} from "components/";
+import { Header } from "components";
+import { PaymentCard } from "components";
+import { FCKeyBoardAvoidingView, TextField } from "components/";
 import { useForm } from "react-hook-form";
 import { nameRule } from "services/inputRuleService";
-import { useStripe } from "@stripe/stripe-react-native";
-import { Picker } from "@react-native-picker/picker";
-
+import { useNavigation } from "@react-navigation/native";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -26,9 +21,9 @@ const wait = (timeout: number) => {
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
-export const AddPaymentScreen = () => {
-  const stripe = useStripe();
-  const openModal = useRef();
+export const EditPaymentScreen = ({ route, navigation }) => {
+  const card = route.params.card;
+  console.log(card)
   const {
     setValue,
     handleSubmit,
@@ -37,57 +32,22 @@ export const AddPaymentScreen = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      brand: "",
-      fullName: "",
-      number: "",
-      exp_month: "",
-      exp_year: "",
+      fullName: card.fullName,
+      number: '',
+      exp_month: card.exp_month,
+      exp_year: card.exp_year.toString(),
       cvc: "",
     },
   });
-  const [selectedLanguage, setSelectedLanguage] = useState();
-
-  const handlingCardNumber = (number: string) => {
-    this.setState({
-      cardNumber: number
-        .replace(/\s?/g, "")
-        .replace(/(\d{4})/g, "$1 ")
-        .trim(),
-    });
-  };
-
-  const onSubmit = async (data) => {
-    stripe.createToken(data).then((payload) => console.log("[token]", payload));
-  };
 
   return (
     <FCKeyBoardAvoidingView loading={false} style={styles.container}>
       <View style={styles.contentContainer}>
-        <Header title={"ADD PAYMENT METHOD"} />
-        <View style ={{flexDirection: 'row'}}>
-          <Picker
-          style ={{width: 160}}
-            selectedValue={selectedLanguage}
-            onValueChange={(itemValue, itemIndex) =>
-              setSelectedLanguage(itemValue)
-            }
-          >
-            <Picker.Item label="January" value="java" />
-            <Picker.Item label="December" value="js" />
-          </Picker>
-          <Picker
-          style ={{width: 160}}
-            selectedValue={selectedLanguage}
-            onValueChange={(itemValue, itemIndex) =>
-              setSelectedLanguage(itemValue)
-            }
-          >
-            <Picker.Item label="Java" value="java" />
-            <Picker.Item label="JavaScript" value="js" />
-          </Picker>
-        </View>
+        <Header title={"EDIT PAYMENT METHOD"} />
         <View style={{ marginTop: 26, flexDirection: "column", flex: 1 }}>
-          <PaymentCard />
+          <PaymentCard
+            card={card}
+          />
           <View
             style={{
               flex: 1,
@@ -105,7 +65,7 @@ export const AddPaymentScreen = () => {
               }}
               control={control}
               label={"Cardholder name"}
-              name={"number"}
+              name={"fullName"}
               rules={nameRule}
               error={errors.fullName}
             />
@@ -117,7 +77,7 @@ export const AddPaymentScreen = () => {
               }}
               control={control}
               label={"Card Number"}
-              name={"fullName"}
+              name={"number"}
               rules={nameRule}
               error={errors.fullName}
             />
@@ -136,27 +96,27 @@ export const AddPaymentScreen = () => {
                 rules={nameRule}
                 error={errors.exp_month}
               />
-              <Pressable
-                onPress={() => {
-                  console.log('asd')
-                }}
-              >
-                <TextField
-                  textInputStyle={styles.nameInput}
-                  control={control}
-                  label={"Expiration Date"}
-                  name={"exp_year"}
-                  rules={nameRule}
-                  error={errors.exp_year}
-                />
-              </Pressable>
+              <TextField
+                textInputStyle={styles.nameInput}
+                control={control}
+                label={"Expiration Date"}
+                name={"exp_year"}
+                rules={nameRule}
+                error={errors.exp_year}
+              />
             </View>
-            <View style={{ width: "100%", flexDirection: "column" }}>
+            <View style={{ width: "100%", flexDirection: 'column' }}>
               <TouchableOpacity
                 style={[styles.button, styles.signInButton]}
-                onPress={() => handleSubmit(onSubmit)}
+                onPress={() => console.log("asdas")}
               >
-                <Text style={styles.buttonText}>Add new card</Text>
+                <Text style={styles.buttonText}>Edit card</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.deleteButton]}
+                onPress={() => console.log("asdas")}
+              >
+                <Text style={styles.buttonText}>Delete card</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -190,6 +150,11 @@ const styles = StyleSheet.create({
   },
   signInButton: {
     backgroundColor: "#212121",
+    width: "100%",
+  },
+  deleteButton: {
+    marginTop: (height * 1.35) / 100,
+    backgroundColor: "#d44c64",
     width: "100%",
   },
 });
