@@ -6,6 +6,8 @@ import {
   Dimensions,
   TouchableOpacity,
   Pressable,
+  Modal,
+  Animated,
 } from "react-native";
 import _ from "lodash";
 import {
@@ -13,11 +15,13 @@ import {
   TextField,
   PaymentCard,
   Header,
+  DateTimePickerModal,
 } from "components/";
 import { useForm } from "react-hook-form";
 import { nameRule } from "services/inputRuleService";
 import { useStripe } from "@stripe/stripe-react-native";
-import { Picker } from "@react-native-picker/picker";
+import DatePicker from "@dietime/react-native-date-picker";
+import moment from "moment";
 
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -29,6 +33,7 @@ const height = Dimensions.get("window").height;
 export const AddPaymentScreen = () => {
   const stripe = useStripe();
   const openModal = useRef();
+  const [time, setTime] = useState(new Animated.Value(0));
   const {
     setValue,
     handleSubmit,
@@ -40,12 +45,11 @@ export const AddPaymentScreen = () => {
       brand: "",
       fullName: "",
       number: "",
-      exp_month: "",
-      exp_year: "",
+      exp_dateTime: "XX/XXXX",
       cvc: "",
     },
   });
-  const [selectedLanguage, setSelectedLanguage] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handlingCardNumber = (number: string) => {
     this.setState({
@@ -61,31 +65,47 @@ export const AddPaymentScreen = () => {
   };
 
   return (
-    <FCKeyBoardAvoidingView loading={false} style={styles.container}>
+    <FCKeyBoardAvoidingView loading={true} style={styles.container}>
+      {/* <Modal animationType="fade" transparent={true} visible={true}>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0, 0, 0, 0.68)",
+            flexDirection: "column-reverse",
+          }}
+        >
+          <Animated.View
+            style={{
+              width: "100%",
+              height: "50%",
+              bottom: 0,
+              backgroundColor: "white",
+              borderTopStartRadius: 20,
+              borderTopEndRadius: 20,
+            }}
+          >
+            <View
+              style={{
+                width: "100%",
+                borderTopStartRadius: 20,
+                borderTopEndRadius: 20,
+                padding: 15,
+                flexDirection: "row-reverse",
+                borderBottomWidth: 0.2,
+              }}
+            >
+              <TouchableOpacity>
+                <Text style={{ fontSize: 20 }}>Close</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{ flex: 1 }}>
+              
+            </View>
+          </Animated.View>
+        </View>
+      </Modal> */}
       <View style={styles.contentContainer}>
         <Header title={"ADD PAYMENT METHOD"} />
-        <View style ={{flexDirection: 'row'}}>
-          <Picker
-          style ={{width: 160}}
-            selectedValue={selectedLanguage}
-            onValueChange={(itemValue, itemIndex) =>
-              setSelectedLanguage(itemValue)
-            }
-          >
-            <Picker.Item label="January" value="java" />
-            <Picker.Item label="December" value="js" />
-          </Picker>
-          <Picker
-          style ={{width: 160}}
-            selectedValue={selectedLanguage}
-            onValueChange={(itemValue, itemIndex) =>
-              setSelectedLanguage(itemValue)
-            }
-          >
-            <Picker.Item label="Java" value="java" />
-            <Picker.Item label="JavaScript" value="js" />
-          </Picker>
-        </View>
         <View style={{ marginTop: 26, flexDirection: "column", flex: 1 }}>
           <PaymentCard />
           <View
@@ -136,20 +156,9 @@ export const AddPaymentScreen = () => {
                 rules={nameRule}
                 error={errors.exp_month}
               />
-              <Pressable
-                onPress={() => {
-                  console.log('asd')
-                }}
-              >
-                <TextField
-                  textInputStyle={styles.nameInput}
-                  control={control}
-                  label={"Expiration Date"}
-                  name={"exp_year"}
-                  rules={nameRule}
-                  error={errors.exp_year}
-                />
-              </Pressable>
+              <View>
+                <DateTimePickerModal />
+              </View>
             </View>
             <View style={{ width: "100%", flexDirection: "column" }}>
               <TouchableOpacity

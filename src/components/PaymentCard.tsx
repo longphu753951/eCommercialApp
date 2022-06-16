@@ -70,7 +70,7 @@ const PaymentCard = (props: Props) => {
           <View style={styles.bottom}>
             <View>
               <Text style={styles.nameText}>Card Holder Name</Text>
-              <Text style={styles.contentText}>{card.fullName}</Text>
+              <Text style={styles.contentText}>{card.name}</Text>
             </View>
             <View>
               <Text style={styles.nameText}>Expiry Date</Text>
