@@ -24,6 +24,8 @@ export const updateDefaultPaymentMethod = createRoutine(
   "PAYMENT/UPDATE_DEFAULT_PAYMENT"
 );
 
+export const addNewPaymentMethod = createRoutine("PAYMENT/ADD_NEW_PAYMENT");
+
 // =========================================================
 // =========================================================
 // SAGAS
@@ -65,8 +67,25 @@ function* updateDefaultPaymentSaga(action: any): Promise<void> {
   }
 }
 
+function* addNewPaymentMethodSaga(action: any): Promise<void> {
+  console.log(action)
+  const data = action.data;
+  try {
+    const response = yield call(axios.postWithAuth, API.ADD_NEW_PAYMENT, {
+      cardDetail: data,
+    });
+    yield put({
+      type: addNewPaymentMethod.SUCCESS,
+      payload: response,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 export function* paymentSaga() {
   yield all([
+    takeLatest(addNewPaymentMethod.TRIGGER, addNewPaymentMethodSaga),
     takeLatest(getAllPaymentMethod.TRIGGER, getPaymentMethodSaga),
     takeLatest(updateDefaultPaymentMethod.TRIGGER, updateDefaultPaymentSaga),
   ]);
@@ -87,7 +106,6 @@ export default createReducer(INITIAL_STATE, (builder) => {
     .addCase(getAllPaymentMethod.SUCCESS, (state, action) => {
       state.payment_list = action.payload.cardListResponse.data;
       state.stripe_customer = action.payload.stripeCustomerResponse;
-      console.log(action.payload.cardListResponse);
     })
     .addCase(updateDefaultPaymentMethod.SUCCESS, (state, action) => {
       state.stripe_customer = action.payload;

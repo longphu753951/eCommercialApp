@@ -18,10 +18,10 @@ import {
   DateTimePickerModal,
 } from "components/";
 import { useForm } from "react-hook-form";
-import { nameRule } from "services/inputRuleService";
-import { useStripe } from "@stripe/stripe-react-native";
-import DatePicker from "@dietime/react-native-date-picker";
-import moment from "moment";
+import { nameRule, rules } from "services/inputRuleService";
+import { useStripe, CardField, } from "@stripe/stripe-react-native";
+import { useDispatch } from "react-redux";
+import { addNewPaymentMethod } from "reducers/payment";
 
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -32,8 +32,7 @@ const height = Dimensions.get("window").height;
 
 export const AddPaymentScreen = () => {
   const stripe = useStripe();
-  const openModal = useRef();
-  const [time, setTime] = useState(new Animated.Value(0));
+  const dispatch = useDispatch();
   const {
     setValue,
     handleSubmit,
@@ -42,14 +41,12 @@ export const AddPaymentScreen = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      brand: "",
-      fullName: "",
-      number: "",
-      exp_dateTime: "XX/XXXX",
-      cvc: "",
+      fullName: "TRAN LONG PHU",
+      number: "5555558265554449",
+      exp_dateTime: "06/2023",
+      cvc: "341",
     },
   });
-  const [modalVisible, setModalVisible] = useState(false);
 
   const handlingCardNumber = (number: string) => {
     this.setState({
@@ -60,50 +57,17 @@ export const AddPaymentScreen = () => {
     });
   };
 
-  const onSubmit = async (data) => {
-    stripe.createToken(data).then((payload) => console.log("[token]", payload));
+  const onSubmit = async  (data) => {
+    const dateTimeArray = data['exp_dateTime'].split("/");
+    delete data['exp_dateTime'];
+    data['exp_month'] = dateTimeArray[0];
+    data['exp_year'] = dateTimeArray[1];
+    
+    await dispatch({ type: addNewPaymentMethod.TRIGGER, data: data });
   };
 
   return (
     <FCKeyBoardAvoidingView loading={true} style={styles.container}>
-      {/* <Modal animationType="fade" transparent={true} visible={true}>
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: "rgba(0, 0, 0, 0.68)",
-            flexDirection: "column-reverse",
-          }}
-        >
-          <Animated.View
-            style={{
-              width: "100%",
-              height: "50%",
-              bottom: 0,
-              backgroundColor: "white",
-              borderTopStartRadius: 20,
-              borderTopEndRadius: 20,
-            }}
-          >
-            <View
-              style={{
-                width: "100%",
-                borderTopStartRadius: 20,
-                borderTopEndRadius: 20,
-                padding: 15,
-                flexDirection: "row-reverse",
-                borderBottomWidth: 0.2,
-              }}
-            >
-              <TouchableOpacity>
-                <Text style={{ fontSize: 20 }}>Close</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={{ flex: 1 }}>
-              
-            </View>
-          </Animated.View>
-        </View>
-      </Modal> */}
       <View style={styles.contentContainer}>
         <Header title={"ADD PAYMENT METHOD"} />
         <View style={{ marginTop: 26, flexDirection: "column", flex: 1 }}>
@@ -125,7 +89,7 @@ export const AddPaymentScreen = () => {
               }}
               control={control}
               label={"Cardholder name"}
-              name={"number"}
+              name={"fullName"}
               rules={nameRule}
               error={errors.fullName}
             />
@@ -137,9 +101,9 @@ export const AddPaymentScreen = () => {
               }}
               control={control}
               label={"Card Number"}
-              name={"fullName"}
-              rules={nameRule}
-              error={errors.fullName}
+              name={"number"}
+              rules={rules}
+              error={errors.number}
             />
             <View
               style={{
@@ -153,17 +117,24 @@ export const AddPaymentScreen = () => {
                 control={control}
                 label={"CVC"}
                 name={"cvc"}
-                rules={nameRule}
-                error={errors.exp_month}
+                rules={rules}
+                error={errors.cvc}
               />
               <View>
-                <DateTimePickerModal />
+                <DateTimePickerModal
+                  inputStyle={styles.nameInput}
+                  control={control}
+                  name={"exp_dateTime"}
+                  rules={rules}
+                  error={errors.exp_dateTime}
+                />
               </View>
             </View>
+            
             <View style={{ width: "100%", flexDirection: "column" }}>
               <TouchableOpacity
                 style={[styles.button, styles.signInButton]}
-                onPress={() => handleSubmit(onSubmit)}
+                onPress={handleSubmit(onSubmit)}
               >
                 <Text style={styles.buttonText}>Add new card</Text>
               </TouchableOpacity>

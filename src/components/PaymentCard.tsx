@@ -26,7 +26,6 @@ interface Props {
 
 const PaymentCard = (props: Props) => {
   const { card, isPressable, onPressCard, purpose } = props;
-  console.log(card);
 
   const setCardNumber = (number: string): string => {
     return "**** **** " + number;
