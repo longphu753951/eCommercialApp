@@ -259,7 +259,7 @@ export const ProductScreen = () => {
                 startingValue={productMain.rating / 5}
               />
               <Text style={styles.rating}>{productMain.rating}</Text>
-              <Text style={styles.reviews}>({product.reviews} reviews)</Text>
+              <Text style={styles.reviews}>(50 reviews)</Text>
             </TouchableOpacity>
             <View style={styles.descriptionContainer}>
               <Text style={styles.description}>{productMain.description}</Text>

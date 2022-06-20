@@ -1,13 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Text, View, Image, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useForm } from "react-hook-form";
+import { useSelector, useDispatch } from "react-redux";
+import { useForm, Controller, UseFormRegister, Control } from "react-hook-form";
 import { TextField } from "components";
 import { styles, width, height } from "../SignUpStyles";
-import { nameRule, emailRule } from "services/inputRuleService";
+import { nameRule, passwordRule } from "services/inputRuleService";
 
 interface Props {
-  submit(data: object): void;
+  submit(data: string): void;
   goBack(): void;
 }
 
@@ -27,14 +28,13 @@ const TypePasswordForm: React.FC<Props> = (props: Props) => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      first_name: "",
-      last_name: "",
-      email: "",
+      password: "",
+      passwordConfirm: "",
     },
   });
 
   const onSubmit = async (data: object) => {
-    submit(data);
+    submit(data.password);
   };
 
   return (
@@ -51,7 +51,7 @@ const TypePasswordForm: React.FC<Props> = (props: Props) => {
         <Image
           resizeMode="contain"
           style={{ height: (height * 30.66) / 100 }}
-          source={require("assets/images/image4.png")}
+          source={require("assets/images/image2.png")}
         />
       </View>
       <View>
@@ -62,7 +62,7 @@ const TypePasswordForm: React.FC<Props> = (props: Props) => {
             color: "#303030",
           }}
         >
-          Step 4
+          Last step
         </Text>
         <Text
           style={{
@@ -71,41 +71,34 @@ const TypePasswordForm: React.FC<Props> = (props: Props) => {
             color: "#606060",
           }}
         >
-          Type your information here
+          Type your password and complete
         </Text>
       </View>
       <View style={{ width: "100%", marginTop: (1 * height) / 100 }}>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            width: "100%",
-          }}
-        >
-          <TextField
-            textInputStyle={styles.nameInput}
-            control={control}
-            label={"First name"}
-            name={"first_name"}
-            rules={nameRule}
-            error={errors.first_name}
-          />
-          <TextField
-            textInputStyle={styles.nameInput}
-            control={control}
-            label={"Last name"}
-            name={"last_name"}
-            rules={nameRule}
-            error={errors.last_name}
-          />
-        </View>
         <TextField
           textInputStyle={{ width: "100%", marginTop: (height * 0.5) / 100 }}
           control={control}
-          label={"Email"}
-          name={"email"}
-          rules={emailRule}
-          error={errors.email}
+          isSecure={true}
+          label={"Password"}
+          name={"password"}
+          rules={passwordRule}
+          error={errors.password}
+        />
+        <TextField
+          textInputStyle={{ width: "100%", marginTop: (height * 0.9) / 100 }}
+          control={control}
+          isSecure={true}
+          label={"Password Confirm"}
+          name={"passwordConfirm"}
+          rules={{
+            required: { value: true, message: "This field is required" },
+            validate: (val: string) => {
+              if (watch("password") != val) {
+                return "Your passwords do no match";
+              }
+            },
+          }}
+          error={errors.passwordConfirm}
         />
       </View>
       <View
@@ -132,6 +125,8 @@ const TypePasswordForm: React.FC<Props> = (props: Props) => {
             <Text style={styles.buttonText}>Go back</Text>
           </TouchableOpacity>
         </View>
+
+        
       </View>
     </View>
   );

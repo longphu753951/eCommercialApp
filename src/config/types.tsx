@@ -12,6 +12,7 @@ export interface User {
   email: string;
   telephone: string;
   avatar_path: string;
+  payment_info: object;
 }
 
 export interface UserRegister {
@@ -67,6 +68,15 @@ export interface Bookmark {
 export interface BookmarkDetail {
   id: number;
   productAttribute: ProductAttribute;
+}
+
+export interface Card {
+  id: string;
+  brand: string,
+  fullName: string;
+  last4: string;
+  exp_month: string;
+  exp_year: string;
 }
 
 export interface ShippingUnit {

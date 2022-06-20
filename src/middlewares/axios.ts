@@ -53,6 +53,24 @@ axios.getWithAuth = (...params: any) => {
   });
 };
 
+axios.putWithAuth = (...params: any) => {
+  let token = store.getState().auth.token.access_token;
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await axios.put(
+        ...params,{
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+      checkAPIResultCode(response, resolve, reject);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 axios.postWithAuth = (...params: any) => {
   let token = store.getState().auth.token.access_token;
   return new Promise(async (resolve, reject) => {
@@ -119,10 +137,12 @@ axios.formPost = (url, data, fileField = 'userfile[]') => {
       };
 
       const response = await axios.post(url, formData, config);
+      
 
       checkAPIResultCode(response, resolve, reject);
-    } catch (e) {
-      reject(e);
+    } catch (error) {
+      console.log(error.headers)
+      reject(error);
     }
   });
 };

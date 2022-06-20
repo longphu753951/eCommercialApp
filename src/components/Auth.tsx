@@ -150,6 +150,21 @@ const App = () => {
   );
 };
 
+export default function App() {
+  const [date, setDate] = useState();
+
+  return (
+      <View>
+          <Text>{date ? date.toDateString() : "Select date..."}</Text>
+          <DatePicker
+              value={date}
+              onChange={(value) => setDate(value)}
+              format="yyyy-mm"
+          />
+      </View>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

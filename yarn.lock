@@ -1089,6 +1089,11 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@dietime/react-native-date-picker@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@dietime/react-native-date-picker/-/react-native-date-picker-1.2.0.tgz#a41821718b9243532d7248c0a621b37429d0939d"
+  integrity sha512-hFd1OUlVeJLpRZ//B99mfB4G8UYGpXOIL1KNG3SNByLS7o5gEtnlXp6Pk7B4/mz2an6t+T6UBaF4tqye0tBzdw==
+
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
   resolved "https://registry.npmjs.org/@egjs/hammerjs/-/hammerjs-2.0.17.tgz"
@@ -2277,6 +2282,13 @@
     sudo-prompt "^9.0.0"
     wcwidth "^1.0.1"
 
+"@react-native-community/datetimepicker@4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-4.0.0.tgz#4629ac3d8d54b4024385f2b2a30bbe13640c6ed3"
+  integrity sha512-q3JfDHX5PI0AxFeMsB6jcHSXODloXAqBVsOfkIvm+YbAe1TUs/xZ3qGazsKVBk9EdFyHO4k+S1Q8tQkEnk2YrQ==
+  dependencies:
+    invariant "^2.2.4"
+
 "@react-native-community/masked-view@^0.1.11":
   version "0.1.11"
   resolved "https://registry.npmjs.org/@react-native-community/masked-view/-/masked-view-0.1.11.tgz"
@@ -2289,7 +2301,7 @@
 
 "@react-native-picker/picker@2.2.1":
   version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@react-native-picker/picker/-/picker-2.2.1.tgz#32b9f540d8e88a73d8856f73cca88251cecb9614"
+  resolved "https://registry.npmjs.org/@react-native-picker/picker/-/picker-2.2.1.tgz"
   integrity sha512-EC7yv22QLHlTfnbC1ez9IUdXTOh1W31x96Oir0PfskSGFFJMWWdLTg4VrcE2DsGLzbfjjkBk123c173vf2a5MQ==
 
 "@react-native/assets@1.0.0":

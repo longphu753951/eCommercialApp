@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   SafeAreaView,
   Text,
@@ -49,6 +49,8 @@ export const ProfileScreen = () => {
     return listItem;
   };
 
+  
+
   const logOut = () => {
     Alert.alert("Log out", "Are you sure you want to log out ?", [
       {
@@ -60,7 +62,7 @@ export const ProfileScreen = () => {
         text: "OK",
         onPress: async () => {
           await dispatch({type: logoutRoutine.TRIGGER})
-          navigation.navigate("LoginScreen");
+          
         },
       },
     ]);

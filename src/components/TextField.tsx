@@ -14,14 +14,15 @@ const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 interface Props {
-  label: String;
-  name: String;
+  label: string;
+  name: string;
   control?: Control<any>;
   isSecure: Boolean;
   error: FieldError;
-  keyboardType: String;
+  keyboardType: string;
   textInputStyle: any;
   rules: any;
+  mode: string;
 }
 
 const TextField: React.FC<Props> = (props: Props) => {
@@ -34,6 +35,7 @@ const TextField: React.FC<Props> = (props: Props) => {
     keyboardType,
     textInputStyle,
     rules,
+    mode,
   } = props;
   const [isShowingPassword, setIsShowingPassword] = useState(false);
   const setShowPassword = () => {
@@ -45,34 +47,32 @@ const TextField: React.FC<Props> = (props: Props) => {
       <Controller
         control={control}
         render={({ field: { onChange, onBlur, value } }) => (
-          <>
-            <View style={styles.textInputContainer}>
-              {/* @ts-ignore */}
-              <TextInput
-                style={textInputStyle}
-                mode="outlined"
-                keyboardType={keyboardType}
-                activeOutlineColor={"#303030"}
-                label={label}
-                autoCapitalize={"none"}
-                returnKeyLabel={"next"}
-                autoCorrect={false} 
-                right={
-                  isSecure && (
-                    <TextInput.Icon
-                      color="#303030"
-                      onPress={() => setShowPassword()}
-                      name={isShowingPassword ? "eye" : "eye-off"}
-                    />
-                  )
-                }
-                secureTextEntry={isSecure && !isShowingPassword}
-                onChangeText={(value) => onChange(value)}
-                onBlur={onBlur}
-                value={value}
-              />
-            </View>
-          </>
+          <View style={styles.textInputContainer}>
+            {/* @ts-ignore */}
+            <TextInput
+              style={textInputStyle}
+              mode={mode}
+              keyboardType={keyboardType}
+              activeOutlineColor={"#303030"}
+              label={label}
+              autoCapitalize={"none"}
+              returnKeyLabel={"next"}
+              autoCorrect={false}
+              right={
+                isSecure && (
+                  <TextInput.Icon
+                    color="#303030"
+                    onPress={() => setShowPassword()}
+                    name={isShowingPassword ? "eye" : "eye-off"}
+                  />
+                )
+              }
+              secureTextEntry={isSecure && !isShowingPassword}
+              onChangeText={(value) => onChange(value)}
+              onBlur={onBlur}
+              value={value}
+            />
+          </View>
         )}
         name={name}
         rules={rules}
@@ -86,6 +86,7 @@ TextField.defaultProps = {
   label: "label",
   name: "label",
   isSecure: false,
+  mode: "outlined",
 };
 
 const styles = StyleSheet.create({

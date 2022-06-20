@@ -15,9 +15,11 @@ import { MyCartScreen } from "screens/MyCartScreen/MyCartScreen";
 import { SignUpScreen } from "screens/SignUpScreen/SignUpScreen";
 import { CheckOutScreen } from "screens/CheckOutScreen/CheckOutScreen";
 import { RatingScreen } from "screens/RatingScreen/RatingScreen";
+import { AddPaymentScreen } from "screens/AddPaymentScreen/AddPaymentScreen";
 import { CameraScreen } from "components/CameraScreen";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Dimensions } from "react-native";
+import { EditPaymentScreen } from "screens/EditPaymentScreen/EditPaymentScreen";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -118,6 +120,22 @@ export const allScreens = (Stack: any) => {
         component={RatingScreen}
         options={{
           headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="EditPaymentScreen"
+        component={EditPaymentScreen}
+        options={{
+          headerShown: false,
+          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="AddPaymentScreen"
+        component={AddPaymentScreen}
+        options={{
+          headerShown: false,
+          gestureEnabled: false,
         }}
       />
     </>
