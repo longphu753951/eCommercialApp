@@ -20,6 +20,7 @@ import { CameraScreen } from "components/CameraScreen";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Dimensions } from "react-native";
 import { EditPaymentScreen } from "screens/EditPaymentScreen/EditPaymentScreen";
+import { AddShippingContactScreen } from "screens/AddShippingContactScreen/AddShippingContactScreen";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -127,7 +128,6 @@ export const allScreens = (Stack: any) => {
         component={EditPaymentScreen}
         options={{
           headerShown: false,
-          gestureEnabled: false,
         }}
       />
       <Stack.Screen
@@ -135,7 +135,13 @@ export const allScreens = (Stack: any) => {
         component={AddPaymentScreen}
         options={{
           headerShown: false,
-          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="AddShippingContactScreen"
+        component={AddShippingContactScreen}
+        options={{
+          headerShown: false,
         }}
       />
     </>

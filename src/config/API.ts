@@ -17,7 +17,7 @@ const API = {
   GET_ALL_PAYMENT_METHOD: '/stripe/get_payment_method',
   GET_STRIPE_CUSTOMER: '/stripe/get_stripe_costumer',
   UPDATE_DEFAULT_PAYMENT: '/stripe/update_default_payment',
-  ADD_NEW_PAYMENT: '/stripe/post_new_payment'
+  ADD_NEW_PAYMENT: '/stripe/post_new_payment',
 };
 
 interface API {

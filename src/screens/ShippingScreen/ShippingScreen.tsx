@@ -18,6 +18,7 @@ import { Feather } from "@expo/vector-icons";
 import { ifIphoneX } from "react-native-iphone-x-helper";
 import _ from "lodash";
 import { Card, Header } from "components";
+import { useNavigation } from "@react-navigation/native";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -25,6 +26,7 @@ const wait = (timeout: number) => {
 export const ShippingScreen = () => {
   const [name, setName] = useState("");
   const [refreshing, setRefreshing] = useState(false);
+  const navigation = useNavigation();
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -110,7 +112,7 @@ export const ShippingScreen = () => {
         <FAB
           style={styles.fab}
           icon="plus"
-          onPress={() => console.log("Pressed")}
+          onPress={() => navigation.navigate("AddShippingContactScreen")}
           color={"#0D1C2E"}
         />
       </View>
