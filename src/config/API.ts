@@ -18,6 +18,10 @@ const API = {
   GET_STRIPE_CUSTOMER: '/stripe/get_stripe_costumer',
   UPDATE_DEFAULT_PAYMENT: '/stripe/update_default_payment',
   ADD_NEW_PAYMENT: '/stripe/post_new_payment',
+  ADD_NEW_ADDRESS: '/shippingContact/addShippingContact/',
+  GET_ALL_ADDRESSES:'/shippingContact/getAllShippingContact/',
+  GET_CART: '/cart/',
+  ADD_TO_CART: '/cart/addToCart/',
 };
 
 interface API {

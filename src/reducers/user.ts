@@ -20,6 +20,7 @@ interface userState {
   user: User;
   loading: string;
   bookmarkId: Number;
+  shippingContacts: Array<any>,
 }
 
 // =========================================================
@@ -30,6 +31,8 @@ export const getCurrentUser = createRoutine("USER/GET_CURRENT_USER");
 export const getBookmark = createRoutine("USER/GET_BOOKMARK");
 export const addBookmark = createRoutine("USER/ADD_BOOKMARK");
 export const deleteBookmark = createRoutine("USER/DELETE_BOOKMARK");
+export const addNewAddress = createRoutine("USER/ADD_NEW_ADDRESS");
+export const getAddresses = createRoutine("USER/GET_ADDRESSES");
 
 // =========================================================
 // =========================================================
@@ -80,6 +83,36 @@ function* addBookmarkSaga(action: any): Promise<void> {
   }
 }
 
+function* addNewAddressSaga(action: any): Promise<void> {
+  try {
+    const data = yield call(
+      axios.postWithAuth,
+      API.ADD_NEW_ADDRESS,
+      action.data
+    );
+    console.log(data);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function* getAllAddressesSaga(action: any): Promise<void> {
+  try {
+    const data = yield call(
+      axios.getWithAuth,
+      API.GET_ALL_ADDRESSES
+    );
+    yield put({
+      type: getAddresses.SUCCESS,
+      payload: data,
+    });
+
+    console.log(data);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 function* deleteBookmarkSaga(action: any): Promise<void> {
   try {
     const url = API.DELETE_BOOKMARK.replace("id", action.id);
@@ -101,6 +134,8 @@ export function* userSaga() {
     takeLatest(getBookmark.TRIGGER, getBookmarkSaga),
     takeLatest(addBookmark.TRIGGER, addBookmarkSaga),
     takeLatest(deleteBookmark.TRIGGER, deleteBookmarkSaga),
+    takeLatest(addNewAddress.TRIGGER, addNewAddressSaga),
+    takeLatest(getAddresses.TRIGGER, getAllAddressesSaga),
   ]);
 }
 
@@ -112,12 +147,15 @@ const INITIAL_STATE: userState = {
     email: "",
     telephone: "",
     avatar_path: "empty",
+    payment_info: "",
+    default_address:"",
   },
   bookmark: {
     id: 0,
     bookmarkDetail: [],
   },
   loading: "",
+  shippingContacts: []
 };
 
 // =========================================================
@@ -161,5 +199,7 @@ export default createReducer(INITIAL_STATE, (builder) => {
     .addCase(deleteBookmark.FAILURE, (state) => {
       state.loading = "FAILURE";
     })
-    ;
+    .addCase(getAddresses.SUCCESS, (state, action) => {
+      state.shippingContacts = action.payload;
+    });
 });

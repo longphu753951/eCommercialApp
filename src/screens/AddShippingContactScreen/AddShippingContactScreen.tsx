@@ -11,12 +11,15 @@ import {
   FCKeyBoardAvoidingView,
   TextField,
   Header,
+  DropdownCustom,
 } from "components/";
 import { useForm } from "react-hook-form";
 import { nameRule, rules, telephoneRule } from "services/inputRuleService";
 import { Dropdown } from "react-native-element-dropdown";
 import { useDispatch } from "react-redux";
 import axios from "axios";
+import { addNewAddress } from "reducers/user";
+import Checkbox from "expo-checkbox";
 
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -31,11 +34,12 @@ export const AddShippingContactScreen = () => {
     setValue,
     handleSubmit,
     control,
+    resetField,
     watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
-      fullName: "",
+      name: "",
       address: "",
       telephone: "",
       ward: "",
@@ -45,13 +49,15 @@ export const AddShippingContactScreen = () => {
   });
   const [listIsFocus, setListIsFocus] = useState([false, false, false]);
   const [provinces, setProvinces] = useState([]);
-  const [provinceCode, setProvinceCode] = useState(-1);
-  const [districtCode, setDistrictCode] = useState(-1);
-  const [wardCode, setWardCode] = useState(-1);
-  const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
+  const [defaultAddress, setDefaultAddress] = useState(false);
+  const [districts, setDistricts] = useState([]);
 
   useEffect(() => {
+    onShowProvince();
+  }, []);
+
+  const onShowProvince = () => {
     axios
       .get("https://provinces.open-api.vn/api/p/")
       .then((response) => {
@@ -66,11 +72,12 @@ export const AddShippingContactScreen = () => {
       .catch((e) => {
         console.log(e);
       });
-  }, []);
+  };
 
-  useEffect(() => {
+  const onSearchDistrict = (value: string) => {
+    setWards([]);
     axios
-      .get(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`)
+      .get(`https://provinces.open-api.vn/api/p/${value}?depth=2`)
       .then((response) => {
         const districtList: Array<any> = response.data.districts.map(
           (district) => {
@@ -85,11 +92,11 @@ export const AddShippingContactScreen = () => {
       .catch((e) => {
         console.log(e);
       });
-  }, [provinceCode]);
+  };
 
-  useEffect(() => {
+  const onSearchWard = (value: string) => {
     axios
-      .get(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`)
+      .get(`https://provinces.open-api.vn/api/d/${value}?depth=2`)
       .then((response) => {
         const wardList: Array<any> = response.data.wards.map((ward) => {
           return {
@@ -102,12 +109,19 @@ export const AddShippingContactScreen = () => {
       .catch((e) => {
         console.log(e);
       });
-  }, [districtCode]);
+  };
 
   const setFocus = (position: number) => {
     const newListSetFocus = _.cloneDeep(listIsFocus);
     newListSetFocus[position] = !newListSetFocus[position];
     setListIsFocus(newListSetFocus);
+  };
+
+  const onSubmit = async (data) => {
+    await dispatch({
+      type: addNewAddress.TRIGGER,
+      data: { shippingContact: data, default: defaultAddress },
+    });
   };
 
   return (
@@ -130,16 +144,21 @@ export const AddShippingContactScreen = () => {
             }}
             control={control}
             label={"Full name"}
-            name={"fullName"}
+            name={"name"}
             rules={nameRule}
-            error={errors.fullName}
+            error={errors.name}
           />
           <TextField
-            textInputStyle={{ width: "100%" }}
+            textInputStyle={{
+              width: "100%",
+              backgroundColor: "white",
+              marginTop: (height * 0.5) / 100,
+            }}
             control={control}
             label={"Telephone"}
             name={"telephone"}
             keyboardType={"phone-pad"}
+            rules={telephoneRule}
             error={errors.telephone}
           />
           <TextField
@@ -151,62 +170,62 @@ export const AddShippingContactScreen = () => {
             control={control}
             label={"Address"}
             name={"address"}
-            rules={nameRule}
-            error={errors.fullName}
+            rules={rules}
+            error={errors.address}
           />
-          
-          <View style={styles.dropdownContainer}>
-            <Dropdown
-              style={[
-                styles.dropdown,
-                listIsFocus[1] && styles.selectedDropdown,
-              ]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              iconStyle={styles.iconStyle}
-              data={districts}
-              search
-              maxHeight={300}
-              labelField="label"
-              valueField="value"
-              placeholder={!listIsFocus[1] ? "Select District" : "..."}
-              searchPlaceholder="Search..."
-              value={districtCode}
-              onFocus={() => setFocus(1)}
-              onBlur={() => setFocus(1)}
-              onChange={(item) => {
-                setDistrictCode(item.value);
-                setFocus(1);
-              }}
+          <DropdownCustom
+            control={control}
+            label={"Province"}
+            name={"province"}
+            placeholder={!listIsFocus[0] ? "Select Province" : "..."}
+            onFocus={() => setFocus(0)}
+            data={provinces}
+            onChangeValue={(item) => {
+              resetField('ward');
+              resetField('district');
+              onSearchDistrict(item);
+            }}
+            rules={nameRule}
+            error={errors.province}
+          />
+          <DropdownCustom
+            control={control}
+            label={"District"}
+            name={"district"}
+            placeholder={!listIsFocus[1] ? "Select District" : "..."}
+            onFocus={() => setFocus(1)}
+            data={districts}
+            onChangeValue={(item) => {
+              resetField('ward');
+              onSearchWard(item);
+            }}
+            rules={nameRule}
+            error={errors.district}
+          />
+          <DropdownCustom
+            control={control}
+            label={"Ward"}
+            name={"ward"}
+            placeholder={!listIsFocus[2] ? "Select ward" : "..."}
+            onFocus={() => setFocus(2)}
+            data={wards}
+            rules={nameRule}
+            error={errors.ward}
+          />
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: (Dimensions.get("window").height * 1.85) / 100,
+            }}
+          >
+            <Checkbox
+              style={styles.checkbox}
+              color={defaultAddress ? "#303030" : "#808080"}
+              value={defaultAddress}
+              onValueChange={() => setDefaultAddress(!defaultAddress)}
             />
-          </View>
-          <View style={styles.dropdownContainer}>
-            <Dropdown
-              style={[
-                styles.dropdown,
-                listIsFocus[2] && styles.selectedDropdown,
-              ]}
-              placeholderStyle={styles.placeholderStyle}
-              selectedTextStyle={styles.selectedTextStyle}
-              inputSearchStyle={styles.inputSearchStyle}
-              dropdownPosition={'top'}
-              iconStyle={styles.iconStyle}
-              data={wards}
-              search
-              maxHeight={300}
-              labelField="label"
-              valueField="value"
-              placeholder={!listIsFocus[2] ? "Select Ward" : "..."}
-              searchPlaceholder="Search..."
-              value={wardCode}
-              onFocus={() => setFocus(2)}
-              onBlur={() => setFocus(2)}
-              onChange={(item) => {
-                setWardCode(item.value);
-                setFocus(2);
-              }}
-            />
+            <Text style={styles.useAsAddText}>Use as the shipping address</Text>
           </View>
           <View
             style={{
@@ -217,7 +236,7 @@ export const AddShippingContactScreen = () => {
           >
             <TouchableOpacity
               style={[styles.button, styles.signInButton]}
-              onPress={() => console.log("abc")}
+              onPress={handleSubmit(onSubmit)}
             >
               <Text style={styles.buttonText}>Add new card</Text>
             </TouchableOpacity>
@@ -279,5 +298,16 @@ const styles = StyleSheet.create({
     marginTop: (height * 0.5) / 100,
     marginBottom: (0.5 * height) / 100,
     height: (height * 8.86) / 100,
+  },
+  checkbox: {
+    height: (Dimensions.get("window").height * 2.46) / 100,
+    width: (Dimensions.get("window").height * 2.46) / 100,
+    borderRadius: 4,
+  },
+  useAsAddText: {
+    fontFamily: "NunitoSans-Regular",
+    fontSize: (Dimensions.get("window").height * 2.21) / 100,
+    marginLeft: (Dimensions.get("window").height * 1.23) / 100,
+    color: "#808080",
   },
 });

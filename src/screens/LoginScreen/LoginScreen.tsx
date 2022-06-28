@@ -13,8 +13,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { FCKeyBoardAvoidingView, TextField } from "components";
 import { loginRoutine } from "reducers/auth";
-import { getCurrentUser } from "reducers/user";
+import { getAddresses, getCurrentUser } from "reducers/user";
 import { getAllPaymentMethod } from "reducers/payment";
+import { getCartRoutine } from "reducers/cart";
+
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -49,7 +51,9 @@ export const LoginScreen = () => {
   const loginSuccess = useCallback(async () => {
     if (loading === "SUCCESS") {
       await dispatch({ type: getCurrentUser.TRIGGER });
+      await dispatch({type: getAddresses.TRIGGER})
       await dispatch({type: getAllPaymentMethod.TRIGGER});
+      await dispatch({type: getCartRoutine.TRIGGER});
       navigation.navigate("tabNavigation");
     }
   }, [loading]);

@@ -9,10 +9,10 @@ import {
   Image,
   RefreshControl,
   Button,
+  TouchableOpacity
 } from "react-native";
 import { Fontisto } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { itemList } from "config/mockData";
 import _ from "lodash";
 import { CartItem, Header } from "components";

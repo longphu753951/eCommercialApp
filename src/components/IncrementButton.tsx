@@ -20,9 +20,16 @@ const IncrementButton: React.FC<Props> = (props: Props) => {
   const {onChangeValue, defaultCount } = props;
   const [count, setCount] = useState(defaultCount);
 
+
+
   useEffect(() => {
     onChangeValue(count);
   }, [count]);
+
+  useEffect(() => {
+    setCount(defaultCount);
+    onChangeValue(defaultCount);
+  }, [defaultCount])
 
   const onChangeCount = (status: string) => {
     let value = status === "i" ? count + 1 : count - 1;

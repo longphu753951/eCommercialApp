@@ -21,6 +21,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { Dimensions } from "react-native";
 import { EditPaymentScreen } from "screens/EditPaymentScreen/EditPaymentScreen";
 import { AddShippingContactScreen } from "screens/AddShippingContactScreen/AddShippingContactScreen";
+import { EditShippingContactScreen } from "screens/EditShippingContactScreen/EditShippingContactScreen";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -140,6 +141,13 @@ export const allScreens = (Stack: any) => {
       <Stack.Screen
         name="AddShippingContactScreen"
         component={AddShippingContactScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="EditShippingContactScreen"
+        component={EditShippingContactScreen}
         options={{
           headerShown: false,
         }}

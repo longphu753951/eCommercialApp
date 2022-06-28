@@ -8,6 +8,8 @@ import {
   RefreshControl,
   TextInput,
   Animated,
+  SafeAreaView,
+  KeyboardAvoidingView,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { myCart } from "config/mockData";
@@ -21,6 +23,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useDispatch, useSelector } from "react-redux";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -29,12 +32,11 @@ const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 export const MyCartScreen = () => {
-  const scrollY = new Animated.Value(0);
   
-  const translateY = scrollY.interpolate({
-    inputRange: [0, (21.05 * height) / 100/4],
-    outputRange: [0, (21.05 * height) / 90],
-  });
+  const cart = useSelector((state) => state.cart.cart);
+  const dispatch = useDispatch();
+  console.log(cart)
+  
 
   const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
@@ -46,10 +48,10 @@ export const MyCartScreen = () => {
   const item = (item: any): JSX.Element => {
     return (
       <CartItem
-        image={item.item.image}
+        image={{uri:item.item.product_attribute.productImage[0].image}}
         content={
           <View style={{ flexDirection: "column" }}>
-            <Text style={styles.nameText}>{item.item.name}</Text>
+            <Text style={styles.nameText}>{item.item.product_attribute.name}</Text>
           </View>
         }
         bottomContent={
@@ -58,7 +60,7 @@ export const MyCartScreen = () => {
               defaultCount={item.item.quantity}
               onChangeValue={(value) => console.log(value)}
             />
-            <Text style={styles.totalPriceItemText}>$ {item.item.price}</Text>
+            <Text style={styles.totalPriceItemText}>$ {item.item.final_price}</Text>
           </View>
         }
       />
@@ -73,36 +75,27 @@ export const MyCartScreen = () => {
       }}
     />
   );
-
   return (
-    <FCKeyBoardAvoidingView>
-      <View style={styles.contentContainer}>
+    <SafeAreaView style={styles.container}>
+      <KeyboardAvoidingView style={styles.contentContainer}>
         <Header title={"MY CART"} />
         <View style={styles.bodyContainer}>
           <FlatList
             showsVerticalScrollIndicator={false}
             style={styles.itemFlatList}
-            data={myCart}
+            data={cart.order_details}
             ItemSeparatorComponent={ItemDivider}
-            keyExtractor={(item) => item.name}
+            keyExtractor={(item) => item.id}
             renderItem={item}
-            bounces = {false}
-            onScroll={(e) => {
-              if(e.nativeEvent.contentOffset.y <0) return
-              scrollY.setValue(e.nativeEvent.contentOffset.y);
-            }}
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
           />
-          <Animated.View
+          <View
             style={{
               position: myCart.length <=5 ? "relative" : "absolute",
               bottom: 0,
               height: (21.05 * height) / 100,
-              transform: [
-                {translateY: myCart.length <= 5 ? 0 :  translateY}
-              ]
             }}
           >
             <LinearGradient
@@ -140,7 +133,7 @@ export const MyCartScreen = () => {
               <View style={styles.totalPriceContainer}>
                 <Text style={styles.totalText}>Total: </Text>
                 <Text style={[styles.totalText, { color: "#303030" }]}>
-                  $ 95.00
+                  $ {cart.total}
                 </Text>
               </View>
               <TouchableOpacity
@@ -150,14 +143,18 @@ export const MyCartScreen = () => {
                 <Text style={styles.addAllText}>CHECK OUT</Text>
               </TouchableOpacity>
             </LinearGradient>
-          </Animated.View>
+          </View>
         </View>
-      </View>
-    </FCKeyBoardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+  },
   itemContainer: {
     marginTop: (height * 1.47) / 100,
     paddingBottom: (height * 1.47) / 100,

@@ -12,7 +12,7 @@ export interface User {
   email: string;
   telephone: string;
   avatar_path: string;
-  payment_info: object;
+  default_address: "";
 }
 
 export interface UserRegister {

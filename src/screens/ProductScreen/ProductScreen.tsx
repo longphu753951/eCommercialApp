@@ -24,6 +24,7 @@ import { IncrementButton } from "components";
 import { useDispatch, useSelector } from "react-redux";
 import { addBookmark, deleteBookmark } from "reducers/user";
 import { PageControl, Colors } from "react-native-ui-lib";
+import { addToCartRoutine } from "reducers/cart";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -41,7 +42,7 @@ export const ProductScreen = () => {
   };
 
   const [chosenProductAttribute, setChosenProductAttribute] = useState([]);
-  const [isShowingModal, setIsShowingModal] = useState(false);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     if (productMain !== null) {
@@ -53,6 +54,7 @@ export const ProductScreen = () => {
 
   const onSetChosenItem = useCallback(
     (item: any) => {
+      setQuantity(1);
       const choosenProduct = item;
       setChosenProductAttribute(choosenProduct);
       const listBookmarkId: string[] = bookmark.bookmarkDetail.map(
@@ -62,6 +64,16 @@ export const ProductScreen = () => {
     },
     [chosenProductAttribute]
   );
+
+  const addToCart = async () => {
+    await dispatch({
+      type: addToCartRoutine.TRIGGER,
+      data: {
+        productAttribute: chosenProductAttribute.sku,
+        quantity: quantity
+      }
+    })
+  }
 
   const setBookmark = async () => {
     if (!isBookmarked) {
@@ -85,17 +97,6 @@ export const ProductScreen = () => {
     setIsBookmarked(!isBookmarked);
   };
 
-  const Modal = (props: any) => {
-    const { showing } = props;
-
-    return (
-      <Modal animationType="slide" transparent={true} visible={showing}>
-        <View>
-          <Text>asdasdasdasdas</Text>
-        </View>
-      </Modal>
-    );
-  };
 
   if (productMain !== null)
     return (
@@ -243,8 +244,10 @@ export const ProductScreen = () => {
                 $ {chosenProductAttribute.price}
               </Text>
               <IncrementButton
-                defaultCount={1}
-                onChangeValue={(child: number) => {}}
+                defaultCount={quantity}
+                onChangeValue={(child: number) => {
+                  setQuantity(child)
+                }}
               />
             </View>
             <TouchableOpacity
@@ -281,6 +284,7 @@ export const ProductScreen = () => {
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.addToCartButton}
+                onPress={() => addToCart()}
                 disabled={loading === "LOADING"}
               >
                 <Text style={styles.addToCartText}>Add to cart</Text>

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   SafeAreaView,
   Text,
@@ -19,14 +19,24 @@ import { ifIphoneX } from "react-native-iphone-x-helper";
 import _ from "lodash";
 import { Card, Header } from "components";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
 export const ShippingScreen = () => {
-  const [name, setName] = useState("");
+  const [number, setNumber] = useState("");
   const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
+  const addresses = useSelector((state) => state.user.shippingContacts);
+  const defaultAddress = useSelector(
+    (state) => state.user.user.default_address
+  );
+
+  useEffect(() => {
+    console.log(defaultAddress)
+    setNumber(defaultAddress);
+  }, []);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -38,6 +48,9 @@ export const ShippingScreen = () => {
   };
 
   const item = (item: any): JSX.Element => {
+    const getAddress = ():string => {
+      return item.item.address+","+ item.item.ward+","+ item.item.district+","+ item.item.province
+    }
     return (
       <View
         style={{ marginTop: (Dimensions.get("window").height * 3.69) / 100 }}
@@ -51,9 +64,9 @@ export const ShippingScreen = () => {
         >
           <Checkbox
             style={styles.checkbox}
-            color={name === item.item.name ? "#303030" : "#808080"}
-            value={name === item.item.name ? true : false}
-            onValueChange={() => onChangeDefaultAddress(item.item.name)}
+            color={number == item.item.id ? "#303030" : "#808080"}
+            value={number == item.item.id ? true : false}
+            onValueChange={() => {}}
           />
           <Text style={styles.useAsAddText}>Use as the shipping address</Text>
         </View>
@@ -71,7 +84,14 @@ export const ShippingScreen = () => {
             }}
           >
             <Text style={styles.nameText}>{item.item.name}</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+              navigation.navigate({
+                name: "EditShippingContactScreen",
+                params: {
+                  shippingContact: item.item,
+                },
+              })
+            }}>
               <Feather
                 name="edit-3"
                 size={(Dimensions.get("window").height * 2.95) / 100}
@@ -87,7 +107,7 @@ export const ShippingScreen = () => {
               paddingRight: (Dimensions.get("window").height * 2.34) / 100,
             }}
           >
-            <Text style={styles.addressText}>{item.item.address}</Text>
+            <Text style={styles.addressText}>{getAddress()}</Text>
           </View>
         </Card>
       </View>
@@ -101,9 +121,10 @@ export const ShippingScreen = () => {
 
         <FlatList
           style={styles.itemFlatList}
-          data={addressList}
+          data={addresses}
+          contentContainerStyle={{paddingBottom: (Dimensions.get("window").height * 7.4) / 100}}
           showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item.name}
+          keyExtractor={(item) => item.id}
           renderItem={item}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

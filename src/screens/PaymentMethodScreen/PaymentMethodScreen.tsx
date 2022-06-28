@@ -30,7 +30,6 @@ export const PaymentMethodScreen = () => {
   );
 
   useEffect(() => {
-    console.log(defaultPayment);
     setNumber(defaultPayment);
   }, []);
 
