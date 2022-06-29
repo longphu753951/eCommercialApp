@@ -17,15 +17,40 @@ const height = Dimensions.get("window").height;
 interface Props {
   children?: React.ReactNode;
   loading: string;
+  isFlatList: boolean;
 }
 
 const defaultProps = {
   children: undefined,
   loading: "",
+  isFlatList: false
 };
 
 const FCKeyBoardAvoidingView: React.FC<Props> = (props: Props) => {
-  const { children, loading } = props;
+  const { children, loading, isFlatList } = props;
+
+  const getHOCType = () => {
+    return isFlatList ? (
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >{children}</KeyboardAvoidingView>
+     
+    ) : (
+      <TouchableWithoutFeedback
+      style={{ width: "100%", height: "100%" }}
+      onPress={() => Keyboard.dismiss()}
+    >
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
+        {children}
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
+    );
+  };
+
   return (
     <>
       {loading === "TRIGGER" && (
@@ -47,19 +72,7 @@ const FCKeyBoardAvoidingView: React.FC<Props> = (props: Props) => {
           <ActivityIndicator size={"large"} color={"white"} />
         </View>
       )}
-      <SafeAreaView style={styles.container}>
-        <TouchableWithoutFeedback
-          style={{ width: "100%", height: "100%" }}
-          onPress={() => Keyboard.dismiss()}
-        >
-          <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={{ flex: 1 }}
-          >
-            {children}
-          </KeyboardAvoidingView>
-        </TouchableWithoutFeedback>
-      </SafeAreaView>
+      <SafeAreaView style={styles.container}>{getHOCType()}</SafeAreaView>
     </>
   );
 };

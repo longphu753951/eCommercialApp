@@ -22,6 +22,8 @@ const API = {
   GET_ALL_ADDRESSES:'/shippingContact/getAllShippingContact/',
   GET_CART: '/cart/',
   ADD_TO_CART: '/cart/addToCart/',
+  DELETE_TO_CART: '/cart/deleteToCart/id/',
+  UPDATE_QUANTITY: '/cart/updateQuantity/id/',
 };
 
 interface API {

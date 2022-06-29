@@ -15,6 +15,8 @@ interface cartState {
 
 export const getCartRoutine = createRoutine("CART/GET_CART");
 export const addToCartRoutine = createRoutine("CART/ADD_TO_CART");
+export const deleteToCartRoutine = createRoutine("CART/DELETE_TO_CART");
+export const updateQuantityRoutine = createRoutine("CART/UPDATE_QUANTITY");
 
 // =========================================================
 // =========================================================
@@ -35,7 +37,7 @@ function* getCartSaga(action: any): Promise<void> {
 }
 
 function* addToCartSaga(action: any): Promise<void> {
-    console.log(action);
+  console.log(action);
   try {
     const data = yield call(axios.postWithAuth, API.ADD_TO_CART, action.data);
     yield put({
@@ -49,10 +51,42 @@ function* addToCartSaga(action: any): Promise<void> {
   }
 }
 
+function* deleteToCartSaga(action: any): Promise<void> {
+  const url = API.DELETE_TO_CART.replace("id", action.data.id);
+  try {
+    const data = yield call(axios.deleteWithAuth, url);
+    yield put({
+      type: deleteToCartRoutine.SUCCESS,
+      payload: {
+        total: data,
+        removedItem: action.data,
+      },
+    });
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function* updateQuantitySaga(action: any): Promise<void> {
+  const url = API.UPDATE_QUANTITY.replace("id", action.data.id);
+  try {
+    const data = yield call(axios.putWithAuth, url, {'quantity': action.data.quantity});
+    data["order_detail_id"] = action.data.id
+    yield put({
+      type: updateQuantityRoutine.SUCCESS,
+      payload: data
+    });
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 export function* cartSaga() {
   yield all([
     takeLatest(getCartRoutine.TRIGGER, getCartSaga),
     takeLatest(addToCartRoutine.TRIGGER, addToCartSaga),
+    takeLatest(deleteToCartRoutine.TRIGGER, deleteToCartSaga),
+    takeLatest(updateQuantityRoutine.TRIGGER, updateQuantitySaga),
   ]);
 }
 
@@ -70,7 +104,26 @@ export default createReducer(INITIAL_STATE, (builder) => {
       state.cart = action.payload[0];
     })
     .addCase(addToCartRoutine.SUCCESS, (state, action) => {
-        console.log(action.payload);
       state.cart = action.payload;
+    })
+    .addCase(deleteToCartRoutine.SUCCESS, (state, action) => {
+      console.log("ab c", action.payload.total);
+      state.cart.total = action.payload.total;
+      state.cart.order_details.splice(
+        state.cart.order_details.findIndex(
+          (x) => x.id === action.payload.removedItem
+        ),
+        1
+      );
+    })
+    .addCase(updateQuantityRoutine.SUCCESS, (state, action) => {
+      state.cart.total = action.payload.order_total;
+      state.cart.order_details.map(x => {
+        if(x.id == action.payload.order_detail_id) {
+          console.log('s')
+          x.final_price = action.payload.total_price_item
+        }
+      })
+      console.log(state.cart.order_details)
     });
 });

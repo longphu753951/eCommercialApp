@@ -10,9 +10,13 @@ import {
   Animated,
   SafeAreaView,
   KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { myCart } from "config/mockData";
+import {
+  KeyboardAwareFlatList,
+} from "react-native-keyboard-aware-scroll-view";
 import _ from "lodash";
 import {
   CartItem,
@@ -24,6 +28,7 @@ import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useDispatch, useSelector } from "react-redux";
+import { deleteToCartRoutine, getCartRoutine, updateQuantityRoutine } from "reducers/cart";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -41,13 +46,26 @@ export const MyCartScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
 
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
+  const onRefresh = useCallback(async () => {
+    await dispatch({type: getCartRoutine.TRIGGER});
   }, []);
   const item = (item: any): JSX.Element => {
+
+    const onChangeQuantity = async (value) => {
+      await dispatch({
+        type: updateQuantityRoutine.TRIGGER,
+        data: {id: item.item.id, quantity: value},
+      });
+    }
+
     return (
       <CartItem
+        onRemoving={async () => {
+          await dispatch({
+            type: deleteToCartRoutine.TRIGGER,
+            data: {id: item.item.id},
+          });
+        }}
         image={{uri:item.item.product_attribute.productImage[0].image}}
         content={
           <View style={{ flexDirection: "column" }}>
@@ -58,7 +76,7 @@ export const MyCartScreen = () => {
           <View style={styles.bottomCotainer}>
             <IncrementButton
               defaultCount={item.item.quantity}
-              onChangeValue={(value) => console.log(value)}
+              onChangeValue={(value) => onChangeQuantity(value)}
             />
             <Text style={styles.totalPriceItemText}>$ {item.item.final_price}</Text>
           </View>
@@ -76,8 +94,7 @@ export const MyCartScreen = () => {
     />
   );
   return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView style={styles.contentContainer}>
+    <FCKeyBoardAvoidingView isFlatList={true}>
         <Header title={"MY CART"} />
         <View style={styles.bodyContainer}>
           <FlatList
@@ -90,11 +107,10 @@ export const MyCartScreen = () => {
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
+            
           />
           <View
             style={{
-              position: myCart.length <=5 ? "relative" : "absolute",
-              bottom: 0,
               height: (21.05 * height) / 100,
             }}
           >
@@ -145,8 +161,7 @@ export const MyCartScreen = () => {
             </LinearGradient>
           </View>
         </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+    </FCKeyBoardAvoidingView>
   );
 };
 
