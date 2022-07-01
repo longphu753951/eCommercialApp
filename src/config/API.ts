@@ -24,6 +24,7 @@ const API = {
   ADD_TO_CART: '/cart/addToCart/',
   DELETE_TO_CART: '/cart/deleteToCart/id/',
   UPDATE_QUANTITY: '/cart/updateQuantity/id/',
+  CREATE_PAYMENT_INTENT: '/stripe/create_payment_intent',
 };
 
 interface API {

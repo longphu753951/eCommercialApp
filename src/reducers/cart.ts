@@ -30,14 +30,13 @@ function* getCartSaga(action: any): Promise<void> {
       payload: data,
     });
 
-    console.log(data);
   } catch (e) {
     console.log(e);
   }
 }
 
 function* addToCartSaga(action: any): Promise<void> {
-  console.log(action);
+
   try {
     const data = yield call(axios.postWithAuth, API.ADD_TO_CART, action.data);
     yield put({
@@ -45,7 +44,6 @@ function* addToCartSaga(action: any): Promise<void> {
       payload: data,
     });
 
-    console.log(data);
   } catch (e) {
     console.log(e);
   }
@@ -71,7 +69,8 @@ function* updateQuantitySaga(action: any): Promise<void> {
   const url = API.UPDATE_QUANTITY.replace("id", action.data.id);
   try {
     const data = yield call(axios.putWithAuth, url, {'quantity': action.data.quantity});
-    data["order_detail_id"] = action.data.id
+    data["order_detail_id"] = action.data.id;
+    data["new_quantity"] = action.data.quantity
     yield put({
       type: updateQuantityRoutine.SUCCESS,
       payload: data
@@ -120,10 +119,9 @@ export default createReducer(INITIAL_STATE, (builder) => {
       state.cart.total = action.payload.order_total;
       state.cart.order_details.map(x => {
         if(x.id == action.payload.order_detail_id) {
-          console.log('s')
           x.final_price = action.payload.total_price_item
+          x.quantity = action.payload.new_quantity
         }
       })
-      console.log(state.cart.order_details)
     });
 });

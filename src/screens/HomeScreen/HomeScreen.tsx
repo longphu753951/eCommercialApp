@@ -25,8 +25,6 @@ export const HomeScreen = () => {
   const categories = useSelector((state) => state.item.listCategories);
   const flatListRef = React.useRef();
   const products = useSelector((state) => state.item.listProducts);
-  const cart = useSelector((state) => state.cart);
-  console.log(cart)
 
   useEffect(() => {
     dispatch({ type: categoryRoutine.TRIGGER });
