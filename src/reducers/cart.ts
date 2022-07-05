@@ -8,6 +8,9 @@ import { loginRoutine, signupRoutine, logoutRoutine } from "./auth";
 
 interface cartState {
   cart: any;
+  loading: boolean;
+  message: '';
+  shippingType: object;
 }
 // =========================================================
 // =========================================================
@@ -17,6 +20,8 @@ export const getCartRoutine = createRoutine("CART/GET_CART");
 export const addToCartRoutine = createRoutine("CART/ADD_TO_CART");
 export const deleteToCartRoutine = createRoutine("CART/DELETE_TO_CART");
 export const updateQuantityRoutine = createRoutine("CART/UPDATE_QUANTITY");
+export const setPaymentRoutine = createRoutine("CART/SET_PAYMENT");
+export const setShippingTypeRoutine = createRoutine("CART/SET_SHIPPING_TYPE");
 
 // =========================================================
 // =========================================================
@@ -45,6 +50,25 @@ function* addToCartSaga(action: any): Promise<void> {
     });
 
   } catch (e) {
+    yield put({
+      type: addToCartRoutine.FAILURE,
+      payload: {
+        errorMessage: e.response.data
+      },
+    });
+  }
+}
+
+function* setPaymentSaga(action: any): Promise<void> {
+
+  try {
+    const data = yield call(axios.postWithAuth, API.SET_PAYMENT, action.data);
+    yield put({
+      type: setPaymentRoutine.SUCCESS,
+      payload: data,
+    });
+
+  } catch (e) {
     console.log(e);
   }
 }
@@ -60,8 +84,8 @@ function* deleteToCartSaga(action: any): Promise<void> {
         removedItem: action.data,
       },
     });
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    console.log(error.response.data);
   }
 }
 
@@ -86,6 +110,7 @@ export function* cartSaga() {
     takeLatest(addToCartRoutine.TRIGGER, addToCartSaga),
     takeLatest(deleteToCartRoutine.TRIGGER, deleteToCartSaga),
     takeLatest(updateQuantityRoutine.TRIGGER, updateQuantitySaga),
+    takeLatest(setPaymentRoutine.TRIGGER,setPaymentSaga)
   ]);
 }
 
@@ -95,18 +120,35 @@ export function* cartSaga() {
 
 const INITIAL_STATE: cartState = {
   cart: null,
+  loading: false,
+  message: '',
+  shippingType: {},
 };
 
 export default createReducer(INITIAL_STATE, (builder) => {
   builder
     .addCase(getCartRoutine.SUCCESS, (state, action) => {
-      state.cart = action.payload[0];
-    })
-    .addCase(addToCartRoutine.SUCCESS, (state, action) => {
+      console.log(action.payload)
       state.cart = action.payload;
     })
+    .addCase(addToCartRoutine.TRIGGER, (state, action) => {
+      state.loading = true;
+      state.message= '';
+    })
+    .addCase(addToCartRoutine.FULFILL, (state) => {
+      state.message= '';
+    })
+    .addCase(addToCartRoutine.SUCCESS, (state, action) => {
+      state.loading = false;
+      state.cart = action.payload;
+      state.message = 'Item has been added';
+    })
+    .addCase(addToCartRoutine.FAILURE, (state, action) => {
+      state.loading = false;
+      state.message = action.payload.errorMessage;
+    })
     .addCase(deleteToCartRoutine.SUCCESS, (state, action) => {
-      console.log("ab c", action.payload.total);
+      
       state.cart.total = action.payload.total;
       state.cart.order_details.splice(
         state.cart.order_details.findIndex(
@@ -123,5 +165,15 @@ export default createReducer(INITIAL_STATE, (builder) => {
           x.quantity = action.payload.new_quantity
         }
       })
-    });
+    })
+    .addCase(setPaymentRoutine.TRIGGER, (state) => {
+      state.loading = true;
+    })
+    .addCase(setPaymentRoutine.SUCCESS, (state) => {
+      state.loading = false;
+    })
+    .addCase(setShippingTypeRoutine.TRIGGER, (state, action) => {
+      state.shippingType = action.data.shippingType;
+    })
+    ;
 });

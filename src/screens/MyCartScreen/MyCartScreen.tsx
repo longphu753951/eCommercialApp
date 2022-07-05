@@ -3,18 +3,12 @@ import {
   Text,
   View,
   FlatList,
-  StyleSheet,
   Dimensions,
   RefreshControl,
+  Image,
   TextInput,
-  Animated,
-  SafeAreaView,
-  KeyboardAvoidingView,
-  Platform,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { myCart } from "config/mockData";
-import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
 import _ from "lodash";
 import {
   CartItem,
@@ -98,69 +92,104 @@ export const MyCartScreen = () => {
   return (
     <FCKeyBoardAvoidingView isFlatList={true}>
       <Header title={"MY CART"} />
-      <View style={styles.bodyContainer}>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          style={styles.itemFlatList}
-          data={cart.order_details}
-          ItemSeparatorComponent={ItemDivider}
-          keyExtractor={(item) => item.id}
-          renderItem={(item) => <ItemCart item={item} />}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        />
-        <View
-          style={{
-            height: (21.05 * height) / 100,
-          }}
-        >
-          <LinearGradient
-            colors={[
-              "#FFFFFF",
-              "rgba(255, 255, 255, 0.9)",
-              "rgba(255, 255, 255, 0.2)",
-            ]}
+      {cart.order_details || cart.order_details.length > 0 ? (
+        <View style={styles.bodyContainer}>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            style={styles.itemFlatList}
+            data={cart.order_details}
+            ItemSeparatorComponent={ItemDivider}
+            keyExtractor={(item) => item.id}
+            renderItem={(item) => <ItemCart item={item} />}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          />
+          <View
             style={{
-              width: width,
-              paddingHorizontal: (Dimensions.get("window").width * 5.33) / 100,
+              height: (21.05 * height) / 100,
             }}
           >
-            <View style={[styles.promoInputContainer]}>
-              <TextInput
-                placeholder="Enter your promo code"
-                style={styles.PromoTextInput}
-              />
-              <View style={styles.promoButtonContainer}>
-                <TouchableOpacity
-                  onPress={() => {
-                    console.log("asd");
-                  }}
-                  style={styles.promoButton}
-                >
-                  <AntDesign
-                    name="right"
-                    size={(height * 1.97) / 100}
-                    color="white"
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View style={styles.totalPriceContainer}>
-              <Text style={styles.totalText}>Total: </Text>
-              <Text style={[styles.totalText, { color: "#303030" }]}>
-                $ {Number(cart.total).toFixed(2)}
-              </Text>
-            </View>
-            <TouchableOpacity
-              style={styles.checkOutButton}
-              onPress={() => navigation.navigate("CheckOutScreen")}
+            <LinearGradient
+              colors={[
+                "#FFFFFF",
+                "rgba(255, 255, 255, 0.9)",
+                "rgba(255, 255, 255, 0.2)",
+              ]}
+              style={{
+                width: width,
+                paddingHorizontal:
+                  (Dimensions.get("window").width * 5.33) / 100,
+              }}
             >
-              <Text style={styles.addAllText}>CHECK OUT</Text>
-            </TouchableOpacity>
-          </LinearGradient>
+              <View style={[styles.promoInputContainer]}>
+                <TextInput
+                  placeholder="Enter your promo code"
+                  style={styles.PromoTextInput}
+                />
+                <View style={styles.promoButtonContainer}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      console.log("asd");
+                    }}
+                    style={styles.promoButton}
+                  >
+                    <AntDesign
+                      name="right"
+                      size={(height * 1.97) / 100}
+                      color="white"
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+              <View style={styles.totalPriceContainer}>
+                <Text style={styles.totalText}>Total: </Text>
+                <Text style={[styles.totalText, { color: "#303030" }]}>
+                  $ {Number(cart.total).toFixed(2)}
+                </Text>
+              </View>
+              <TouchableOpacity
+                style={styles.checkOutButton}
+                onPress={() => navigation.navigate("CheckOutScreen")}
+              >
+                <Text style={styles.addAllText}>CHECK OUT</Text>
+              </TouchableOpacity>
+            </LinearGradient>
+          </View>
         </View>
-      </View>
+      ) : (
+        <View style={{ alignItems: "center", marginTop: (5 * height) / 100 }}>
+          <Image
+            resizeMode="contain"
+            style={{ height: (height * 30.66) / 100, tintColor: "#000000" }}
+            source={require("assets/images/addToCart.png")}
+          />
+          <Text
+            style={{
+              fontFamily: "Gelasio-SemiBold",
+              fontSize: (3.5 * height) / 100,
+              color: "#303030",
+              marginTop: (4 * height) / 100,
+              letterSpacing: (width * 0.5) / 100,
+            }}
+          >
+            Your Cart is Empty
+          </Text>
+          <Text
+            style={{
+              fontFamily: "NunitoSans-SemiBold",
+              fontSize: (2 * height) / 100,
+              color: "#606060",
+              letterSpacing: (width * 0.13) / 100,
+              textAlign: "center",
+              width: (width * 80) / 100,
+              marginTop: (1.3 * height) / 100,
+            }}
+          >
+            Looks like you haven't added anything to your cart yet
+          </Text>
+        </View>
+      )}
     </FCKeyBoardAvoidingView>
   );
 };

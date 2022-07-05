@@ -8,4 +8,5 @@ export { default as CartItem } from "./CartItem";
 export { default as TextField } from "./TextField";
 export { default as PaymentCard } from "./PaymentCard";
 export { default as CustomModal } from "./CustomModal";
+export {default as Loading} from './Loading';
 export { default as DateTimePickerModal } from "./DateTimePickerModal";

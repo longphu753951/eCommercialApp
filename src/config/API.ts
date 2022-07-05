@@ -20,11 +20,12 @@ const API = {
   ADD_NEW_PAYMENT: '/stripe/post_new_payment',
   ADD_NEW_ADDRESS: '/shippingContact/addShippingContact/',
   GET_ALL_ADDRESSES:'/shippingContact/getAllShippingContact/',
-  GET_CART: '/cart/',
+  GET_CART: '/cart/getCart/',
   ADD_TO_CART: '/cart/addToCart/',
   DELETE_TO_CART: '/cart/deleteToCart/id/',
   UPDATE_QUANTITY: '/cart/updateQuantity/id/',
   CREATE_PAYMENT_INTENT: '/stripe/create_payment_intent',
+  SET_PAYMENT: '/cart/setPayment/'
 };
 
 interface API {

@@ -18,7 +18,7 @@ const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 const CardInfo = (props) => {
-  const { child, title, screen, onChooseEdit } = props;
+  const { child, title, screen, onChooseEdit, defaultText } = props;
   return (
     <View>
       <View
@@ -45,16 +45,29 @@ const CardInfo = (props) => {
           />
         </TouchableOpacity>
       </View>
-      <Card
-        cardStyle={{
-          marginTop: (1.23 * height) / 100,
-        }}
-      >
-        {child}
-      </Card>
+      {child ? (
+        <Card
+          cardStyle={{
+            marginTop: (1.23 * height) / 100,
+          }}
+        >
+          {child}
+        </Card>
+      ) : (
+        <Text
+          style={{
+            textAlign: "center",
+            fontSize: 18,
+            color: '#909090',
+            fontFamily: "NunitoSans-Bold",
+            paddingVertical: (height * 2) / 100,
+          }}
+        >
+          {defaultText}
+        </Text>
+      )}
     </View>
   );
 };
-
 
 export default CardInfo;

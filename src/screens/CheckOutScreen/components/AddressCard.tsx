@@ -4,12 +4,12 @@ import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { RootState } from "reducers";
 import user from "reducers/user";
-import {styles, width, height} from './styles'
+import { styles, width, height } from "./styles";
 import CardInfo from "./CardInfo";
 
 const AddressCard = () => {
   const user: Array<any> = useSelector((state: RootState) => state.user.user);
-  
+
   const listAddress: Array<any> = useSelector(
     (state: RootState) => state.user.shippingContacts
   );
@@ -29,11 +29,10 @@ const AddressCard = () => {
       defaultAddress.province
     );
   };
-  return (
-    <CardInfo
-      title="Shipping Address"
-      onChooseEdit={() => navigation.navigate("ShippingScreen")}
-      child={
+
+  const getAddressComponent = () => {
+    if (defaultAddress) {
+      return (
         <>
           <View
             style={{
@@ -60,7 +59,17 @@ const AddressCard = () => {
             <Text style={styles.addressText}>{getAddress()}</Text>
           </View>
         </>
-      }
+      );
+    }
+    return null;
+  };
+
+  return (
+    <CardInfo
+      title="Shipping Address"
+      onChooseEdit={() => navigation.navigate("ShippingScreen")}
+      defaultText = {"Please choose address for shipping"}
+      child ={getAddressComponent()}
     />
   );
 };

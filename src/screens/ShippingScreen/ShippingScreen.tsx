@@ -34,7 +34,6 @@ export const ShippingScreen = () => {
   );
 
   useEffect(() => {
-    console.log(defaultAddress)
     setNumber(defaultAddress);
   }, []);
 

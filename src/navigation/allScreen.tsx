@@ -22,12 +22,28 @@ import { Dimensions } from "react-native";
 import { EditPaymentScreen } from "screens/EditPaymentScreen/EditPaymentScreen";
 import { AddShippingContactScreen } from "screens/AddShippingContactScreen/AddShippingContactScreen";
 import { EditShippingContactScreen } from "screens/EditShippingContactScreen/EditShippingContactScreen";
+import { CongratulationScreen } from "screens/CongratulationScreen/CongratulationScreen";
+import { ShippingUnitScreen } from "screens/ShippingUnitScreen/ShippingUnitScreen";
 
 const Tab = createMaterialTopTabNavigator();
 
 export const allScreens = (Stack: any) => {
   return (
     <>
+       <Stack.Screen
+        name="ShippingUnitScreen"
+        component={ShippingUnitScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="CongratulationScreen"
+        component={CongratulationScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="BoardingScreen"
         component={BoardingScreen}

@@ -102,7 +102,6 @@ export const FavoriteScreen = () => {
         image={{ uri: item.item.productAttribute.productImage[0].image }}
         disable={loading === "LOADING"}
         onRemoving={async () => {
-          console.log(item.item.id);
           await dispatch({
             type: deleteBookmark.TRIGGER,
             id: item.item.id,

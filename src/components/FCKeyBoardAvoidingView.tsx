@@ -10,6 +10,8 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
+import Loading from "./Loading";
+
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -54,23 +56,7 @@ const FCKeyBoardAvoidingView: React.FC<Props> = (props: Props) => {
   return (
     <>
       {loading === "TRIGGER" && (
-        <View
-          style={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-            zIndex: 1,
-            alignContent: "center",
-            justifyContent: "center",
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(52, 52, 52, 0.8)",
-          }}
-        >
-          <ActivityIndicator size={"large"} color={"white"} />
-        </View>
+        <Loading/>
       )}
       <SafeAreaView style={styles.container}>{getHOCType()}</SafeAreaView>
     </>

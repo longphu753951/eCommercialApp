@@ -22,7 +22,6 @@ const DateTimePickerModal = (props: Props) => {
   const [visible, setVisible] = useState(false);
 
   const closeModal = () => {
-    console.log(visible);
     setVisible(false);
   };
 
