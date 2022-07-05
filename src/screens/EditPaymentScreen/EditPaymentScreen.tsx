@@ -23,7 +23,6 @@ const height = Dimensions.get("window").height;
 
 export const EditPaymentScreen = ({ route, navigation }) => {
   const card = route.params.card;
-  console.log(card)
   const {
     setValue,
     handleSubmit,

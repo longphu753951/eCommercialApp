@@ -61,7 +61,8 @@ export const ProfileScreen = () => {
       {
         text: "OK",
         onPress: async () => {
-          await dispatch({type: logoutRoutine.TRIGGER})
+          await dispatch({type: logoutRoutine.TRIGGER});
+          navigation.goBack();
           
         },
       },

@@ -26,11 +26,10 @@ export const PaymentMethodScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const defaultPayment = useSelector(
-    (state) => state.payment.stripe_customer.invoice_settings.default_payment_method
+    (state) => state.payment.stripe_customer.default_source
   );
 
   useEffect(() => {
-    console.log(defaultPayment);
     setNumber(defaultPayment);
   }, []);
 

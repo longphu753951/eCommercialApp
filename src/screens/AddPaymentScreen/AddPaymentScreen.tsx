@@ -41,10 +41,10 @@ export const AddPaymentScreen = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      fullName: "TRAN LONG PHU",
-      number: "5555558265554449",
-      exp_dateTime: "06/2023",
-      cvc: "341",
+      fullName: "",
+      number: "",
+      exp_dateTime: "",
+      cvc: "",
     },
   });
 

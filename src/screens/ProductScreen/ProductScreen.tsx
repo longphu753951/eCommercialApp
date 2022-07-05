@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import { product } from "config/mockData";
 import _ from "lodash";
@@ -24,6 +25,9 @@ import { IncrementButton } from "components";
 import { useDispatch, useSelector } from "react-redux";
 import { addBookmark, deleteBookmark } from "reducers/user";
 import { PageControl, Colors } from "react-native-ui-lib";
+import { addToCartRoutine } from "reducers/cart";
+import { RootState } from "reducers";
+import { Loading } from "components/";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -31,17 +35,25 @@ const height = Dimensions.get("window").height;
 export const ProductScreen = () => {
   const navigation = useNavigation();
   const [currentIndex, setCurrentIndex] = useState(1);
-  const productMain = useSelector((state) => state.item.product);
-  const bookmark: any[] = useSelector((state) => state.user.bookmark);
-  const loading = useSelector((state) => state.user.loading);
+  const productMain = useSelector((state: RootState) => state.item.product);
+  const bookmark: any[] = useSelector(
+    (state: RootState) => state.user.bookmark
+  );
+  const loading = useSelector((state: RootState) => state.user.loading);
   const dispatch = useDispatch();
+  const addItemLoading = useSelector((state: RootState) => state.cart.loading);
+  const addItemMessage = useSelector((state: RootState) => state.cart.message);
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const goBack = () => {
+  const goBack = async () => {
+    await dispatch({
+      type: addToCartRoutine.FULFILL,
+      
+    });
     navigation.goBack();
   };
 
   const [chosenProductAttribute, setChosenProductAttribute] = useState([]);
-  const [isShowingModal, setIsShowingModal] = useState(false);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     if (productMain !== null) {
@@ -49,10 +61,18 @@ export const ProductScreen = () => {
     }
   }, [productMain]);
 
+  useEffect(() => {
+    
+      if (addItemMessage !== "") {
+        Alert.alert(addItemMessage);
+      }
+  }, [addItemLoading]);
+
   let a: number = getDisplay();
 
   const onSetChosenItem = useCallback(
     (item: any) => {
+      setQuantity(1);
       const choosenProduct = item;
       setChosenProductAttribute(choosenProduct);
       const listBookmarkId: string[] = bookmark.bookmarkDetail.map(
@@ -62,6 +82,16 @@ export const ProductScreen = () => {
     },
     [chosenProductAttribute]
   );
+
+  const addToCart = async () => {
+    await dispatch({
+      type: addToCartRoutine.TRIGGER,
+      data: {
+        productAttribute: chosenProductAttribute.sku,
+        quantity: quantity,
+      },
+    });
+  };
 
   const setBookmark = async () => {
     if (!isBookmarked) {
@@ -85,114 +115,82 @@ export const ProductScreen = () => {
     setIsBookmarked(!isBookmarked);
   };
 
-  const Modal = (props: any) => {
-    const { showing } = props;
-
-    return (
-      <Modal animationType="slide" transparent={true} visible={showing}>
-        <View>
-          <Text>asdasdasdasdas</Text>
-        </View>
-      </Modal>
-    );
-  };
-
   if (productMain !== null)
     return (
-      <View style={styles.container}>
-        <View style={styles.contentContainer}>
-          <View style={{ alignItems: "flex-end" }}>
-            <View
-              style={{
-                width: (Dimensions.get("window").width * 86.13) / 100,
-                height: (Dimensions.get("window").height * 54.03) / 100,
-                borderBottomLeftRadius: 50,
-                overflow: "hidden",
-              }}
-            >
-              <FlatList
+      <>
+        {addItemLoading === true && <Loading />}
+
+        <View style={styles.container}>
+          <View style={styles.contentContainer}>
+            <View style={{ alignItems: "flex-end" }}>
+              <View
                 style={{
                   width: (Dimensions.get("window").width * 86.13) / 100,
+                  height: (Dimensions.get("window").height * 54.03) / 100,
+                  borderBottomLeftRadius: 50,
+                  overflow: "hidden",
                 }}
-                horizontal
-                pagingEnabled
-                data={chosenProductAttribute.productImage}
-                bounces={false}
-                showsHorizontalScrollIndicator={false}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item, index }) => {
-                  return (
-                    <Image
-                      resizeMode="cover"
-                      style={{
-                        width: (Dimensions.get("window").width * 86.13) / 100,
-                        height: (Dimensions.get("window").height * 56.03) / 100,
-                      }}
-                      key={index}
-                      source={{ uri: item.image }}
-                    />
-                  );
+              >
+                <FlatList
+                  style={{
+                    width: (Dimensions.get("window").width * 86.13) / 100,
+                  }}
+                  horizontal
+                  pagingEnabled
+                  data={chosenProductAttribute.productImage}
+                  bounces={false}
+                  showsHorizontalScrollIndicator={false}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item, index }) => {
+                    return (
+                      <Image
+                        resizeMode="cover"
+                        style={{
+                          width: (Dimensions.get("window").width * 86.13) / 100,
+                          height:
+                            (Dimensions.get("window").height * 56.03) / 100,
+                        }}
+                        key={index}
+                        source={{ uri: item.image }}
+                      />
+                    );
+                  }}
+                />
+              </View>
+              <PageControl
+                size={20}
+                spacing={8}
+                limitShownPages={true}
+                containerStyle={{
+                  position: "absolute",
+                  bottom: 30,
+                  right: 50,
+                  flexWrap: "wrap",
+                }}
+                inactiveColor={"#d4d4d4"}
+                color={Colors.grey20}
+                numOfPages={20}
+                currentPage={currentIndex}
+                onPagePress={(index) => {
+                  setCurrentIndex(index);
                 }}
               />
-            </View>
-            <PageControl
-              size={20}
-              spacing={8}
-              limitShownPages={true}
-              containerStyle={{
-                position: "absolute",
-                bottom: 30,
-                right: 50,
-                flexWrap: "wrap",
-              }}
-              inactiveColor={'#d4d4d4'}
-              color={Colors.grey20}
-              numOfPages={20}
-              currentPage={currentIndex}
-              onPagePress={(index) => {setCurrentIndex(index)}}
-            />
-            <View
-              style={{
-                position: "absolute",
-                left: responsiveWidth(5.33 * a),
-                top: responsiveHeight(7.26 * a),
-                alignItems: "center",
-              }}
-            >
-              <TouchableOpacity
+              <View
                 style={{
-                  width: (Dimensions.get("window").height * 6.157) / 100,
-                  height: (Dimensions.get("window").height * 6.157) / 100,
-                  backgroundColor: "white",
-                  borderRadius: 12,
-                  justifyContent: "center",
+                  position: "absolute",
+                  left: responsiveWidth(5.33 * a),
+                  top: responsiveHeight(7.26 * a),
                   alignItems: "center",
-                  shadowColor: "#8A959E",
-                  shadowOffset: {
-                    width: 2,
-                    height: 3,
-                  },
-                  shadowOpacity: 0.21,
-                  shadowRadius: 10,
-                  elevation: 2,
                 }}
-                onPress={() => goBack()}
               >
-                <Entypo
-                  name="chevron-thin-left"
-                  size={(Dimensions.get("window").height * 2.95) / 100}
-                  color="black"
-                />
-              </TouchableOpacity>
-              {productMain.productAttribute.length >= 2 && (
-                <View
+                <TouchableOpacity
                   style={{
+                    width: (Dimensions.get("window").height * 6.157) / 100,
+                    height: (Dimensions.get("window").height * 6.157) / 100,
                     backgroundColor: "white",
-                    marginTop: (Dimensions.get("window").height * 4.92) / 100,
-                    width: (Dimensions.get("window").height * 7.88) / 100,
-                    height: (Dimensions.get("window").height * 23.64) / 100,
-                    borderRadius:
-                      (Dimensions.get("window").height * 23.64) / 100,
+                    borderRadius: 12,
+                    justifyContent: "center",
+                    alignItems: "center",
                     shadowColor: "#8A959E",
                     shadowOffset: {
                       width: 2,
@@ -201,94 +199,126 @@ export const ProductScreen = () => {
                     shadowOpacity: 0.21,
                     shadowRadius: 10,
                     elevation: 2,
-                    alignItems: "center",
-                    justifyContent:
-                      productMain.productAttribute.length == 2
-                        ? "flex-start"
-                        : "space-between",
-                    paddingVertical: (height * 1.847) / 100,
                   }}
+                  onPress={() => goBack()}
                 >
-                  {productMain.productAttribute.map((item: any) => {
-                    return (
-                      <TouchableOpacity
-                        onPress={() => onSetChosenItem(item)}
-                        disabled={loading === "LOADING"}
-                        style={{
-                          width: (height * 4.5) / 100,
-                          height: (height * 4.5) / 100,
-                          backgroundColor: item.hexColor,
-                          borderRadius: 500,
-                          marginBottom:
-                            productMain.productAttribute.length == 2
-                              ? (height * 3.69) / 100
-                              : 0,
-                          borderWidth: (height * 0.61) / 100,
-                          borderColor:
-                            chosenProductAttribute === item
-                              ? "#909090"
-                              : "#F0F0F0",
-                        }}
-                      ></TouchableOpacity>
-                    );
-                  })}
-                </View>
-              )}
+                  <Entypo
+                    name="chevron-thin-left"
+                    size={(Dimensions.get("window").height * 2.95) / 100}
+                    color="black"
+                  />
+                </TouchableOpacity>
+                {productMain.productAttribute.length >= 2 && (
+                  <View
+                    style={{
+                      backgroundColor: "white",
+                      marginTop: (Dimensions.get("window").height * 4.92) / 100,
+                      width: (Dimensions.get("window").height * 7.88) / 100,
+                      height: (Dimensions.get("window").height * 23.64) / 100,
+                      borderRadius:
+                        (Dimensions.get("window").height * 23.64) / 100,
+                      shadowColor: "#8A959E",
+                      shadowOffset: {
+                        width: 2,
+                        height: 3,
+                      },
+                      shadowOpacity: 0.21,
+                      shadowRadius: 10,
+                      elevation: 2,
+                      alignItems: "center",
+                      justifyContent:
+                        productMain.productAttribute.length == 2
+                          ? "flex-start"
+                          : "space-between",
+                      paddingVertical: (height * 1.847) / 100,
+                    }}
+                  >
+                    {productMain.productAttribute.map((item: any) => {
+                      return (
+                        <TouchableOpacity
+                          onPress={() => onSetChosenItem(item)}
+                          disabled={loading === "LOADING"}
+                          style={{
+                            width: (height * 4.5) / 100,
+                            height: (height * 4.5) / 100,
+                            backgroundColor: item.hexColor,
+                            borderRadius: 500,
+                            marginBottom:
+                              productMain.productAttribute.length == 2
+                                ? (height * 3.69) / 100
+                                : 0,
+                            borderWidth: (height * 0.61) / 100,
+                            borderColor:
+                              chosenProductAttribute === item
+                                ? "#909090"
+                                : "#F0F0F0",
+                          }}
+                        ></TouchableOpacity>
+                      );
+                    })}
+                  </View>
+                )}
+              </View>
             </View>
-          </View>
-          <View style={styles.informationContainer}>
-            <Text style={styles.itemName}>{productMain.name}</Text>
-            <View style={styles.priceContainer}>
-              <Text style={styles.priceText}>
-                $ {chosenProductAttribute.price}
-              </Text>
-              <IncrementButton
-                defaultCount={1}
-                onChangeValue={(child: number) => {}}
-              />
-            </View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("RatingScreen")}
-              style={styles.ratingContainer}
-            >
-              <Rating
-                type="star"
-                ratingCount={1}
-                imageSize={(height * 2.46) / 100}
-                readonly
-                startingValue={productMain.rating / 5}
-              />
-              <Text style={styles.rating}>{productMain.rating}</Text>
-              <Text style={styles.reviews}>(50 reviews)</Text>
-            </TouchableOpacity>
-            <View style={styles.descriptionContainer}>
-              <Text style={styles.description}>{productMain.description}</Text>
-            </View>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                disabled={loading === "LOADING"}
-                onPress={() => setBookmark()}
-                style={[
-                  styles.bookMarkButton,
-                  { backgroundColor: isBookmarked ? "#303030" : "#E0E0E0" },
-                ]}
-              >
-                <FontAwesome
-                  name={isBookmarked ? "bookmark" : "bookmark-o"}
-                  size={(height * 2.95) / 100}
-                  color={isBookmarked ? "white" : "black"}
+            <View style={styles.informationContainer}>
+              <Text style={styles.itemName}>{productMain.name}</Text>
+              <View style={styles.priceContainer}>
+                <Text style={styles.priceText}>
+                  $ {chosenProductAttribute.price}
+                </Text>
+                <IncrementButton
+                  defaultCount={quantity}
+                  onChangeValue={(child: number) => {
+                    setQuantity(child);
+                  }}
                 />
-              </TouchableOpacity>
+              </View>
               <TouchableOpacity
-                style={styles.addToCartButton}
-                disabled={loading === "LOADING"}
+                onPress={() => navigation.navigate("RatingScreen")}
+                style={styles.ratingContainer}
               >
-                <Text style={styles.addToCartText}>Add to cart</Text>
+                <Rating
+                  type="star"
+                  ratingCount={1}
+                  imageSize={(height * 2.46) / 100}
+                  readonly
+                  startingValue={productMain.rating / 5}
+                />
+                <Text style={styles.rating}>{productMain.rating}</Text>
+                <Text style={styles.reviews}>(50 reviews)</Text>
               </TouchableOpacity>
+              <View style={styles.descriptionContainer}>
+                <Text style={styles.description}>
+                  {productMain.description}
+                </Text>
+              </View>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  disabled={loading === "LOADING"}
+                  onPress={() => setBookmark()}
+                  style={[
+                    styles.bookMarkButton,
+                    { backgroundColor: isBookmarked ? "#303030" : "#E0E0E0" },
+                  ]}
+                >
+                  <FontAwesome
+                    name={isBookmarked ? "bookmark" : "bookmark-o"}
+                    size={(height * 2.95) / 100}
+                    color={isBookmarked ? "white" : "black"}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.addToCartButton}
+                  onPress={() => addToCart()}
+                  disabled={loading === "LOADING"}
+                >
+                  <Text style={styles.addToCartText}>Add to cart</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
-      </View>
+      </>
     );
   else {
     return (

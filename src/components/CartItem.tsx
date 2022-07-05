@@ -8,6 +8,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 interface Props {
   image?: any;
   content?: React.ReactNode;
+  size: number;
   bottomContent?: React.ReactNode;
   isRemoving?: boolean;
   disableButton?: boolean
@@ -22,10 +23,10 @@ const seperate = (width * 5.33) / 100;
 const contentWidth = (width * 57.33) / 100;
 
 const CartItem: React.FC<Props> = (props: Props) => {
-  const { content, image, bottomContent, isRemoving, cartStyle, onRemoving, disableButton } = props;
+  const { content, image, bottomContent, isRemoving, cartStyle, onRemoving, disableButton, size } = props;
   return (
     <View style={[styles.itemContainer, cartStyle]}>
-      <Image style={styles.itemImage} source={image} />
+      <Image style={[styles.itemImage, size ? {width: size, height: size}: {}]} source={image} />
       <View style={styles.contentItemContainer}>
         <View style={styles.itemTextContainer}>
           {content}

@@ -9,10 +9,10 @@ import {
   Image,
   RefreshControl,
   Button,
+  TouchableOpacity
 } from "react-native";
 import { Fontisto } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { itemList } from "config/mockData";
 import _ from "lodash";
 import { CartItem, Header } from "components";
@@ -102,7 +102,6 @@ export const FavoriteScreen = () => {
         image={{ uri: item.item.productAttribute.productImage[0].image }}
         disable={loading === "LOADING"}
         onRemoving={async () => {
-          console.log(item.item.id);
           await dispatch({
             type: deleteBookmark.TRIGGER,
             id: item.item.id,

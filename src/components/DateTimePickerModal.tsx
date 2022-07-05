@@ -3,11 +3,9 @@ import moment from "moment";
 import { Control, Controller, FieldError } from "react-hook-form";
 import React, { useState, useCallback } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { TextInput } from "react-native-paper";
 import { height, width } from "screens/SignUpScreen/SignUpStyles";
 import CustomModal from "./CustomModal";
-import * as Haptics from 'expo-haptics';
 
 
 interface Props {
@@ -24,7 +22,6 @@ const DateTimePickerModal = (props: Props) => {
   const [visible, setVisible] = useState(false);
 
   const closeModal = () => {
-    console.log(visible);
     setVisible(false);
   };
 
