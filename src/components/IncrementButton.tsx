@@ -20,9 +20,16 @@ const IncrementButton: React.FC<Props> = (props: Props) => {
   const {onChangeValue, defaultCount } = props;
   const [count, setCount] = useState(defaultCount);
 
+
+
   useEffect(() => {
     onChangeValue(count);
   }, [count]);
+
+  useEffect(() => {
+    setCount(defaultCount);
+    onChangeValue(defaultCount);
+  }, [defaultCount])
 
   const onChangeCount = (status: string) => {
     let value = status === "i" ? count + 1 : count - 1;
@@ -37,6 +44,7 @@ const IncrementButton: React.FC<Props> = (props: Props) => {
   return (
     <View style={styles.icrementButtonContainer}>
       <TouchableOpacity
+        disabled={count === 1}
         style={styles.button}
         onPress={() => onChangeCount("d")}
         onLongPress= {() => onChangeCount("d")}
@@ -45,6 +53,7 @@ const IncrementButton: React.FC<Props> = (props: Props) => {
       </TouchableOpacity>
       <Text style={styles.countNumber}>{pad(count)}</Text>
       <TouchableOpacity
+        disabled={count === 12}
         style={styles.button}
         onPress={() => onChangeCount("i")}
         onLongPress= {() => onChangeCount("i")}

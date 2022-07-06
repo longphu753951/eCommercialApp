@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import {
   Text,
   View,
@@ -7,12 +7,12 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
-  Animated,
-  useWindowDimensions,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
 import { product } from "config/mockData";
 import _ from "lodash";
-import { AntDesign, FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import {
   responsiveHeight,
   responsiveWidth,
@@ -21,228 +21,317 @@ import { useNavigation } from "@react-navigation/native";
 import { Entypo } from "@expo/vector-icons";
 import { Rating } from "react-native-ratings";
 import { getDisplay } from "config/size";
-import {IncrementButton} from "components";
+import { IncrementButton } from "components";
+import { useDispatch, useSelector } from "react-redux";
+import { addBookmark, deleteBookmark } from "reducers/user";
+import { PageControl, Colors } from "react-native-ui-lib";
+import { addToCartRoutine } from "reducers/cart";
+import { RootState } from "reducers";
+import { Loading } from "components/";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 export const ProductScreen = () => {
   const navigation = useNavigation();
-  const goBack = () => {
+  const [currentIndex, setCurrentIndex] = useState(1);
+  const productMain = useSelector((state: RootState) => state.item.product);
+  const bookmark: any[] = useSelector(
+    (state: RootState) => state.user.bookmark
+  );
+  const loading = useSelector((state: RootState) => state.user.loading);
+  const dispatch = useDispatch();
+  const addItemLoading = useSelector((state: RootState) => state.cart.loading);
+  const addItemMessage = useSelector((state: RootState) => state.cart.message);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const goBack = async () => {
+    await dispatch({
+      type: addToCartRoutine.FULFILL,
+      
+    });
     navigation.goBack();
   };
 
-  const [chosenColor, setChosenColor] = useState(product.colors[0]);
+  const [chosenProductAttribute, setChosenProductAttribute] = useState([]);
+  const [quantity, setQuantity] = useState(1);
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const scrollX = useRef(new Animated.Value(0)).current;
-  const slidesRef = useRef(null);
-  const viewableItemsChanged = useRef(({ viewableItems }) => {
-    setCurrentIndex(viewableItems[0].index);
-  }).current;
+  useEffect(() => {
+    if (productMain !== null) {
+      onSetChosenItem(productMain.productAttribute[0]);
+    }
+  }, [productMain]);
 
-  const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
+  useEffect(() => {
+    
+      if (addItemMessage !== "") {
+        Alert.alert(addItemMessage);
+      }
+  }, [addItemLoading]);
 
   let a: number = getDisplay();
 
-  const Paginator = ({ data, scrollX }) => {
-    const { width } = useWindowDimensions();
-    return (
-      <View
-        style={{
-          flexDirection: "row",
-          position: "absolute",
-          bottom: 30,
-          right: 50,
-        }}
-      >
-        {data.map((_, index) => {
-          const inputRange = [
-            (index - 1) * ((Dimensions.get("window").width * 86.13) / 100),
-            (Dimensions.get("window").width * 86.13) / 100,
-            (index + 1) * ((Dimensions.get("window").width * 86.13) / 100),
-          ];
+  const onSetChosenItem = useCallback(
+    (item: any) => {
+      setQuantity(1);
+      const choosenProduct = item;
+      setChosenProductAttribute(choosenProduct);
+      const listBookmarkId: string[] = bookmark.bookmarkDetail.map(
+        (item) => item.productAttribute.sku
+      );
+      setIsBookmarked(listBookmarkId.includes(item.sku));
+    },
+    [chosenProductAttribute]
+  );
 
-          const dotWidth = scrollX.interpolate({
-            inputRange,
-            outputRange: [15, 30, 15],
-            extrapolate: "clamp",
-          });
-
-          const backgroundColor = scrollX.interpolate({
-            inputRange,
-            outputRange: ["#F0F0F0", "#303030", "#F0F0F0"],
-            extrapolate: "clamp",
-          });
-          return (
-            <Animated.View
-              key={index.toString()}
-              style={[
-                { width: dotWidth, backgroundColor },
-                {
-                  height: 4,
-                  borderRadius: 4,
-                  marginHorizontal:
-                    (Dimensions.get("window").width * 0.66) / 100,
-                },
-              ]}
-            />
-          );
-        })}
-      </View>
-    );
+  const addToCart = async () => {
+    await dispatch({
+      type: addToCartRoutine.TRIGGER,
+      data: {
+        productAttribute: chosenProductAttribute.sku,
+        quantity: quantity,
+      },
+    });
   };
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.contentContainer}>
-        <View style={{ alignItems: "flex-end" }}>
-          <View
-            style={{
-              width: (Dimensions.get("window").width * 86.13) / 100,
-              height: (Dimensions.get("window").height * 54.03) / 100,
-              borderBottomLeftRadius: 50,
-              overflow: "hidden",
-            }}
-          >
-            <FlatList
-              style={{
-                width: (Dimensions.get("window").width * 86.13) / 100,
-              }}
-              horizontal
-              pagingEnabled
-              data={product.images}
-              bounces={false}
-              showsHorizontalScrollIndicator={false}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item, index }) => {
-                return (
-                  <Image
-                    resizeMode="cover"
-                    style={{
-                      width: (Dimensions.get("window").width * 86.13) / 100,
-                      height: (Dimensions.get("window").height * 56.03) / 100,
-                    }}
-                    key={index}
-                    source={item}
-                  />
-                );
-              }}
-            />
-            <Paginator data={product.images} scrollX={scrollX} />
-          </View>
+  const setBookmark = async () => {
+    if (!isBookmarked) {
+      await dispatch({
+        type: addBookmark.TRIGGER,
+        data: {
+          bookmark: bookmark.id,
+          productAttribute: chosenProductAttribute.sku,
+        },
+      });
+    } else {
+      const selectedBookmark = bookmark.bookmarkDetail.find((item) => {
+        return item.productAttribute.sku === chosenProductAttribute.sku;
+      });
+      await dispatch({
+        type: deleteBookmark.TRIGGER,
+        id: selectedBookmark.id,
+      });
+    }
 
-          <View
-            style={{
-              position: "absolute",
-              left: responsiveWidth(5.33*a),
-              top: responsiveHeight(7.26 * a),
-              alignItems: "center",
-            }}
-          >
-            <TouchableOpacity
-              style={{
-                width: (Dimensions.get("window").height * 6.157) / 100,
-                height: (Dimensions.get("window").height * 6.157) / 100,
-                backgroundColor: "white",
-                borderRadius: 12,
-                justifyContent: "center",
-                alignItems: "center",
-                shadowColor: "#8A959E",
-                shadowOffset: {
-                  width: 2,
-                  height: 3,
-                },
-                shadowOpacity: 0.21,
-                shadowRadius: 10,
-                elevation: 2,
-              }}
-              onPress={() => goBack()}
-            >
-              <Entypo
-                name="chevron-thin-left"
-                size={(Dimensions.get("window").height * 2.95) / 100}
-                color="black"
+    setIsBookmarked(!isBookmarked);
+  };
+
+  if (productMain !== null)
+    return (
+      <>
+        {addItemLoading === true && <Loading />}
+
+        <View style={styles.container}>
+          <View style={styles.contentContainer}>
+            <View style={{ alignItems: "flex-end" }}>
+              <View
+                style={{
+                  width: (Dimensions.get("window").width * 86.13) / 100,
+                  height: (Dimensions.get("window").height * 54.03) / 100,
+                  borderBottomLeftRadius: 50,
+                  overflow: "hidden",
+                }}
+              >
+                <FlatList
+                  style={{
+                    width: (Dimensions.get("window").width * 86.13) / 100,
+                  }}
+                  horizontal
+                  pagingEnabled
+                  data={chosenProductAttribute.productImage}
+                  bounces={false}
+                  showsHorizontalScrollIndicator={false}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item, index }) => {
+                    return (
+                      <Image
+                        resizeMode="cover"
+                        style={{
+                          width: (Dimensions.get("window").width * 86.13) / 100,
+                          height:
+                            (Dimensions.get("window").height * 56.03) / 100,
+                        }}
+                        key={index}
+                        source={{ uri: item.image }}
+                      />
+                    );
+                  }}
+                />
+              </View>
+              <PageControl
+                size={20}
+                spacing={8}
+                limitShownPages={true}
+                containerStyle={{
+                  position: "absolute",
+                  bottom: 30,
+                  right: 50,
+                  flexWrap: "wrap",
+                }}
+                inactiveColor={"#d4d4d4"}
+                color={Colors.grey20}
+                numOfPages={20}
+                currentPage={currentIndex}
+                onPagePress={(index) => {
+                  setCurrentIndex(index);
+                }}
               />
-            </TouchableOpacity>
-            <View
-              style={{
-                backgroundColor: "white",
-                marginTop: (Dimensions.get("window").height * 4.92) / 100,
-                width: (Dimensions.get("window").height * 7.88) / 100,
-                height: (Dimensions.get("window").height * 23.64) / 100,
-                borderRadius: (Dimensions.get("window").height * 23.64) / 100,
-                shadowColor: "#8A959E",
-                shadowOffset: {
-                  width: 2,
-                  height: 3,
-                },
-                shadowOpacity: 0.21,
-                shadowRadius: 10,
-                elevation: 2,
-                alignItems: "center",
-                justifyContent: "space-between",
-                paddingVertical: (height * 1.847) / 100,
-              }}
-            >
-              {product.colors.map((item) => {
-                return (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setChosenColor(item);
-                    }}
+              <View
+                style={{
+                  position: "absolute",
+                  left: responsiveWidth(5.33 * a),
+                  top: responsiveHeight(7.26 * a),
+                  alignItems: "center",
+                }}
+              >
+                <TouchableOpacity
+                  style={{
+                    width: (Dimensions.get("window").height * 6.157) / 100,
+                    height: (Dimensions.get("window").height * 6.157) / 100,
+                    backgroundColor: "white",
+                    borderRadius: 12,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    shadowColor: "#8A959E",
+                    shadowOffset: {
+                      width: 2,
+                      height: 3,
+                    },
+                    shadowOpacity: 0.21,
+                    shadowRadius: 10,
+                    elevation: 2,
+                  }}
+                  onPress={() => goBack()}
+                >
+                  <Entypo
+                    name="chevron-thin-left"
+                    size={(Dimensions.get("window").height * 2.95) / 100}
+                    color="black"
+                  />
+                </TouchableOpacity>
+                {productMain.productAttribute.length >= 2 && (
+                  <View
                     style={{
-                      width: (height * 4.5) / 100,
-                      height: (height * 4.5) / 100,
-                      backgroundColor: item,
-                      borderRadius: 500,
-                      borderWidth: (height * 0.61) / 100,
-                      borderColor: chosenColor === item ? "#909090" : "#F0F0F0",
+                      backgroundColor: "white",
+                      marginTop: (Dimensions.get("window").height * 4.92) / 100,
+                      width: (Dimensions.get("window").height * 7.88) / 100,
+                      height: (Dimensions.get("window").height * 23.64) / 100,
+                      borderRadius:
+                        (Dimensions.get("window").height * 23.64) / 100,
+                      shadowColor: "#8A959E",
+                      shadowOffset: {
+                        width: 2,
+                        height: 3,
+                      },
+                      shadowOpacity: 0.21,
+                      shadowRadius: 10,
+                      elevation: 2,
+                      alignItems: "center",
+                      justifyContent:
+                        productMain.productAttribute.length == 2
+                          ? "flex-start"
+                          : "space-between",
+                      paddingVertical: (height * 1.847) / 100,
                     }}
-                  ></TouchableOpacity>
-                );
-              })}
+                  >
+                    {productMain.productAttribute.map((item: any) => {
+                      return (
+                        <TouchableOpacity
+                          onPress={() => onSetChosenItem(item)}
+                          disabled={loading === "LOADING"}
+                          style={{
+                            width: (height * 4.5) / 100,
+                            height: (height * 4.5) / 100,
+                            backgroundColor: item.hexColor,
+                            borderRadius: 500,
+                            marginBottom:
+                              productMain.productAttribute.length == 2
+                                ? (height * 3.69) / 100
+                                : 0,
+                            borderWidth: (height * 0.61) / 100,
+                            borderColor:
+                              chosenProductAttribute === item
+                                ? "#909090"
+                                : "#F0F0F0",
+                          }}
+                        ></TouchableOpacity>
+                      );
+                    })}
+                  </View>
+                )}
+              </View>
+            </View>
+            <View style={styles.informationContainer}>
+              <Text style={styles.itemName}>{productMain.name}</Text>
+              <View style={styles.priceContainer}>
+                <Text style={styles.priceText}>
+                  $ {chosenProductAttribute.price}
+                </Text>
+                <IncrementButton
+                  defaultCount={quantity}
+                  onChangeValue={(child: number) => {
+                    setQuantity(child);
+                  }}
+                />
+              </View>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("RatingScreen")}
+                style={styles.ratingContainer}
+              >
+                <Rating
+                  type="star"
+                  ratingCount={1}
+                  imageSize={(height * 2.46) / 100}
+                  readonly
+                  startingValue={productMain.rating / 5}
+                />
+                <Text style={styles.rating}>{productMain.rating}</Text>
+                <Text style={styles.reviews}>(50 reviews)</Text>
+              </TouchableOpacity>
+              <View style={styles.descriptionContainer}>
+                <Text style={styles.description}>
+                  {productMain.description}
+                </Text>
+              </View>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  disabled={loading === "LOADING"}
+                  onPress={() => setBookmark()}
+                  style={[
+                    styles.bookMarkButton,
+                    { backgroundColor: isBookmarked ? "#303030" : "#E0E0E0" },
+                  ]}
+                >
+                  <FontAwesome
+                    name={isBookmarked ? "bookmark" : "bookmark-o"}
+                    size={(height * 2.95) / 100}
+                    color={isBookmarked ? "white" : "black"}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.addToCartButton}
+                  onPress={() => addToCart()}
+                  disabled={loading === "LOADING"}
+                >
+                  <Text style={styles.addToCartText}>Add to cart</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
-        <View style={styles.informationContainer}>
-          <Text style={styles.itemName}>{product.name}</Text>
-          <View style={styles.priceContainer}>
-            <Text style={styles.priceText}>$ {product.price}</Text>
-            <IncrementButton defaultCount={1} onChangeValue ={(child: number) => {
-              console.log(child)
-            }}/>
-          </View>
-          <TouchableOpacity onPress={()=> navigation.navigate("RatingScreen")} style={styles.ratingContainer}>
-            <Rating
-              type="star"
-              ratingCount={1}
-              imageSize={(height * 2.46) / 100}
-              readonly
-              startingValue={0.9}
-            />
-            <Text style={styles.rating}>{product.rating}</Text>
-            <Text style={styles.reviews}>({product.reviews} reviews)</Text>
-          </TouchableOpacity>
-          <View style={styles.descriptionContainer}>
-            <Text style={styles.description}>{product.description}</Text>
-          </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.bookMarkButton}>
-              <FontAwesome5
-                name="bookmark"
-                size={(height * 2.95) / 100}
-                color="black"
-              />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.addToCartButton}>
-              <Text style={styles.addToCartText}>Add to cart</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+      </>
+    );
+  else {
+    return (
+      <View
+        style={[
+          styles.container,
+          { alignContent: "center", justifyContent: "center" },
+        ]}
+      >
+        <ActivityIndicator size="large" color="#8A959E" />
       </View>
-    </View>
-  );
+    );
+  }
 };
 
 const styles = StyleSheet.create({
@@ -293,7 +382,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: (1.412 * height) / 100,
-    justifyContent: 'flex-start'
+    justifyContent: "flex-start",
   },
   rating: {
     fontFamily: "NunitoSans-Bold",
@@ -312,13 +401,13 @@ const styles = StyleSheet.create({
   description: {
     fontFamily: "NunitoSans-Light",
     fontSize: (1.72 * height) / 100,
+    height: (14.02 * height) / 100,
   },
   buttonContainer: {
     flexDirection: "row",
     marginTop: (2.46 * height) / 100,
   },
   bookMarkButton: {
-    backgroundColor: "#E0E0E0",
     borderRadius: 16,
     width: (height * 7.4) / 100,
     height: (height * 7.4) / 100,

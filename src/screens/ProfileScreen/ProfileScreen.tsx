@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   SafeAreaView,
   Text,
@@ -11,18 +11,21 @@ import {
 } from "react-native";
 import { profileCategoryList } from "config/mockData";
 import { useNavigation } from "@react-navigation/native";
-import { Card } from "components";
 import _ from "lodash";
 import { ScrollView } from "react-native-gesture-handler";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
-import { Header } from "components";
+import { Header, Card } from "components";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutRoutine } from "reducers/auth";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 export const ProfileScreen = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
   const renderCategory = (): JSX.Element => {
     const listItem = profileCategoryList.map((item) => {
       return (
@@ -46,6 +49,8 @@ export const ProfileScreen = () => {
     return listItem;
   };
 
+  
+
   const logOut = () => {
     Alert.alert("Log out", "Are you sure you want to log out ?", [
       {
@@ -53,7 +58,14 @@ export const ProfileScreen = () => {
         onPress: () => console.log("Cancel Pressed"),
         style: "cancel",
       },
-      { text: "OK", onPress: () => navigation.navigate("LoginScreen") },
+      {
+        text: "OK",
+        onPress: async () => {
+          await dispatch({type: logoutRoutine.TRIGGER});
+          navigation.goBack();
+          
+        },
+      },
     ]);
   };
 
@@ -80,11 +92,13 @@ export const ProfileScreen = () => {
             <Image
               resizeMode={"contain"}
               style={styles.profileImage}
-              source={require("assets/images/profile-image.png")}
+              source={{ uri: user.avatar_path }}
             />
             <View style={styles.profileTextContainer}>
-              <Text style={styles.name}>Long Phú</Text>
-              <Text style={styles.email}>longphu753951@gmail.com</Text>
+              <Text style={styles.name}>
+                {user.last_name + " " + user.first_name}
+              </Text>
+              <Text style={styles.email}>{user.email}</Text>
             </View>
           </View>
           <View

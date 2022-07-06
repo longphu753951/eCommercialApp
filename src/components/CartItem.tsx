@@ -8,9 +8,12 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 interface Props {
   image?: any;
   content?: React.ReactNode;
+  size: number;
   bottomContent?: React.ReactNode;
   isRemoving?: boolean;
+  disableButton?: boolean
   cartStyle?: any;
+  onRemoving?(): void;
 }
 
 const width = Dimensions.get("window").width;
@@ -20,19 +23,21 @@ const seperate = (width * 5.33) / 100;
 const contentWidth = (width * 57.33) / 100;
 
 const CartItem: React.FC<Props> = (props: Props) => {
-  const { content, image, bottomContent, isRemoving, cartStyle } = props;
+  const { content, image, bottomContent, isRemoving, cartStyle, onRemoving, disableButton, size } = props;
   return (
     <View style={[styles.itemContainer, cartStyle]}>
-      <Image style={styles.itemImage} source={image} />
+      <Image style={[styles.itemImage, size ? {width: size, height: size}: {}]} source={image} />
       <View style={styles.contentItemContainer}>
         <View style={styles.itemTextContainer}>
           {content}
           {isRemoving && (
             <TouchableOpacity
+              disabled={disableButton}
               style={{
                 width: (height * 3.69) / 100,
                 alignItems: "center",
               }}
+              onPress= {onRemoving}
             >
               <FontAwesomeIcon
                 size={(height * 2.401) / 100}
@@ -50,9 +55,11 @@ const CartItem: React.FC<Props> = (props: Props) => {
 
 CartItem.defaultProps = {
   image: require(""),
+  onRemoving: () => {},
   content: undefined,
   bottomContent: undefined,
   isRemoving: true,
+  disableButton: false,
   cartStyle: {},
 };
 

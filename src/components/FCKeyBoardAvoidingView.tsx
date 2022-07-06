@@ -6,37 +6,60 @@ import {
   Platform,
   SafeAreaView,
   Keyboard,
+  View,
+  TouchableWithoutFeedback,
 } from "react-native";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { ActivityIndicator } from "react-native-paper";
+import Loading from "./Loading";
+
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 interface Props {
   children?: React.ReactNode;
+  loading: string;
+  isFlatList: boolean;
 }
 
 const defaultProps = {
   children: undefined,
+  loading: "",
+  isFlatList: false
 };
 
 const FCKeyBoardAvoidingView: React.FC<Props> = (props: Props) => {
-  const { children } = props;
-  return (
-    <SafeAreaView style={styles.container}>
+  const { children, loading, isFlatList } = props;
+
+  const getHOCType = () => {
+    return isFlatList ? (
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >{children}</KeyboardAvoidingView>
+     
+    ) : (
+      <TouchableWithoutFeedback
+      style={{ width: "100%", height: "100%" }}
+      onPress={() => Keyboard.dismiss()}
+    >
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
       >
-        <TouchableWithoutFeedback
-          style={{ height: "100%" }}
-          onPress={Keyboard.dismiss}
-          accessible={false}
-        >
-          {children}
-        </TouchableWithoutFeedback>
+        {children}
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </TouchableWithoutFeedback>
+    );
+  };
+
+  return (
+    <>
+      {loading === "TRIGGER" && (
+        <Loading/>
+      )}
+      <SafeAreaView style={styles.container}>{getHOCType()}</SafeAreaView>
+    </>
   );
 };
 

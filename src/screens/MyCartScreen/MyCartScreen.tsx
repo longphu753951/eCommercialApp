@@ -3,14 +3,12 @@ import {
   Text,
   View,
   FlatList,
-  StyleSheet,
   Dimensions,
   RefreshControl,
+  Image,
   TextInput,
-  Animated,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { myCart } from "config/mockData";
 import _ from "lodash";
 import {
   CartItem,
@@ -21,44 +19,62 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  deleteToCartRoutine,
+  getCartRoutine,
+  updateQuantityRoutine,
+} from "reducers/cart";
+import ItemCart from "./components/ItemCart";
+import { width, height, styles } from "./components/styles";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
 
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
-
 export const MyCartScreen = () => {
-  const scrollY = new Animated.Value(0);
-  
-  const translateY = scrollY.interpolate({
-    inputRange: [0, (21.05 * height) / 100/4],
-    outputRange: [0, (21.05 * height) / 90],
-  });
+  const cart = useSelector((state) => state.cart.cart);
+  const dispatch = useDispatch();
 
   const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
 
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
+  const onRefresh = useCallback(async () => {
+    await dispatch({ type: getCartRoutine.TRIGGER });
   }, []);
+
   const item = (item: any): JSX.Element => {
+    const onChangeQuantity = async (value) => {
+      await dispatch({
+        type: updateQuantityRoutine.TRIGGER,
+        data: { id: item.item.id, quantity: value },
+      });
+    };
+
     return (
       <CartItem
-        image={item.item.image}
+        onRemoving={async () => {
+          await dispatch({
+            type: deleteToCartRoutine.TRIGGER,
+            data: { id: item.item.id },
+          });
+        }}
+        image={{ uri: item.item.product_attribute.productImage[0].image }}
         content={
           <View style={{ flexDirection: "column" }}>
-            <Text style={styles.nameText}>{item.item.name}</Text>
+            <Text style={styles.nameText}>
+              {item.item.product_attribute.name}
+            </Text>
           </View>
         }
         bottomContent={
           <View style={styles.bottomCotainer}>
             <IncrementButton
               defaultCount={item.item.quantity}
-              onChangeValue={(value) => console.log(value)}
+              onChangeValue={(value) => onChangeQuantity(value)}
             />
-            <Text style={styles.totalPriceItemText}>$ {item.item.price}</Text>
+            <Text style={styles.totalPriceItemText}>
+              $ {item.item.final_price}
+            </Text>
           </View>
         }
       />
@@ -74,220 +90,116 @@ export const MyCartScreen = () => {
     />
   );
 
-  return (
-    <FCKeyBoardAvoidingView>
-      <View style={styles.contentContainer}>
-        <Header title={"MY CART"} />
-        <View style={styles.bodyContainer}>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            style={styles.itemFlatList}
-            data={myCart}
-            ItemSeparatorComponent={ItemDivider}
-            keyExtractor={(item) => item.name}
-            renderItem={item}
-            bounces = {false}
-            onScroll={(e) => {
-              if(e.nativeEvent.contentOffset.y <0) return
-              scrollY.setValue(e.nativeEvent.contentOffset.y);
-            }}
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-            }
-          />
-          <Animated.View
-            style={{
-              position: myCart.length <=5 ? "relative" : "absolute",
-              bottom: 0,
-              height: (21.05 * height) / 100,
-              transform: [
-                {translateY: myCart.length <= 5 ? 0 :  translateY}
-              ]
-            }}
-          >
-            <LinearGradient
-              colors={[
-                "#FFFFFF",
-                "rgba(255, 255, 255, 0.9)",
-                "rgba(255, 255, 255, 0.2)",
-              ]}
+  const renderContentComponent = () => {
+    if (!_.isEmpty(cart.order_details)) {
+      if (cart.order_details.length > 0) {
+        return (
+          <View style={styles.bodyContainer}>
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              style={styles.itemFlatList}
+              data={cart.order_details}
+              ItemSeparatorComponent={ItemDivider}
+              keyExtractor={(item) => item.id}
+              renderItem={(item) => <ItemCart item={item} />}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
+            />
+            <View
               style={{
-                width: width,
-                paddingHorizontal:
-                  (Dimensions.get("window").width * 5.33) / 100,
+                height: (21.05 * height) / 100,
               }}
             >
-              <View style={[styles.promoInputContainer]}>
-                <TextInput
-                  placeholder="Enter your promo code"
-                  style={styles.PromoTextInput}
-                />
-                <View style={styles.promoButtonContainer}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      console.log("asd");
-                    }}
-                    style={styles.promoButton}
-                  >
-                    <AntDesign
-                      name="right"
-                      size={(height * 1.97) / 100}
-                      color="white"
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View style={styles.totalPriceContainer}>
-                <Text style={styles.totalText}>Total: </Text>
-                <Text style={[styles.totalText, { color: "#303030" }]}>
-                  $ 95.00
-                </Text>
-              </View>
-              <TouchableOpacity
-                style={styles.checkOutButton}
-                onPress={() => navigation.navigate("CheckOutScreen")}
+              <LinearGradient
+                colors={[
+                  "#FFFFFF",
+                  "rgba(255, 255, 255, 0.9)",
+                  "rgba(255, 255, 255, 0.2)",
+                ]}
+                style={{
+                  width: width,
+                  paddingHorizontal:
+                    (Dimensions.get("window").width * 5.33) / 100,
+                }}
               >
-                <Text style={styles.addAllText}>CHECK OUT</Text>
-              </TouchableOpacity>
-            </LinearGradient>
-          </Animated.View>
-        </View>
+                <View style={[styles.promoInputContainer]}>
+                  <TextInput
+                    placeholder="Enter your promo code"
+                    style={styles.PromoTextInput}
+                  />
+                  <View style={styles.promoButtonContainer}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        console.log("asd");
+                      }}
+                      style={styles.promoButton}
+                    >
+                      <AntDesign
+                        name="right"
+                        size={(height * 1.97) / 100}
+                        color="white"
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={styles.totalPriceContainer}>
+                  <Text style={styles.totalText}>Total: </Text>
+                  <Text style={[styles.totalText, { color: "#303030" }]}>
+                    $ {Number(cart.total).toFixed(2)}
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  style={styles.checkOutButton}
+                  onPress={() => navigation.navigate("CheckOutScreen")}
+                >
+                  <Text style={styles.addAllText}>CHECK OUT</Text>
+                </TouchableOpacity>
+              </LinearGradient>
+            </View>
+          </View>
+        );
+      }
+    }
+    return (
+      <View style={{ alignItems: "center", marginTop: (5 * height) / 100 }}>
+        <Image
+          resizeMode="contain"
+          style={{ height: (height * 30.66) / 100, tintColor: "#000000" }}
+          source={require("assets/images/addToCart.png")}
+        />
+        <Text
+          style={{
+            fontFamily: "Gelasio-SemiBold",
+            fontSize: (3.5 * height) / 100,
+            color: "#303030",
+            marginTop: (4 * height) / 100,
+            letterSpacing: (width * 0.5) / 100,
+          }}
+        >
+          Your Cart is Empty
+        </Text>
+        <Text
+          style={{
+            fontFamily: "NunitoSans-SemiBold",
+            fontSize: (2 * height) / 100,
+            color: "#606060",
+            letterSpacing: (width * 0.13) / 100,
+            textAlign: "center",
+            width: (width * 80) / 100,
+            marginTop: (1.3 * height) / 100,
+          }}
+        >
+          Looks like you haven't added anything to your cart yet
+        </Text>
       </View>
+    );
+  };
+
+  return (
+    <FCKeyBoardAvoidingView isFlatList={true}>
+      <Header title={"MY CART"} />
+      {renderContentComponent()}
     </FCKeyBoardAvoidingView>
   );
 };
-
-const styles = StyleSheet.create({
-  itemContainer: {
-    marginTop: (height * 1.47) / 100,
-    paddingBottom: (height * 1.47) / 100,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
-  },
-  contentContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  bodyContainer: {
-    paddingHorizontal: (Dimensions.get("window").width * 5.33) / 100,
-    alignItems: "center",
-    justifyContent: "center",
-    flex: 1,
-    width: "100%",
-  },
-  itemFlatList: {
-    flex: 1,
-    width: "100%",
-  },
-  titleText: {
-    fontSize: (width * 4.8) / 100,
-    fontFamily: "Gelasio-Medium",
-  },
-  itemImage: {
-    width: (height * 12.31) / 100,
-    height: (height * 12.31) / 100,
-    borderRadius: 10,
-  },
-  itemTextContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  nameText: {
-    fontSize: (Dimensions.get("window").height * 1.724) / 100,
-    fontFamily: "NunitoSans-Regular",
-    color: "#606060",
-  },
-  priceText: {
-    fontFamily: "NunitoSans-Bold",
-    marginTop: (Dimensions.get("window").height * 0.615) / 100,
-    fontSize: (Dimensions.get("window").height * 1.97) / 100,
-  },
-  checkOutButton: {
-    width: (Dimensions.get("window").width * 89.06) / 100,
-    height: (Dimensions.get("window").height * 6.15) / 100,
-    backgroundColor: "rgba(48, 48, 48, 1)",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 8,
-    marginBottom: (Dimensions.get("window").height * 2.46) / 100,
-  },
-  addAllText: {
-    fontFamily: "NunitoSans-Regular",
-    fontSize: (Dimensions.get("window").height * 2.21) / 100,
-    color: "white",
-  },
-  shoppingIconContainer: {
-    width: (Dimensions.get("window").height * 3.69) / 100,
-    height: (Dimensions.get("window").height * 3.69) / 100,
-    backgroundColor: "rgba(224, 224, 224, 0.6)",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 8,
-  },
-  contentItemContainer: {
-    justifyContent: "space-between",
-    flexDirection: "column",
-    marginLeft: (Dimensions.get("window").width * 5.33) / 100,
-    backgroundColor: "blue",
-  },
-  bottomCotainer: {
-    justifyContent: "space-between",
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  totalPriceItemText: {
-    color: "#303030",
-    fontFamily: "NunitoSans-Bold",
-    fontSize: (height * 1.97) / 100,
-  },
-  PromoTextInput: {
-    backgroundColor: "white",
-    width: (width * 89.33) / 100,
-    height: (height * 5.41) / 100,
-    borderRadius: 10,
-    shadowColor: "#000",
-    fontFamily: "NunitoSans-Regular",
-    fontSize: (height * 1.97) / 100,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 1.41,
-
-    elevation: 2,
-    paddingLeft: (5.33 * width) / 100,
-    flexWrap: "wrap",
-  },
-  promoInputContainer: {
-    marginBottom: (height * 2.46) / 100,
-    flexDirection: "row",
-  },
-  promoButton: {
-    width: (height * 5.41) / 100,
-    height: (height * 5.41) / 100,
-    backgroundColor: "rgba(48, 48, 48, 1)",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 8,
-  },
-  promoButtonContainer: {
-    position: "absolute",
-    right: 0,
-    top: 0,
-    elevation: 2,
-  },
-  totalPriceContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginHorizontal: (5.066 * width) / 100,
-    marginBottom: (2.46 * height) / 100,
-  },
-  totalText: {
-    fontSize: (2.46 * height) / 100,
-    fontFamily: "NunitoSans-Bold",
-    color: "#808080",
-  },
-});

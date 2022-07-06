@@ -1,30 +1,34 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { createStore, applyMiddleware } from "redux";
-import { persistStore, persistCombineReducers } from "redux-persist";
+import { configureStore } from "@reduxjs/toolkit";
+import { persistReducer } from "redux-persist";
 import createSagaMiddleware from "redux-saga";
 
 import reducers, { rootSaga } from "reducers";
 
-let store = {};
+//Use this for developing purpose098
+AsyncStorage.clear()
 
 const config = {
   key: "root",
   storage: AsyncStorage,
-  whitelist: ["auth", "settings"],
+  whitelist: ["auth", "settings", "user"],
 };
 
-const reducer = persistCombineReducers(config, reducers);
+const reducer = persistReducer(config, reducers);
 
 const sagaMiddleware = createSagaMiddleware();
 
-export default function configurationStore(initialState = {}) {
-  store = createStore(reducer, initialState, applyMiddleware(sagaMiddleware));
-  const persistor = persistStore(store);
-  sagaMiddleware.run(rootSaga);
+// store = createStore(reducer, initialState, applyMiddleware(sagaMiddleware));
+const store = configureStore({
+  reducer,
+  devTools: false,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+      thunk: false,
+    }).concat(sagaMiddleware),
+});
+// 
+sagaMiddleware.run(rootSaga);
 
-  return { persistor, store };
-}
-
-export function getStore() {
-  return store;
-}
+export default store;

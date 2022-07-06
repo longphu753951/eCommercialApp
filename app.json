@@ -1,7 +1,16 @@
 {
   "expo": {
     "name": "eCommercialAppExpo",
-    "slug": "eCommercialAppExpo",
+    "plugins": [
+      "expo-camera",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ],
+    "slug": "eCommercialApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,9 +22,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.phutl.ecommercialapp",
@@ -31,6 +38,17 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "firebase": {
+        "apiKey": "AIzaSyBOJw-7JcmZrua6IS0OWWKCyOwV6LtFt2s",
+        "authDomain": "ecommercial-8d9ee.firebaseapp.com",
+        "projectId": "ecommercial-8d9ee",
+        "storageBucket": "ecommercial-8d9ee.appspot.com",
+        "messagingSenderId": "213082501110",
+        "appId": "1:213082501110:web:f93b9dad0ed631ae2a21d7",
+        "measurementId": "G-BRSDBV7BPE"
+      }
     }
   }
 }

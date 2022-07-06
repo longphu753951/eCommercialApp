@@ -10,19 +10,41 @@ import { ShippingScreen } from "screens/ShippingScreen/ShippingScreen";
 import { PaymentMethodScreen } from "screens/PaymentMethodScreen/PaymentMethodScreen";
 import { MyReviewScreen } from "screens/MyReviewScreen/MyReviewScreen";
 import { ProductScreen } from "screens/ProductScreen/ProductScreen";
+import { CompleteScreen } from "screens/CompleteScreen/CompleteScreen";
 import { MyCartScreen } from "screens/MyCartScreen/MyCartScreen";
+import { SignUpScreen } from "screens/SignUpScreen/SignUpScreen";
 import { CheckOutScreen } from "screens/CheckOutScreen/CheckOutScreen";
 import { RatingScreen } from "screens/RatingScreen/RatingScreen";
 import { MyOrderScreen } from 'screens/MyOrderScreen/MyOrderScreen';
+import { AddPaymentScreen } from "screens/AddPaymentScreen/AddPaymentScreen";
+import { CameraScreen } from "components/CameraScreen";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Dimensions } from "react-native";
-
+import { EditPaymentScreen } from "screens/EditPaymentScreen/EditPaymentScreen";
+import { AddShippingContactScreen } from "screens/AddShippingContactScreen/AddShippingContactScreen";
+import { EditShippingContactScreen } from "screens/EditShippingContactScreen/EditShippingContactScreen";
+import { CongratulationScreen } from "screens/CongratulationScreen/CongratulationScreen";
+import { ShippingUnitScreen } from "screens/ShippingUnitScreen/ShippingUnitScreen";
 
 const Tab = createMaterialTopTabNavigator();
 
 export const allScreens = (Stack: any) => {
   return (
     <>
+       <Stack.Screen
+        name="ShippingUnitScreen"
+        component={ShippingUnitScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="CongratulationScreen"
+        component={CongratulationScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="BoardingScreen"
         component={BoardingScreen}
@@ -33,6 +55,30 @@ export const allScreens = (Stack: any) => {
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
+        options={{
+          headerShown: false,
+          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="CameraScreen"
+        component={CameraScreen}
+        options={{
+          headerShown: false,
+          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="SignUpScreen"
+        component={SignUpScreen}
+        options={{
+          headerShown: false,
+          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="CompleteScreen"
+        component={CompleteScreen}
         options={{
           headerShown: false,
           gestureEnabled: false,
@@ -98,6 +144,34 @@ export const allScreens = (Stack: any) => {
       <Stack.Screen
         name="RatingScreen"
         component={RatingScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="EditPaymentScreen"
+        component={EditPaymentScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="AddPaymentScreen"
+        component={AddPaymentScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="AddShippingContactScreen"
+        component={AddShippingContactScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="EditShippingContactScreen"
+        component={EditShippingContactScreen}
         options={{
           headerShown: false,
         }}
@@ -182,27 +256,4 @@ export const tabNavigation = () => {
       {allTabScreens(Tab)}
     </Tab.Navigator>
   );
-};
-
-const bottomTabScreen = {
-  home: {
-    component: HomeScreen,
-    fill: "home",
-    outline: "home-outline",
-  },
-  favorite: {
-    component: HomeScreen,
-    fill: "bookmark",
-    outline: "bookmark-outline",
-  },
-  notification: {
-    component: HomeScreen,
-    fill: "notifications",
-    outline: "notifications-outline",
-  },
-  profile: {
-    component: HomeScreen,
-    fill: "person",
-    outline: "person-outline",
-  },
 };
