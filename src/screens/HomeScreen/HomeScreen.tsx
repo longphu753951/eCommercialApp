@@ -81,6 +81,7 @@ export const HomeScreen = () => {
             showsVerticalScrollIndicator={false}
             data={products}
             style={styles.itemContainer}
+            contentContainerStyle={{paddingBottom:20}}
             columnWrapperStyle={{ justifyContent: "space-between" }}
             renderItem={(item) => (
               <Item

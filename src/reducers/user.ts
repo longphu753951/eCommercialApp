@@ -20,7 +20,8 @@ interface userState {
   user: User;
   loading: string;
   bookmarkId: Number;
-  shippingContacts: Array<any>,
+  shippingContactLoading: boolean;
+  shippingContacts: Array<any>;
 }
 
 // =========================================================
@@ -33,6 +34,9 @@ export const addBookmark = createRoutine("USER/ADD_BOOKMARK");
 export const deleteBookmark = createRoutine("USER/DELETE_BOOKMARK");
 export const addNewAddress = createRoutine("USER/ADD_NEW_ADDRESS");
 export const getAddresses = createRoutine("USER/GET_ADDRESSES");
+export const updateDefaultAddressRoutine = createRoutine(
+  "USER/UPDATE_DEFAULT_ADDRESS"
+);
 
 // =========================================================
 // =========================================================
@@ -98,10 +102,7 @@ function* addNewAddressSaga(action: any): Promise<void> {
 
 function* getAllAddressesSaga(action: any): Promise<void> {
   try {
-    const data = yield call(
-      axios.getWithAuth,
-      API.GET_ALL_ADDRESSES
-    );
+    const data = yield call(axios.getWithAuth, API.GET_ALL_ADDRESSES);
     yield put({
       type: getAddresses.SUCCESS,
       payload: data,
@@ -128,6 +129,22 @@ function* deleteBookmarkSaga(action: any): Promise<void> {
   }
 }
 
+function* updateDefaultAddressSaga(action: any): Promise<void> {
+  try {
+    const url = API.UPDATE_DEFAULT_ADDRESS.replace("id", action.data);
+    const data = yield call(axios.putWithAuth, url, {});
+    console.log(data);
+    yield put({
+      type: updateDefaultAddressRoutine.SUCCESS,
+      payload: data,
+    });
+  } catch (e) {
+    yield put({
+      type: updateDefaultAddressRoutine.FAILURE,
+    });
+  }
+}
+
 export function* userSaga() {
   yield all([
     takeLatest(getCurrentUser.TRIGGER, getCurrentUserSaga),
@@ -136,6 +153,7 @@ export function* userSaga() {
     takeLatest(deleteBookmark.TRIGGER, deleteBookmarkSaga),
     takeLatest(addNewAddress.TRIGGER, addNewAddressSaga),
     takeLatest(getAddresses.TRIGGER, getAllAddressesSaga),
+    takeLatest(updateDefaultAddressRoutine.TRIGGER, updateDefaultAddressSaga),
   ]);
 }
 
@@ -148,14 +166,15 @@ const INITIAL_STATE: userState = {
     telephone: "",
     avatar_path: "empty",
     payment_info: "",
-    default_address:"",
+    default_address: "",
   },
   bookmark: {
     id: 0,
     bookmarkDetail: [],
   },
   loading: "",
-  shippingContacts: []
+  shippingContactLoading: false,
+  shippingContacts: [],
 };
 
 // =========================================================
@@ -201,5 +220,12 @@ export default createReducer(INITIAL_STATE, (builder) => {
     })
     .addCase(getAddresses.SUCCESS, (state, action) => {
       state.shippingContacts = action.payload;
+    })
+    .addCase(updateDefaultAddressRoutine.TRIGGER, (state, action) => {
+      state.shippingContactLoading = true;
+    })
+    .addCase(updateDefaultAddressRoutine.SUCCESS, (state, action) => {
+      state.shippingContactLoading = false;
+      state.user.default_address = action.payload;
     });
 });

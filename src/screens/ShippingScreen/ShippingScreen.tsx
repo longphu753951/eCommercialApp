@@ -19,7 +19,8 @@ import { ifIphoneX } from "react-native-iphone-x-helper";
 import _ from "lodash";
 import { Card, Header } from "components";
 import { useNavigation } from "@react-navigation/native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getAddresses, updateDefaultAddressRoutine } from "reducers/user";
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
 };
@@ -28,6 +29,7 @@ export const ShippingScreen = () => {
   const [number, setNumber] = useState("");
   const [refreshing, setRefreshing] = useState(false);
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const addresses = useSelector((state) => state.user.shippingContacts);
   const defaultAddress = useSelector(
     (state) => state.user.user.default_address
@@ -37,13 +39,13 @@ export const ShippingScreen = () => {
     setNumber(defaultAddress);
   }, []);
 
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
+  const onRefresh = useCallback(async () => {
+    await dispatch({type: getAddresses.TRIGGER});
   }, []);
 
-  const onChangeDefaultAddress = (name: string): void => {
-    setName(name);
+  const onChangeDefaultAddress = async (id: string): Promise<void> => {
+    await dispatch({ type: updateDefaultAddressRoutine.TRIGGER, data: id });
+    setNumber(id);
   };
 
   const item = (item: any): JSX.Element => {
@@ -65,7 +67,7 @@ export const ShippingScreen = () => {
             style={styles.checkbox}
             color={number == item.item.id ? "#303030" : "#808080"}
             value={number == item.item.id ? true : false}
-            onValueChange={() => {}}
+            onValueChange={() => onChangeDefaultAddress(item.item.id)}
           />
           <Text style={styles.useAsAddText}>Use as the shipping address</Text>
         </View>

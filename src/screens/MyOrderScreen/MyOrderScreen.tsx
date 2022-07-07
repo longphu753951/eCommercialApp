@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   SafeAreaView,
   Text,
@@ -11,15 +11,46 @@ import {
   ScrollView,
 } from "react-native";
 import { Fontisto } from "@expo/vector-icons";
-import { Header } from "components";
-import styles from "./MyOrderStyle";
+import { Header, Card } from "components";
+import { styles, width, height } from "./components/styles";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { TabScreen } from "./components";
+import { Type } from "./components/TabScreen";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "reducers";
+import { getDeliveringRoutine, getOrderRoutine } from "reducers/cart";
 
 export const Tab = createMaterialTopTabNavigator();
 
-const ChildScreen = () => {
-  return <View></View>;
+const OrderedTab = () => {
+  const dispatch = useDispatch();
+  const orderedList = useSelector((state: RootState) => state.cart.orderedList);
+
+  useEffect(() => {
+    dispatch({ type: getOrderRoutine.TRIGGER });
+  }, []);
+  return <TabScreen data={orderedList} type={"Ordered"} />;
 };
+
+const DeliveringTab = () => {
+  const dispatch = useDispatch();
+  const deliveringList = useSelector((state: RootState) => state.cart.deliveringList);
+
+  useEffect(() => {
+    dispatch({ type: getDeliveringRoutine.TRIGGER });
+  }, []);
+  return <TabScreen data={deliveringList} type={"Delivering"} />;
+};
+
+// const DeliveringTab = () => {
+//   const dispatch = useDispatch();
+//   const deliveringList = useSelector((state: RootState) => state.cart.deliveringList);
+
+//   useEffect(() => {
+//     dispatch({ type: getOrderRoutine.TRIGGER, data: {type: 'delivering'} });
+//   }, []);
+//   return <TabScreen data={deliveringList} type={"Ordered"} />;
+// };
 
 export const MyOrderScreen = () => {
   return (
@@ -31,23 +62,25 @@ export const MyOrderScreen = () => {
             tabBarOptions={{
               indicatorStyle: {
                 backgroundColor: "#303030",
-                width: (Dimensions.get("screen").width * 10.66) / 100,
+                marginHorizontal: 40,
+                width: 140,
                 height: 4,
                 borderRadius: 20,
-                left: Dimensions.get("screen").width / 9,
               },
-              labelStyle: {fontFamily: "NunitoSans-Regular" }
+              labelStyle: { fontFamily: "NunitoSans-Regular" },
             }}
             screenOptions={{
               tabBarActiveTintColor: "#303030",
-              tabBarLabelStyle: { fontSize: 18, },
+              tabBarLabelStyle: { fontSize: 18 },
+            }}
+            indicatorContainerStyle={{
+              width: Dimensions.get("screen").width,
             }}
             activeTintColor="black"
             inactiveColor="gray"
           >
-            <Tab.Screen name="Delivered" component={ChildScreen} />
-            <Tab.Screen name="Processing" component={ChildScreen} />
-            <Tab.Screen name="Canceled" component={ChildScreen} />
+            <Tab.Screen name="Ordered" component={OrderedTab} />
+            <Tab.Screen name="Delivering" component={DeliveringTab} />
           </Tab.Navigator>
         </View>
       </View>

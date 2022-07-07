@@ -26,6 +26,7 @@ export const CheckOutScreen = () => {
   const user: Array<any> = useSelector((state: RootState) => state.user.user);
   const totalPrice = useSelector((state: RootState) => state.cart.cart.total);
   const [loading, setLoading] = useState(false);
+
   const cartLoading = useSelector((state: RootState) => state.cart.loading);
   const [paymentIntentId, setPaymentIntentId] = useState("");
   const token = useSelector(
@@ -36,14 +37,13 @@ export const CheckOutScreen = () => {
   );
 
   const isEnable = useMemo(() => {
-    if(_.isEmpty(shippingType) || _.isEmpty(user.default_address))
-    {
+    if (_.isEmpty(shippingType) || _.isEmpty(user.default_address)) {
       return true;
     }
     return false;
-  },[user.default_address, shippingType]);
+  }, [user.default_address, shippingType]);
 
-  console.log('is enable', isEnable)
+  console.log("is enable", isEnable);
 
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
 
@@ -74,7 +74,7 @@ export const CheckOutScreen = () => {
       //methods that complete payment after a delay, like SEPA Debit and Sofort.
       allowsDelayedPaymentMethods: true,
     });
-    if(!error) {
+    if (!error) {
       setLoading(false);
     }
   };
@@ -85,9 +85,12 @@ export const CheckOutScreen = () => {
     if (!error) {
       await dispatch({
         type: setPaymentRoutine.TRIGGER,
-        data: { paymentIntentId: paymentIntentId },
+        data: {
+          paymentIntentId: paymentIntentId,
+          shippingType: shippingType.id,
+        },
       });
-      navigation.navigate("CongratulationScreen")
+      navigation.navigate("CongratulationScreen");
     }
   };
 
@@ -107,7 +110,7 @@ export const CheckOutScreen = () => {
             }}
           >
             <AddressCard />
-            <CartCard/>
+            <CartCard />
             <ShippingUnitCard />
             <Card cardStyle={styles.priceContainer}>
               <View style={styles.priceTextContainer}>
@@ -130,8 +133,8 @@ export const CheckOutScreen = () => {
               </View>
             </Card>
             <TouchableOpacity
-              disabled = {isEnable}
-              style={[styles.checkOutButton, { opacity: isEnable ? 0.5 : 1 },]}
+              disabled={isEnable}
+              style={[styles.checkOutButton, { opacity: isEnable ? 0.5 : 1 }]}
               onPress={() => handlePayPress()}
             >
               <Text style={styles.addAllText}>CHECK OUT</Text>
