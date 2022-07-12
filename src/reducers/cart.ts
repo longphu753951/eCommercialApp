@@ -63,7 +63,7 @@ function* getOrderSaga(action: any): Promise<void> {
     }
 
     const data = yield call(axios.putWithAuth, API.GET_ORDER, dataType);
-    console.log(data);
+
     yield put({
       type: successAction,
       payload: {
@@ -178,7 +178,6 @@ const INITIAL_STATE: cartState = {
 export default createReducer(INITIAL_STATE, (builder) => {
   builder
     .addCase(getCartRoutine.SUCCESS, (state, action) => {
-      console.log(action.payload);
       state.cart = action.payload;
     })
     .addCase(addToCartRoutine.TRIGGER, (state, action) => {
@@ -199,12 +198,9 @@ export default createReducer(INITIAL_STATE, (builder) => {
     })
     .addCase(deleteToCartRoutine.SUCCESS, (state, action) => {
       state.cart.total = action.payload.total;
-      state.cart.order_details.splice(
-        state.cart.order_details.findIndex(
-          (x) => x.id === action.payload.removedItem
-        ),
-        1
-      );
+      state.cart.order_details = state.cart.order_details.filter((item) => {
+        return item.id !== action.payload.removedItem.id;
+      });
     })
     .addCase(updateQuantityRoutine.SUCCESS, (state, action) => {
       state.cart.total = action.payload.order_total;
@@ -229,7 +225,6 @@ export default createReducer(INITIAL_STATE, (builder) => {
       state.orderedList = action.payload.list;
     })
     .addCase(getDeliveringRoutine.SUCCESS, (state, action) => {
-      console.log('abc')
       state.deliveringList = action.payload.list;
     });
 });

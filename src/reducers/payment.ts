@@ -68,7 +68,7 @@ function* updateDefaultPaymentSaga(action: any): Promise<void> {
 }
 
 function* addNewPaymentMethodSaga(action: any): Promise<void> {
-  console.log(action)
+  
   const data = action.data;
   try {
     const response = yield call(axios.postWithAuth, API.ADD_NEW_PAYMENT, {

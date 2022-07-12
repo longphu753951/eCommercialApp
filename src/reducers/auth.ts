@@ -50,7 +50,6 @@ function* loginSaga(action: any): Promise<void> {
 function* signupSaga(action: any): Promise<void> {
   try {
     const register = action.data;
-    console.log(register)
     const data = yield call(axios.formPost, API.SIGN_UP, register);
     yield put({
       type: signupRoutine.SUCCESS,
@@ -98,13 +97,16 @@ export default createReducer(INITIAL_STATE, (builder) => {
       state.loading = "TRIGGER";
     })
     .addCase(loginRoutine.SUCCESS, (state, action) => {
-      console.log('sssss')
+     
       state.loading = "SUCCESS";
       state.token = action.payload;
-      console.log(action.payload);
+    })
+    .addCase(loginRoutine.FULFILL, (state, action) => {
+      state.loading = "";
     })
     .addCase(logoutRoutine.TRIGGER, (state) => {
-      console.log('sssss')
+     
+      state.token ={};
       state.user= {
         id: 0,
         first_name: "",

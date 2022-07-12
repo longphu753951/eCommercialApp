@@ -94,7 +94,6 @@ function* addNewAddressSaga(action: any): Promise<void> {
       API.ADD_NEW_ADDRESS,
       action.data
     );
-    console.log(data);
   } catch (e) {
     console.log(e);
   }
@@ -108,7 +107,6 @@ function* getAllAddressesSaga(action: any): Promise<void> {
       payload: data,
     });
 
-    console.log(data);
   } catch (e) {
     console.log(e);
   }
@@ -133,7 +131,7 @@ function* updateDefaultAddressSaga(action: any): Promise<void> {
   try {
     const url = API.UPDATE_DEFAULT_ADDRESS.replace("id", action.data);
     const data = yield call(axios.putWithAuth, url, {});
-    console.log(data);
+  
     yield put({
       type: updateDefaultAddressRoutine.SUCCESS,
       payload: data,

@@ -11,7 +11,7 @@ import reducers, { rootSaga } from "reducers";
 const config = {
   key: "root",
   storage: AsyncStorage,
-  whitelist: ["auth", "settings", "user"],
+  whitelist: ["auth", "settings", "user", "cart"],
 };
 
 const reducer = persistReducer(config, reducers);

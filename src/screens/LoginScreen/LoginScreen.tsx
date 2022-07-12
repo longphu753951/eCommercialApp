@@ -48,22 +48,23 @@ export const LoginScreen = () => {
     },
   });
 
-  const loginSuccess = useCallback(async () => {
+
+  useEffect(async () => {
+    console.log(loading)
     if (loading === "SUCCESS") {
       await dispatch({ type: getCurrentUser.TRIGGER });
       await dispatch({type: getAddresses.TRIGGER})
       await dispatch({type: getAllPaymentMethod.TRIGGER});
       await dispatch({type: getCartRoutine.TRIGGER});
+      await dispatch({ type: loginRoutine.FULFILL });
+      reset();
       navigation.navigate("tabNavigation");
     }
+    
   }, [loading]);
 
-  useEffect(() => {
-    reset()
-    loginSuccess();
-  }, [loginSuccess]);
-
   const onSubmit = async (data) => {
+    
     await dispatch({ type: loginRoutine.TRIGGER, data: data });
   };
 
