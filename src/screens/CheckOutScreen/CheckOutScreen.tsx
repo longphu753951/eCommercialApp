@@ -73,6 +73,9 @@ export const CheckOutScreen = () => {
       // Set `allowsDelayedPaymentMethods` to true if your business can handle payment
       //methods that complete payment after a delay, like SEPA Debit and Sofort.
       allowsDelayedPaymentMethods: true,
+      customFlow: false,
+      merchantDisplayName: 'Example Inc.',
+      style: 'alwaysDark',
     });
     if (!error) {
       setLoading(false);

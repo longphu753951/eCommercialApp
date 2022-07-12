@@ -53,6 +53,7 @@ const App = () => {
   }
   return (
     <StripeProvider
+    merchantIdentifier="merchant.identifier"
       publishableKey={
         "pk_test_51KAS9GEAPiKpbC1N48OEYp3ofa5Ll0aDuPI6Y8waDoh1x6otOE4bljUQa5aJY3i5lt2dH46owJRV3w9R9sbh1O7c00oZ7xp778"
       }
