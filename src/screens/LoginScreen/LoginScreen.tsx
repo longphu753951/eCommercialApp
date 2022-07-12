@@ -59,6 +59,7 @@ export const LoginScreen = () => {
   }, [loading]);
 
   useEffect(() => {
+    reset()
     loginSuccess();
   }, [loginSuccess]);
 

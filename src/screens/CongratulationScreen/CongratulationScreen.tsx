@@ -40,13 +40,13 @@ export const CongratulationScreen = () => {
         <View style={{ width: "80%", marginTop: (4.9 * height) / 100 }}>
           <TouchableOpacity
             style={[styles.button, styles.signInButton]}
-            onPress={() => navigation.navigate("LoginScreen")}
+            onPress={() => navigation.navigate("MyOrderScreen")}
           >
             <Text style={styles.buttonText}>TRACK YOUR ORDER</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.button, styles.backToHomeButton]}
-            onPress={() => navigation.navigate("LoginScreen")}
+            onPress={() => navigation.navigate("tabNavigation")}
           >
             <Text
               style={[

@@ -12,14 +12,17 @@ import {
   TextField,
   Header,
   DropdownCustom,
+  Loading,
 } from "components/";
 import { useForm } from "react-hook-form";
 import { nameRule, rules, telephoneRule } from "services/inputRuleService";
 import { Dropdown } from "react-native-element-dropdown";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { addNewAddress } from "reducers/user";
+import { addNewAddress, getAddresses } from "reducers/user";
 import Checkbox from "expo-checkbox";
+import { useNavigation } from "@react-navigation/native";
+import { RootState } from "reducers/";
 
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -29,6 +32,7 @@ const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 export const AddShippingContactScreen = () => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const {
     setValue,
@@ -49,7 +53,11 @@ export const AddShippingContactScreen = () => {
   });
   const [listIsFocus, setListIsFocus] = useState([false, false, false]);
   const [provinces, setProvinces] = useState([]);
+  const addresses = useSelector(
+    (state: RootState) => state.user.shippingContacts
+  );
   const [wards, setWards] = useState([]);
+  const [added, setAdded] = useState("");
   const [defaultAddress, setDefaultAddress] = useState(false);
   const [districts, setDistricts] = useState([]);
 
@@ -117,17 +125,26 @@ export const AddShippingContactScreen = () => {
     setListIsFocus(newListSetFocus);
   };
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: any) => {
+    setAdded("adding")
     await dispatch({
       type: addNewAddress.TRIGGER,
       data: { shippingContact: data, default: defaultAddress },
     });
+
+    await dispatch({ type: getAddresses.TRIGGER });
+    setAdded("added")
   };
+
+  useEffect(() => {
+    if (added === "added") navigation.goBack();
+  }, [added]);
 
   return (
     <FCKeyBoardAvoidingView loading={true} style={styles.container}>
       <View style={styles.contentContainer}>
         <Header title={"ADD SHIPPING CONTACT"} />
+        {added === "adding" && <Loading />}
         <View
           style={{
             marginTop: 26,
@@ -181,8 +198,8 @@ export const AddShippingContactScreen = () => {
             onFocus={() => setFocus(0)}
             data={provinces}
             onChangeValue={(item) => {
-              resetField('ward');
-              resetField('district');
+              resetField("ward");
+              resetField("district");
               onSearchDistrict(item);
             }}
             rules={nameRule}
@@ -196,7 +213,7 @@ export const AddShippingContactScreen = () => {
             onFocus={() => setFocus(1)}
             data={districts}
             onChangeValue={(item) => {
-              resetField('ward');
+              resetField("ward");
               onSearchWard(item);
             }}
             rules={nameRule}

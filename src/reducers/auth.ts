@@ -98,11 +98,13 @@ export default createReducer(INITIAL_STATE, (builder) => {
       state.loading = "TRIGGER";
     })
     .addCase(loginRoutine.SUCCESS, (state, action) => {
+      console.log('sssss')
       state.loading = "SUCCESS";
       state.token = action.payload;
       console.log(action.payload);
     })
     .addCase(logoutRoutine.TRIGGER, (state) => {
+      console.log('sssss')
       state.user= {
         id: 0,
         first_name: "",

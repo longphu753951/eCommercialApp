@@ -18,6 +18,8 @@ import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { Header, Card } from "components";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutRoutine } from "reducers/auth";
+import * as RootNavigation from 'services/navigationService';
+
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -62,7 +64,7 @@ export const ProfileScreen = () => {
         text: "OK",
         onPress: async () => {
           await dispatch({type: logoutRoutine.TRIGGER});
-          navigation.goBack();
+          RootNavigation.navigate('LoginScreen')
           
         },
       },

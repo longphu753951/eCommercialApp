@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-
+import { navigationRef } from 'services/navigationService';
 import { ConnectionStatusBar } from "react-native-ui-lib";
 import { allScreens } from "./allScreen";
 import { Alert, StatusBar } from "react-native";
@@ -18,7 +18,7 @@ ConnectionStatusBar.registerGlobalOnConnectionLost(() => {
 const Navigation = (props) => {
   const [isConnected, setIsConnected] = useState(true);
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <StatusBar barStyle="dark-content" />
       <ConnectionStatusBar
       useAbsolutePosition ={true}

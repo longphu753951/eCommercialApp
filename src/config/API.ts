@@ -25,7 +25,9 @@ const API = {
   DELETE_TO_CART: '/cart/deleteToCart/id/',
   UPDATE_QUANTITY: '/cart/updateQuantity/id/',
   CREATE_PAYMENT_INTENT: '/stripe/create_payment_intent',
-  SET_PAYMENT: '/cart/setPayment/'
+  SET_PAYMENT: '/cart/setPayment/',
+  GET_ORDER: '/cart/getOrder/',
+  UPDATE_DEFAULT_ADDRESS: '/shippingContact/updateDefaultAddress/id/'
 };
 
 interface API {

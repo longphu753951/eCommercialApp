@@ -15,6 +15,7 @@ import { MyCartScreen } from "screens/MyCartScreen/MyCartScreen";
 import { SignUpScreen } from "screens/SignUpScreen/SignUpScreen";
 import { CheckOutScreen } from "screens/CheckOutScreen/CheckOutScreen";
 import { RatingScreen } from "screens/RatingScreen/RatingScreen";
+import { MyOrderScreen } from 'screens/MyOrderScreen/MyOrderScreen';
 import { AddPaymentScreen } from "screens/AddPaymentScreen/AddPaymentScreen";
 import { CameraScreen } from "components/CameraScreen";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
@@ -126,6 +127,13 @@ export const allScreens = (Stack: any) => {
           headerShown: false,
         }}
       />
+      <Stack.Screen 
+        name = "MyOrderScreen"
+        component={MyOrderScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="CheckOutScreen"
         component={CheckOutScreen}
@@ -222,6 +230,7 @@ const allTabScreens = (Tab: any) => {
 export const tabNavigation = () => {
   return (
     <Tab.Navigator
+      lazy = {true}
       tabBarOptions={{
         showIcon: true,
         showLabel: false,
@@ -236,7 +245,7 @@ export const tabNavigation = () => {
           },
           shadowOpacity: 0.23,
           shadowRadius: 2.62,
-
+          
           elevation: 4,
         },
       }}

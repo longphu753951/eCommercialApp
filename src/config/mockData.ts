@@ -114,7 +114,7 @@ export const profileCategoryList = [
   {
     name: "My orders",
     title: "Already have 10 orders",
-    screen: "ShippingScreen",
+    screen: "MyOrderScreen",
   },
   {
     name: "Shipping Addresses",

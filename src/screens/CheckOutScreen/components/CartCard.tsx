@@ -15,11 +15,12 @@ import CardInfo from "./CardInfo";
 import { cardType } from "config/mockData";
 import { FlatList } from "react-native-gesture-handler";
 import { CartItem } from "components";
+import _ from "lodash";
 
 const CartCard = () => {
   const navigation = useNavigation();
   const cart = useSelector((state) => state.cart.cart);
-  const itemCarts = cart.order_details.map((orderDetail: any) => {
+  const itemCarts = ! _.isEmpty(cart) ? cart.order_details.map((orderDetail: any) => {
    
 
     return (
@@ -59,7 +60,7 @@ const CartCard = () => {
         image={{ uri: orderDetail.product_attribute.productImage[0].image }}
       />
     );
-  });
+  }) : null;
 
   return (
     <CardInfo
