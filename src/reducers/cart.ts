@@ -62,7 +62,7 @@ function* getOrderSaga(action: any): Promise<void> {
         break;
     }
 
-    const data = yield call(axios.postWithAuth, API.GET_ORDER, dataType);
+    const data = yield call(axios.putWithAuth, API.GET_ORDER, dataType);
     console.log(data);
     yield put({
       type: successAction,
