@@ -141,7 +141,7 @@ export const LoginScreen = () => {
           <View>
             <TouchableOpacity
               style={[styles.button, styles.signInWithButton]}
-              onPress={() => navigation.navigate("tabNavigation")}
+              onPress={() => console.log('apple')}
             >
               <Image
                 resizeMode="contain"
@@ -161,7 +161,7 @@ export const LoginScreen = () => {
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, styles.signInWithButton]}
-              onPress={() => navigation.navigate("tabNavigation")}
+              onPress={() => console.log('google')}
             >
               <Image
                 resizeMode="contain"
@@ -181,7 +181,7 @@ export const LoginScreen = () => {
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, styles.signInWithButton]}
-              onPress={() => navigation.navigate("tabNavigation")}
+              onPress={() => console.log('facebook')}
             >
               <Image
                 resizeMode="contain"
