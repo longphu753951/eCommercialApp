@@ -66,11 +66,13 @@ export const SignUpScreen = () => {
     onChangeScreen(1);
   }
 
-  const onSubmitTelephone = async (telephone: any): Promise<void> => {
+  const onSubmitTelephone = async (telephone: string): Promise<void> => {
+    const firstNumber = telephone[0];
+    const replacePhone = telephone.replace(firstNumber, '+84');
     const phoneProvider = new PhoneAuthProvider(auth);
     try {
       const verificationId = await phoneProvider.verifyPhoneNumber(
-        "+84933501450",
+        replacePhone,
         // @ts-ignore
         recaptchaVerifier.current
       );

@@ -122,14 +122,14 @@ const TypeOTPForm: React.FC<Props> = (props: Props) => {
             name={"otp"}
             error={errors.otp}
           />
-          <View style={styles.signUpContainer}>
+          {/* <View style={styles.signUpContainer}>
             <Text style={styles.alreadyText}>Haven't received an OTP? </Text>
             <TouchableOpacity
               onPress={() => navigation.navigate("LoginScreen")}
             >
               <Text style={styles.signInText}>TRY AGAIN</Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
       </View>
 
