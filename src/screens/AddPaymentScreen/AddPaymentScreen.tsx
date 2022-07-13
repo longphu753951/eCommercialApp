@@ -21,7 +21,9 @@ import { useForm } from "react-hook-form";
 import { nameRule, rules } from "services/inputRuleService";
 import { useStripe, CardField, } from "@stripe/stripe-react-native";
 import { useDispatch } from "react-redux";
-import { addNewPaymentMethod } from "reducers/payment";
+import { addNewPaymentMethod, getAllPaymentMethod } from "reducers/payment";
+import { useNavigation } from "@react-navigation/native";
+import { Loading } from "components/";
 
 const wait = (timeout: number) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -32,6 +34,9 @@ const height = Dimensions.get("window").height;
 
 export const AddPaymentScreen = () => {
   const stripe = useStripe();
+
+  const navigation = useNavigation();
+  const [added, setAdded] = useState("");
   const dispatch = useDispatch();
   const {
     setValue,
@@ -62,23 +67,30 @@ export const AddPaymentScreen = () => {
     delete data['exp_dateTime'];
     data['exp_month'] = dateTimeArray[0];
     data['exp_year'] = dateTimeArray[1];
+    setAdded("adding")
     
     await dispatch({ type: addNewPaymentMethod.TRIGGER, data: data });
+    await dispatch({ type: getAllPaymentMethod.TRIGGER });
+    setAdded("added")
   };
+
+  useEffect(() => {
+    if (added === "added") navigation.goBack();
+  }, [added]);
 
   return (
     <FCKeyBoardAvoidingView loading={true} style={styles.container}>
       <View style={styles.contentContainer}>
         <Header title={"ADD PAYMENT METHOD"} />
+        {added === "adding" && <Loading />}
         <View style={{ marginTop: 26, flexDirection: "column", flex: 1 }}>
-          <PaymentCard />
+          
           <View
             style={{
               flex: 1,
               alignItems: "flex-start",
               paddingHorizontal: (width * 5.33) / 100,
               width: width,
-              marginTop: 20,
             }}
           >
             <TextField
