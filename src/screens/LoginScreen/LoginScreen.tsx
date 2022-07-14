@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import size from "config/size";
 import { useNavigation } from "@react-navigation/native";
@@ -16,7 +17,9 @@ import { loginRoutine } from "reducers/auth";
 import { getAddresses, getCurrentUser } from "reducers/user";
 import { getAllPaymentMethod } from "reducers/payment";
 import { getCartRoutine } from "reducers/cart";
-
+import * as AppleAuthentication from "expo-apple-authentication";
+import * as GoogleSignIn from "expo-google-sign-in";
+import * as Facebook from "expo-facebook";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -24,6 +27,7 @@ const height = Dimensions.get("window").height;
 export const LoginScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const [user, setUser] = useState<GoogleSignIn.GoogleUser | null>(null);
   const loading = useSelector((state) => state.auth.loading);
   const [isShowingPassword, setIsShowingPassword] = useState(false);
 
@@ -48,23 +52,53 @@ export const LoginScreen = () => {
     },
   });
 
+  
 
   useEffect(async () => {
-    console.log(loading)
+    try {
+    await GoogleSignIn.initAsync({
+      // You may ommit the clientId when the firebase `googleServicesFile` is configured
+      clientId: "818164448023-7cmb24u4tm0a5vg30bldadi7fgff7lj0.apps.googleusercontent.com",
+    });
+  }catch ({ message }) {
+    alert('GoogleSignIn.initAsync(): ' + message);
+  }
+    _syncUserWithStateAsync();
+  }, []);
+
+  const _syncUserWithStateAsync = async () => {
+    const user = await GoogleSignIn.signInSilentlyAsync();
+    setUser(user);
+  };
+
+  const signInAsync = async () => {
+    try {
+      await GoogleSignIn.askForPlayServicesAsync();
+      const { type, user } = await GoogleSignIn.signInAsync();
+      if (type === 'success') {
+        _syncUserWithStateAsync();
+      }
+    } catch ({ message }) {
+      alert('login: Error:' + message);
+    }
+  };
+
+  
+
+  useEffect(async () => {
+    console.log(loading);
     if (loading === "SUCCESS") {
       await dispatch({ type: getCurrentUser.TRIGGER });
-      await dispatch({type: getAddresses.TRIGGER})
-      await dispatch({type: getAllPaymentMethod.TRIGGER});
-      await dispatch({type: getCartRoutine.TRIGGER});
+      await dispatch({ type: getAddresses.TRIGGER });
+      await dispatch({ type: getAllPaymentMethod.TRIGGER });
+      await dispatch({ type: getCartRoutine.TRIGGER });
       await dispatch({ type: loginRoutine.FULFILL });
       reset();
       navigation.navigate("tabNavigation");
     }
-    
   }, [loading]);
 
   const onSubmit = async (data) => {
-    
     await dispatch({ type: loginRoutine.TRIGGER, data: data });
   };
 
@@ -139,29 +173,43 @@ export const LoginScreen = () => {
           </View>
           <Text style={styles.orText}>OR</Text>
           <View>
+            <AppleAuthentication.AppleAuthenticationButton
+              buttonType={
+                AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN
+              }
+              buttonStyle={
+                AppleAuthentication.AppleAuthenticationButtonStyle.WHITE_OUTLINE
+              }
+              cornerRadius={5}
+              style={[styles.button, styles.signInWithButton]}
+              onPress={async () => {
+                console.log(
+                  AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+                  AppleAuthentication.AppleAuthenticationScope.EMAIL
+                );
+                try {
+                  const credential = await AppleAuthentication.signInAsync({
+                    requestedScopes: [
+                      AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+                      AppleAuthentication.AppleAuthenticationScope.EMAIL,
+                    ],
+                  });
+                  // signed in
+                } catch (e) {
+                  if (e.code === "ERR_CANCELED") {
+                    // handle that the user canceled the sign-in flow
+                  } else {
+                    // handle other errors
+                  }
+                }
+              }}
+            />
+
             <TouchableOpacity
               style={[styles.button, styles.signInWithButton]}
-              onPress={() => console.log('apple')}
-            >
-              <Image
-                resizeMode="contain"
-                style={{ width: 18, height: 18, marginRight: 10 }}
-                source={require("assets/images/apple-logo.png")}
-              />
-              <Text
-                style={{
-                  fontFamily: "NunitoSans-Regular",
-                  fontSize: 18,
-                  color: "#212121",
-                  textAlignVertical: "center",
-                }}
-              >
-                Sign in with Apple
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.button, styles.signInWithButton]}
-              onPress={() => console.log('google')}
+              onPress={() => {
+                signInAsync();
+              }}
             >
               <Image
                 resizeMode="contain"
@@ -181,7 +229,36 @@ export const LoginScreen = () => {
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, styles.signInWithButton]}
-              onPress={() => console.log('facebook')}
+              onPress={async () => {
+                try {
+                  await Facebook.initializeAsync({
+                    appId: "600246601082072",
+                  });
+                  const {
+                    type,
+                    token,
+                    expirationDate,
+                    permissions,
+                    declinedPermissions,
+                  } = await Facebook.logInWithReadPermissionsAsync({
+                    permissions: ["public_profile"],
+                  });
+                  if (type === "success") {
+                    // Get the user's name using Facebook's Graph API
+                    const response = await fetch(
+                      `https://graph.facebook.com/me?access_token=${token}`
+                    );
+                    Alert.alert(
+                      "Logged in!",
+                      `Hi ${(await response.json()).name}!`
+                    );
+                  } else {
+                    // type === 'cancel'
+                  }
+                } catch ({ message }) {
+                  alert(`Facebook Login Error: ${message}`);
+                }
+              }}
             >
               <Image
                 resizeMode="contain"

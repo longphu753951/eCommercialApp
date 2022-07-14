@@ -12,6 +12,8 @@ import { StripeProvider as _StripeProvider } from "@stripe/stripe-react-native";
 import type { Props as StripeProviderProps } from "@stripe/stripe-react-native/lib/typescript/src/components/StripeProvider";
 const StripeProvider = _StripeProvider as React.FC<StripeProviderProps>;
 import { persistStore } from "redux-persist";
+import { initializeApp, getApp } from 'firebase/app';
+import { getAnalytics } from "firebase/analytics";
 
 LogBox.ignoreLogs([
   "AsyncStorage has been extracted from react-native core and will be removed in a future release.",
@@ -19,7 +21,30 @@ LogBox.ignoreLogs([
 
 let persistor = persistStore(store);
 
+const firebaseConfig = {
+  apiKey: 'api-key',
+  authDomain: 'strong-maker-353301.firebaseapp.com',
+  databaseURL: 'https://strong-maker-353301.firebaseio.com',
+  projectId: 'strong-maker-353301',
+  storageBucket: 'strong-maker-353301.appspot.com',
+  messagingSenderId: '818164448023',
+  appId: '1:818164448023:web:29e0b85d87741f9cc91552',
+  measurementId: 'G-6S539S9K5Z',
+};
 
+
+function initializeAppIfNecessary() {
+  try {
+    return getApp();
+  } catch (any) {
+    return initializeApp(firebaseConfig);
+  }
+}
+
+const app = initializeAppIfNecessary();
+
+
+const analytics = getAnalytics(app);
 
 const App = () => {
   const [loaded] = useFonts(font);

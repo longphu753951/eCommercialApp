@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "818164448023",
+    "firebase_url": "https://strong-maker-353301-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "strong-maker-353301",
+    "storage_bucket": "strong-maker-353301.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:818164448023:android:20095d06bf8fa406c91552",
+        "android_client_info": {
+          "package_name": "com.phutl.ecommercialapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "818164448023-gkno1nmgog79gka6934fcsq0mgrl7de9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.phutl.ecommercialapp",
+            "certificate_hash": "2cb93456795cf12da22a3a7d5babd6e8377f4925"
+          }
+        },
+        {
+          "client_id": "818164448023-5045b746pn147a074archb4gtf6n666q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCOWIlV9V9inkD17aMh1em-mopjdXtYpHE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "818164448023-5045b746pn147a074archb4gtf6n666q.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "818164448023-7cmb24u4tm0a5vg30bldadi7fgff7lj0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.phutl.ecommercialapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
