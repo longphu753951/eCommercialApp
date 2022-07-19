@@ -68,6 +68,7 @@ export const LoginScreen = () => {
 
   const _syncUserWithStateAsync = async () => {
     const user = await GoogleSignIn.signInSilentlyAsync();
+    console.log(user)
     setUser(user);
   };
 
