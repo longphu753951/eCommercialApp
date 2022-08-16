@@ -6,32 +6,32 @@ import { HomeScreen } from "screens/HomeScreen/HomeScreen";
 import { FavoriteScreen } from "screens/FavoriteScreen/FavoriteScreen";
 import { ProfileScreen } from "screens/ProfileScreen/ProfileScreen";
 import { NotificationScreen } from "screens/NotificationScreen/NotificationScreen";
-import { ShippingScreen } from "screens/ShippingScreen/ShippingScreen";
-import { PaymentMethodScreen } from "screens/PaymentMethodScreen/PaymentMethodScreen";
-import { MyReviewScreen } from "screens/MyReviewScreen/MyReviewScreen";
-import { ProductScreen } from "screens/ProductScreen/ProductScreen";
-import { CompleteScreen } from "screens/CompleteScreen/CompleteScreen";
-import { MyCartScreen } from "screens/MyCartScreen/MyCartScreen";
-import { SignUpScreen } from "screens/SignUpScreen/SignUpScreen";
-import { CheckOutScreen } from "screens/CheckOutScreen/CheckOutScreen";
-import { RatingScreen } from "screens/RatingScreen/RatingScreen";
-import { MyOrderScreen } from 'screens/MyOrderScreen/MyOrderScreen';
-import { AddPaymentScreen } from "screens/AddPaymentScreen/AddPaymentScreen";
-import { CameraScreen } from "components/CameraScreen";
+// import { ShippingScreen } from "screens/ShippingScreen/ShippingScreen";
+// import { PaymentMethodScreen } from "screens/PaymentMethodScreen/PaymentMethodScreen";
+// import { MyReviewScreen } from "screens/MyReviewScreen/MyReviewScreen";
+// import { ProductScreen } from "screens/ProductScreen/ProductScreen";
+// import { CompleteScreen } from "screens/CompleteScreen/CompleteScreen";
+// import { MyCartScreen } from "screens/MyCartScreen/MyCartScreen";
+// import { SignUpScreen } from "screens/SignUpScreen/SignUpScreen";
+// import { CheckOutScreen } from "screens/CheckOutScreen/CheckOutScreen";
+// import { RatingScreen } from "screens/RatingScreen/RatingScreen";
+// import { MyOrderScreen } from 'screens/MyOrderScreen/MyOrderScreen';
+// import { AddPaymentScreen } from "screens/AddPaymentScreen/AddPaymentScreen";
+// import { CameraScreen } from "components/CameraScreen";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Dimensions } from "react-native";
-import { EditPaymentScreen } from "screens/EditPaymentScreen/EditPaymentScreen";
-import { AddShippingContactScreen } from "screens/AddShippingContactScreen/AddShippingContactScreen";
-import { EditShippingContactScreen } from "screens/EditShippingContactScreen/EditShippingContactScreen";
-import { CongratulationScreen } from "screens/CongratulationScreen/CongratulationScreen";
-import { ShippingUnitScreen } from "screens/ShippingUnitScreen/ShippingUnitScreen";
+// import { EditPaymentScreen } from "screens/EditPaymentScreen/EditPaymentScreen";
+// import { AddShippingContactScreen } from "screens/AddShippingContactScreen/AddShippingContactScreen";
+// import { EditShippingContactScreen } from "screens/EditShippingContactScreen/EditShippingContactScreen";
+// import { CongratulationScreen } from "screens/CongratulationScreen/CongratulationScreen";
+// import { ShippingUnitScreen } from "screens/ShippingUnitScreen/ShippingUnitScreen";
 
 const Tab = createMaterialTopTabNavigator();
 
 export const allScreens = (Stack: any) => {
   return (
     <>
-       <Stack.Screen
+       {/* <Stack.Screen
         name="ShippingUnitScreen"
         component={ShippingUnitScreen}
         options={{
@@ -44,7 +44,7 @@ export const allScreens = (Stack: any) => {
         options={{
           headerShown: false,
         }}
-      />
+      /> */}
       <Stack.Screen
         name="BoardingScreen"
         component={BoardingScreen}
@@ -60,7 +60,7 @@ export const allScreens = (Stack: any) => {
           gestureEnabled: false,
         }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="CameraScreen"
         component={CameraScreen}
         options={{
@@ -175,7 +175,7 @@ export const allScreens = (Stack: any) => {
         options={{
           headerShown: false,
         }}
-      />
+      /> */}
     </>
   );
 };

@@ -1,34 +1,57 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { configureStore } from "@reduxjs/toolkit";
-import { persistReducer } from "redux-persist";
-import createSagaMiddleware from "redux-saga";
+import {
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+  persistReducer,
+} from "redux-persist";
+import {
+  getFirebase,
+  actionTypes as rrfActionTypes,
+} from "react-redux-firebase";
+import { constants as rfConstants } from "redux-firestore";
 
 import reducers, { rootSaga } from "reducers";
 
 //Use this for developing purpose098
-AsyncStorage.clear()
+AsyncStorage.clear();
 
 const config = {
   key: "root",
   storage: AsyncStorage,
-  whitelist: ["auth", "settings", "user", "cart"],
+  whitelist: ["auth", "settings", "user", "cart", "firestore"],
 };
 
 const reducer = persistReducer(config, reducers);
 
-const sagaMiddleware = createSagaMiddleware();
-
 // store = createStore(reducer, initialState, applyMiddleware(sagaMiddleware));
 const store = configureStore({
-  reducer,
-  devTools: false,
+  reducer: reducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: false,
-      thunk: false,
-    }).concat(sagaMiddleware),
+      serializableCheck: {
+        ignoredActions: [
+          FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER,
+          // just ignore every redux-firebase and react-redux-firebase action type
+          ...Object.keys(rfConstants.actionTypes).map(
+            (type) => `${rfConstants.actionsPrefix}/${type}`
+          ),
+          ...Object.keys(rrfActionTypes).map(
+            (type) => `@@reactReduxFirebase/${type}`
+          ),
+        ],
+        ignoredPaths: ["firebase", "firestore"],
+      },
+      thunk: {
+        extraArgument: {
+          getFirebase,
+        },
+      },
+    }),
 });
-// 
-sagaMiddleware.run(rootSaga);
 
 export default store;

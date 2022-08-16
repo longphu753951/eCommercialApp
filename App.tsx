@@ -12,8 +12,13 @@ import { StripeProvider as _StripeProvider } from "@stripe/stripe-react-native";
 import type { Props as StripeProviderProps } from "@stripe/stripe-react-native/lib/typescript/src/components/StripeProvider";
 const StripeProvider = _StripeProvider as React.FC<StripeProviderProps>;
 import { persistStore } from "redux-persist";
-import { initializeApp, getApp } from 'firebase/app';
+import firebase from "firebase/compat/app";
+import "firebase/compat/firestore";
+import "firebase/compat/functions";
 import { getAnalytics } from "firebase/analytics";
+import Constants from "expo-constants";
+import { ReactReduxFirebaseProvider } from "react-redux-firebase";
+import { createFirestoreInstance } from "redux-firestore";
 
 LogBox.ignoreLogs([
   "AsyncStorage has been extracted from react-native core and will be removed in a future release.",
@@ -21,30 +26,22 @@ LogBox.ignoreLogs([
 
 let persistor = persistStore(store);
 
-const firebaseConfig = {
-  apiKey: 'api-key',
-  authDomain: 'strong-maker-353301.firebaseapp.com',
-  databaseURL: 'https://strong-maker-353301.firebaseio.com',
-  projectId: 'strong-maker-353301',
-  storageBucket: 'strong-maker-353301.appspot.com',
-  messagingSenderId: '818164448023',
-  appId: '1:818164448023:web:29e0b85d87741f9cc91552',
-  measurementId: 'G-6S539S9K5Z',
+const rrfConfig = {
+  userProfile: "users",
+  useFirestoreForProfile: true, // Firestore for Profile instead of Realtime DB
+  enableClaims: true, // Get custom claims along with the profile
 };
 
+firebase.initializeApp(Constants.manifest?.extra?.firebase);
+firebase.firestore();
+firebase.functions();
 
-function initializeAppIfNecessary() {
-  try {
-    return getApp();
-  } catch (any) {
-    return initializeApp(firebaseConfig);
-  }
-}
-
-const app = initializeAppIfNecessary();
-
-
-const analytics = getAnalytics(app);
+const rrfProps = {
+  firebase,
+  config: rrfConfig,
+  dispatch: store.dispatch,
+  createFirestoreInstance, // <- needed if using firestore
+};
 
 const App = () => {
   const [loaded] = useFonts(font);
@@ -78,15 +75,16 @@ const App = () => {
   }
   return (
     <StripeProvider
-    merchantIdentifier="merchant.identifier"
+      merchantIdentifier="merchant.identifier"
       publishableKey={
         "pk_test_51KAS9GEAPiKpbC1N48OEYp3ofa5Ll0aDuPI6Y8waDoh1x6otOE4bljUQa5aJY3i5lt2dH46owJRV3w9R9sbh1O7c00oZ7xp778"
       }
     >
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          
-          <Navigation />
+          <ReactReduxFirebaseProvider {...rrfProps}>
+            <Navigation />
+          </ReactReduxFirebaseProvider>
         </PersistGate>
       </Provider>
     </StripeProvider>

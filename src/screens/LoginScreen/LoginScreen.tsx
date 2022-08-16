@@ -20,6 +20,8 @@ import { getCartRoutine } from "reducers/cart";
 import * as AppleAuthentication from "expo-apple-authentication";
 import * as GoogleSignIn from "expo-google-sign-in";
 import * as Facebook from "expo-facebook";
+import { useFirestoreConnect } from 'react-redux-firebase'
+
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -30,6 +32,13 @@ export const LoginScreen = () => {
   const [user, setUser] = useState<GoogleSignIn.GoogleUser | null>(null);
   const loading = useSelector((state) => state.auth.loading);
   const [isShowingPassword, setIsShowingPassword] = useState(false);
+  
+  useFirestoreConnect([
+    { collection: 'todos' } // or 'todos'
+  ])
+
+  const todos = useSelector((state) => state?.firestore?.ordered?.todos)
+
 
   const timeOfDay = () => {
     const today = new Date();
@@ -52,9 +61,11 @@ export const LoginScreen = () => {
     },
   });
 
+  useEffect(() => {console.log(todos);},[todos])
   
 
   useEffect(async () => {
+    console.log(todos);
     try {
     await GoogleSignIn.initAsync({
       // You may ommit the clientId when the firebase `googleServicesFile` is configured
@@ -145,7 +156,7 @@ export const LoginScreen = () => {
             <TouchableOpacity
               style={{ marginBottom: (height * 1.01) / 100 }}
               onPress={() => {
-                console.log("forgot the password");
+                console.log(todos);
               }}
             >
               <Text
@@ -167,7 +178,7 @@ export const LoginScreen = () => {
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, styles.signUpButton]}
-              onPress={() => navigation.navigate("SignUpScreen")}
+              onPress={() => console.log("SignUpScreen")}
             >
               <Text style={styles.buttonText}>Sign up</Text>
             </TouchableOpacity>
