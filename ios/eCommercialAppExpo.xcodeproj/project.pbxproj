@@ -360,6 +360,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 46UMBACQ4A;
 				ENABLE_BITCODE = NO;
+				EXCLUDED_ARCHS = arm64;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -392,6 +393,7 @@
 				CODE_SIGN_ENTITLEMENTS = eCommercialAppExpo/eCommercialAppExpo.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 46UMBACQ4A;
+				EXCLUDED_ARCHS = arm64;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = eCommercialAppExpo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;

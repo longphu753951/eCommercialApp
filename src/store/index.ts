@@ -18,7 +18,7 @@ import { constants as rfConstants } from "redux-firestore";
 import reducers, { rootSaga } from "reducers";
 
 //Use this for developing purpose098
-AsyncStorage.clear();
+//AsyncStorage.clear();
 
 const config = {
   key: "root",

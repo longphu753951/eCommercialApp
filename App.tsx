@@ -12,12 +12,8 @@ import { StripeProvider as _StripeProvider } from "@stripe/stripe-react-native";
 import type { Props as StripeProviderProps } from "@stripe/stripe-react-native/lib/typescript/src/components/StripeProvider";
 const StripeProvider = _StripeProvider as React.FC<StripeProviderProps>;
 import { persistStore } from "redux-persist";
-import firebase from "firebase/compat/app";
-import "firebase/compat/firestore";
-import "firebase/compat/functions";
-import { getAnalytics } from "firebase/analytics";
-import Constants from "expo-constants";
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
+import {firebase, rrfConfig} from 'services/firebase';
 import { createFirestoreInstance } from "redux-firestore";
 
 LogBox.ignoreLogs([
@@ -25,16 +21,6 @@ LogBox.ignoreLogs([
 ]);
 
 let persistor = persistStore(store);
-
-const rrfConfig = {
-  userProfile: "users",
-  useFirestoreForProfile: true, // Firestore for Profile instead of Realtime DB
-  enableClaims: true, // Get custom claims along with the profile
-};
-
-firebase.initializeApp(Constants.manifest?.extra?.firebase);
-firebase.firestore();
-firebase.functions();
 
 const rrfProps = {
   firebase,

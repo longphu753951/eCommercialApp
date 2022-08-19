@@ -20,7 +20,9 @@ import { getCartRoutine } from "reducers/cart";
 import * as AppleAuthentication from "expo-apple-authentication";
 import * as GoogleSignIn from "expo-google-sign-in";
 import * as Facebook from "expo-facebook";
-import { useFirestoreConnect } from 'react-redux-firebase'
+import { useFirestoreConnect } from 'react-redux-firebase';
+import { useFirestore } from 'react-redux-firebase'
+
 
 
 const width = Dimensions.get("window").width;
@@ -32,7 +34,9 @@ export const LoginScreen = () => {
   const [user, setUser] = useState<GoogleSignIn.GoogleUser | null>(null);
   const loading = useSelector((state) => state.auth.loading);
   const [isShowingPassword, setIsShowingPassword] = useState(false);
-  
+  const firestore = useFirestore()
+
+
   useFirestoreConnect([
     { collection: 'todos' } // or 'todos'
   ])
@@ -111,7 +115,10 @@ export const LoginScreen = () => {
   }, [loading]);
 
   const onSubmit = async (data) => {
-    await dispatch({ type: loginRoutine.TRIGGER, data: data });
+    const exampleTodo = { done: false, text: 'Sample' }
+    return firestore.collection('todos').add(exampleTodo)
+
+    //await dispatch({ type: loginRoutine.TRIGGER, data: data });
   };
 
   return (
