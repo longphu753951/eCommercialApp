@@ -3,17 +3,12 @@
     "name": "eCommercialAppExpo",
     "plugins": [
       "@notifee/react-native",
+      "@react-native-google-signin/google-signin",
       "expo-camera",
       [
         "expo-image-picker",
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
-        }
-      ],
-      [
-        "expo-facebook",
-        {
-          "userTrackingPermission": false
         }
       ]
     ],
@@ -29,7 +24,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.phutl.ecommercialapp",

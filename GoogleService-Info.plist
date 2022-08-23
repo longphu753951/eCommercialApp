@@ -3,23 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>818164448023-7cmb24u4tm0a5vg30bldadi7fgff7lj0.apps.googleusercontent.com</string>
+	<string>870321759178-f257u8o2jeo4bkf4n8laji9t2nshpl2a.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.818164448023-7cmb24u4tm0a5vg30bldadi7fgff7lj0</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>818164448023-gkno1nmgog79gka6934fcsq0mgrl7de9.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.870321759178-f257u8o2jeo4bkf4n8laji9t2nshpl2a</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAJLsx6UKL7ImgjiUR8nPaZ-deXf5Innog</string>
+	<string>AIzaSyB5GekuE2N7CsQKrBUoZyy_S9gXXjotAgE</string>
 	<key>GCM_SENDER_ID</key>
-	<string>818164448023</string>
+	<string>870321759178</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.phutl.ecommercialapp</string>
 	<key>PROJECT_ID</key>
-	<string>strong-maker-353301</string>
+	<string>ecommercialapi-b220a</string>
 	<key>STORAGE_BUCKET</key>
-	<string>strong-maker-353301.appspot.com</string>
+	<string>ecommercialapi-b220a.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,8 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:818164448023:ios:e4e03598ff62c662c91552</string>
-	<key>DATABASE_URL</key>
-	<string>https://strong-maker-353301-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+	<string>1:870321759178:ios:51c0c9eb38a2bea17fe533</string>
 </dict>
 </plist>

@@ -18,10 +18,14 @@ import { getAddresses, getCurrentUser } from "reducers/user";
 import { getAllPaymentMethod } from "reducers/payment";
 import { getCartRoutine } from "reducers/cart";
 import * as AppleAuthentication from "expo-apple-authentication";
-import * as GoogleSignIn from "expo-google-sign-in";
-import * as Facebook from "expo-facebook";
-import { useFirestoreConnect } from 'react-redux-firebase'
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
+import { useFirestoreConnect } from "react-redux-firebase";
 
+GoogleSignin.configure();
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -32,13 +36,12 @@ export const LoginScreen = () => {
   const [user, setUser] = useState<GoogleSignIn.GoogleUser | null>(null);
   const loading = useSelector((state) => state.auth.loading);
   const [isShowingPassword, setIsShowingPassword] = useState(false);
-  
+
   useFirestoreConnect([
-    { collection: 'todos' } // or 'todos'
-  ])
+    { collection: "todos" }, // or 'todos'
+  ]);
 
-  const todos = useSelector((state) => state?.firestore?.ordered?.todos)
-
+  const todos = useSelector((state) => state?.firestore?.ordered?.todos);
 
   const timeOfDay = () => {
     const today = new Date();
@@ -61,41 +64,10 @@ export const LoginScreen = () => {
     },
   });
 
-  useEffect(() => {console.log(todos);},[todos])
-  
-
-  useEffect(async () => {
+  useEffect(() => {
     console.log(todos);
-    try {
-    await GoogleSignIn.initAsync({
-      // You may ommit the clientId when the firebase `googleServicesFile` is configured
-      clientId: "818164448023-7cmb24u4tm0a5vg30bldadi7fgff7lj0.apps.googleusercontent.com",
-    });
-  }catch ({ message }) {
-    alert('GoogleSignIn.initAsync(): ' + message);
-  }
-    _syncUserWithStateAsync();
-  }, []);
+  }, [todos]);
 
-  const _syncUserWithStateAsync = async () => {
-    const user = await GoogleSignIn.signInSilentlyAsync();
-    console.log(user)
-    setUser(user);
-  };
-
-  const signInAsync = async () => {
-    try {
-      await GoogleSignIn.askForPlayServicesAsync();
-      const { type, user } = await GoogleSignIn.signInAsync();
-      if (type === 'success') {
-        _syncUserWithStateAsync();
-      }
-    } catch ({ message }) {
-      alert('login: Error:' + message);
-    }
-  };
-
-  
 
   useEffect(async () => {
     console.log(loading);
@@ -219,8 +191,24 @@ export const LoginScreen = () => {
 
             <TouchableOpacity
               style={[styles.button, styles.signInWithButton]}
-              onPress={() => {
-                signInAsync();
+              onPress={async () => {
+                try {
+                  await GoogleSignin.hasPlayServices();
+                  const userInfo = await GoogleSignin.signIn();
+                  console.log(userInfo);
+                } catch (error) {
+                  if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                    // user cancelled the login flow
+                  } else if (error.code === statusCodes.IN_PROGRESS) {
+                    // operation (e.g. sign in) is in progress already
+                  } else if (
+                    error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE
+                  ) {
+                    // play services not available or outdated
+                  } else {
+                    // some other error happened
+                  }
+                }
               }}
             >
               <Image
@@ -239,7 +227,7 @@ export const LoginScreen = () => {
                 Sign in with Google
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={[styles.button, styles.signInWithButton]}
               onPress={async () => {
                 try {
@@ -287,7 +275,7 @@ export const LoginScreen = () => {
               >
                 Sign in with Facebook
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
       </View>
