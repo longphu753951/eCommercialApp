@@ -5,6 +5,22 @@
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 
     /* Completeness */
-    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
+    "skipLibCheck": true,                                 /* Skip type checking all .d.ts files. */
+    "jsx": "react",
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "screens/*": ["./src/screens/*"],
+      "navigation/*": ["./src/navigation/*"],
+      "assets/*": ["./src/assets/*"],
+      "config/*": ["./src/config/*"],
+      "components/*": ["./src/components/*"],
+      "reducers/*": ["./src/reducers/*"],
+      "store/*": ["./src/store/*"],
+      "middlewares/*": ["./src/middlewares/*"],
+      "utils/*": ["./src/utils/*"],
+      "services/*": ["./src/services/*"],
+      "underscore": ["lodash"]
+    }
   }
 }

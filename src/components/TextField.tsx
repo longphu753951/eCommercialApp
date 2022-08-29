@@ -8,7 +8,6 @@ import {
   Text,
 } from "react-native";
 import { TextInput } from "react-native-paper";
-import { Ionicons } from "@expo/vector-icons";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;

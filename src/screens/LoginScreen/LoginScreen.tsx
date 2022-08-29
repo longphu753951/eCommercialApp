@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -6,33 +6,74 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
-} from "react-native";
-import size from "config/size";
-import { useNavigation } from "@react-navigation/native";
-import { useSelector, useDispatch } from "react-redux";
-import { useForm } from "react-hook-form";
-import { FCKeyBoardAvoidingView, TextField } from "components";
-import { loginRoutine } from "reducers/auth";
-import { getAddresses, getCurrentUser } from "reducers/user";
-import { getAllPaymentMethod } from "reducers/payment";
-import { getCartRoutine } from "reducers/cart";
+} from 'react-native';
+import size from 'config/size';
+import {useNavigation} from '@react-navigation/native';
+import {useSelector, useDispatch} from 'react-redux';
+import {useForm} from 'react-hook-form';
+import {FCKeyBoardAvoidingView, TextField} from 'components';
+import {loginRoutine} from 'reducers/auth';
+import {useFirestoreConnect} from 'react-redux-firebase';
+import {
+  AppleButton,
+  appleAuth,
+} from '@invertase/react-native-apple-authentication';
 
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
+//import {LoginButton, AccessToken} from 'react-native-fbsdk-next';
 
-const width = Dimensions.get("window").width;
-const height = Dimensions.get("window").height;
+GoogleSignin.configure();
+
+const signIn = async () => {
+  try {
+    await GoogleSignin.hasPlayServices();
+    const userInfo = await GoogleSignin.signIn();
+    console.log(userInfo);
+  } catch (error: any) {
+    if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+      // user cancelled the login flow
+    } else if (error.code === statusCodes.IN_PROGRESS) {
+      // operation (e.g. sign in) is in progress already
+    } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+      // play services not available or outdated
+    } else {
+      // some other error happened
+    }
+  }
+};
+
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
 export const LoginScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const loading = useSelector((state) => state.auth.loading);
+  // const loading = useSelector((state) => state.auth.loading);
   const [isShowingPassword, setIsShowingPassword] = useState(false);
+  useFirestoreConnect([
+    {collection: 'todos'}, // or 'todos'
+  ]);
 
+  const todos = useSelector(state => state?.firestore?.ordered?.todos);
   const timeOfDay = () => {
     const today = new Date();
     const curHr = today.getHours();
-    const time = curHr < 12 ? "morning" : curHr < 18 ? "afternoon" : "evening";
+    const time = curHr < 12 ? 'morning' : curHr < 18 ? 'afternoon' : 'evening';
     return time;
   };
+
+  useEffect(() => {
+    // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
+    return appleAuth.onCredentialRevoked(async () => {
+      console.warn(
+        'If this function executes, User Credentials have been Revoked',
+      );
+    });
+  }, []);
 
   const {
     register,
@@ -40,42 +81,57 @@ export const LoginScreen = () => {
     handleSubmit,
     control,
     reset,
-    formState: { errors },
+    formState: {errors},
   } = useForm({
     defaultValues: {
-      telephone: "",
-      password: "",
+      telephone: '',
+      password: '',
     },
   });
 
+  const onAppleButtonPress = async () => {
+    // Start the sign-in request
+    const appleAuthRequestResponse = await appleAuth.performRequest({
+      requestedOperation: appleAuth.Operation.LOGIN,
+      requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+    });
 
-  useEffect(async () => {
-    console.log(loading)
-    if (loading === "SUCCESS") {
-      await dispatch({ type: getCurrentUser.TRIGGER });
-      await dispatch({type: getAddresses.TRIGGER})
-      await dispatch({type: getAllPaymentMethod.TRIGGER});
-      await dispatch({type: getCartRoutine.TRIGGER});
-      await dispatch({ type: loginRoutine.FULFILL });
-      reset();
-      navigation.navigate("tabNavigation");
+    // Ensure Apple returned a user identityToken
+    if (!appleAuthRequestResponse.identityToken) {
+      throw new Error('Apple Sign-In failed - no identify token returned');
     }
-    
-  }, [loading]);
 
-  const onSubmit = async (data) => {
-    
-    await dispatch({ type: loginRoutine.TRIGGER, data: data });
+    // Create a Firebase credential from the response
+    const {identityToken, nonce} = appleAuthRequestResponse;
+    console.log(identityToken);
+  };
+
+  // useEffect(async () => {
+  //   console.log(loading)
+  //   if (loading === "SUCCESS") {
+  //     await dispatch({ type: getCurrentUser.TRIGGER });
+  //     await dispatch({type: getAddresses.TRIGGER})
+  //     await dispatch({type: getAllPaymentMethod.TRIGGER});
+  //     await dispatch({type: getCartRoutine.TRIGGER});
+  //     await dispatch({ type: loginRoutine.FULFILL });
+  //     reset();
+  //     navigation.navigate("tabNavigation");
+  //   }
+
+  // }, [loading]);
+
+  const onSubmit = async data => {
+    await dispatch({type: loginRoutine.TRIGGER, data: data});
   };
 
   return (
-    <FCKeyBoardAvoidingView loading={loading} style={styles.container}>
+    <FCKeyBoardAvoidingView loading={false} style={styles.container}>
       <View style={styles.contentContainer}>
-        <View style={{ alignItems: "center", width: "100%" }}>
+        <View style={{alignItems: 'center', width: '100%'}}>
           <Image
             style={styles.topImage}
-            resizeMode={"contain"}
-            source={require("assets/images/icon.png")}
+            resizeMode={'contain'}
+            source={require('assets/images/icon.png')}
           />
         </View>
         <View style={styles.welcomeContainer}>
@@ -85,117 +141,129 @@ export const LoginScreen = () => {
         <View
           style={{
             marginTop: (1.847 * height) / 100,
-            width: "100%",
-          }}
-        >
+            width: '100%',
+          }}>
           <TextField
-            textInputStyle={{ width: "100%" }}
+            textInputStyle={{width: '100%'}}
             control={control}
-            label={"Telephone"}
-            name={"telephone"}
-            keyboardType={"phone-pad"}
+            label={'Telephone'}
+            name={'telephone'}
+            keyboardType={'phone-pad'}
             error={errors.telephone}
           />
 
           <TextField
-            textInputStyle={{ width: "100%" }}
+            textInputStyle={{width: '100%'}}
             control={control}
             isSecure={true}
-            label={"Password"}
-            name={"password"}
+            label={'Password'}
+            name={'password'}
             error={errors.password}
           />
 
-          <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
+          <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
             <TouchableOpacity
-              style={{ marginBottom: (height * 1.01) / 100 }}
+              style={{marginBottom: (height * 1.01) / 100}}
               onPress={() => {
-                console.log("forgot the password");
-              }}
-            >
+                console.log('forgot the password');
+              }}>
               <Text
                 style={{
                   fontSize: 18,
-                  fontFamily: "NunitoSans-SemiBold",
-                }}
-              >
+                  fontFamily: 'NunitoSans-SemiBold',
+                }}>
                 Forgot Password ?
               </Text>
             </TouchableOpacity>
           </View>
-          <View style={{ alignItems: "center", flexDirection: "column" }}>
+          <View style={{alignItems: 'center', flexDirection: 'column'}}>
             <TouchableOpacity
               style={[styles.button, styles.signInButton]}
-              onPress={handleSubmit(onSubmit)}
-            >
+              onPress={handleSubmit(onSubmit)}>
               <Text style={styles.buttonText}>Sign in</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, styles.signUpButton]}
-              onPress={() => navigation.navigate("SignUpScreen")}
-            >
+              onPress={() => navigation.navigate('SignUpScreen')}>
               <Text style={styles.buttonText}>Sign up</Text>
             </TouchableOpacity>
           </View>
           <Text style={styles.orText}>OR</Text>
           <View>
+            <AppleButton
+              buttonStyle={AppleButton.Style.WHITE_OUTLINE}
+              buttonType={AppleButton.Type.SIGN_IN}
+              style={{
+                width: (width * 89.06) / 100,
+                borderWidth: 3,
+                borderRadius: 4,
+                marginBottom: (1.35 * height) / 100,
+                height: (height * 5.54) / 100,
+              }}
+              onPress={() =>
+                onAppleButtonPress().then(() =>
+                  console.log('Apple sign-in complete!'),
+                )
+              }
+            />
+            <GoogleSigninButton
+              style={{
+                width: (width * 89.06) / 100,
+
+                marginBottom: (1.35 * height) / 100,
+                height: (height * 5.54) / 100,
+              }}
+              size={GoogleSigninButton.Size.Wide}
+              color={GoogleSigninButton.Color.Dark}
+              onPress={signIn}
+            />
             <TouchableOpacity
               style={[styles.button, styles.signInWithButton]}
-              onPress={() => console.log('apple')}
-            >
+              onPress={() => console.log('google')}>
               <Image
                 resizeMode="contain"
-                style={{ width: 18, height: 18, marginRight: 10 }}
-                source={require("assets/images/apple-logo.png")}
+                style={{width: 18, height: 18, marginRight: 10}}
+                source={require('assets/images/google-logo.png')}
               />
               <Text
                 style={{
-                  fontFamily: "NunitoSans-Regular",
+                  fontFamily: 'NunitoSans-Regular',
                   fontSize: 18,
-                  color: "#212121",
-                  textAlignVertical: "center",
-                }}
-              >
-                Sign in with Apple
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.button, styles.signInWithButton]}
-              onPress={() => console.log('google')}
-            >
-              <Image
-                resizeMode="contain"
-                style={{ width: 18, height: 18, marginRight: 10 }}
-                source={require("assets/images/google-logo.png")}
-              />
-              <Text
-                style={{
-                  fontFamily: "NunitoSans-Regular",
-                  fontSize: 18,
-                  color: "#212121",
-                  textAlignVertical: "center",
-                }}
-              >
+                  color: '#212121',
+                  textAlignVertical: 'center',
+                }}>
                 Sign in with Google
               </Text>
             </TouchableOpacity>
+            {/* <LoginButton
+              onLoginFinished={(error, result) => {
+                if (error) {
+                  console.log('login has error: ' + result.error);
+                } else if (result.isCancelled) {
+                  console.log('login is cancelled.');
+                } else {
+                  AccessToken.getCurrentAccessToken().then(data => {
+                    console.log(data.accessToken.toString());
+                  });
+                }
+              }}
+              onLogoutFinished={() => console.log('logout.')}
+            /> */}
             <TouchableOpacity
               style={[styles.button, styles.signInWithButton]}
-              onPress={() => console.log('facebook')}
-            >
+              onPress={() => console.log('facebook')}>
               <Image
                 resizeMode="contain"
-                style={{ width: 18, height: 18, marginRight: 10 }}
-                source={require("assets/images/facebook-logo.png")}
+                style={{width: 18, height: 18, marginRight: 10}}
+                source={require('assets/images/facebook-logo.png')}
               />
               <Text
                 style={{
-                  fontFamily: "NunitoSans-Regular",
+                  fontFamily: 'NunitoSans-Regular',
                   fontSize: 18,
-                  color: "#212121",
-                  textAlignVertical: "center",
-                }}
-              >
+                  color: '#212121',
+                  textAlignVertical: 'center',
+                }}>
                 Sign in with Facebook
               </Text>
             </TouchableOpacity>
@@ -209,60 +277,60 @@ export const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: 'white',
   },
   contentContainer: {
     flex: 1,
-    alignItems: "flex-start",
-    justifyContent: "center",
+    alignItems: 'flex-start',
+    justifyContent: 'center',
     paddingHorizontal: (width * 5.33) / 100,
   },
   topImage: {
     width: (84 * width) / 100,
   },
-  welcomeContainer: { marginTop: (4.92 * height) / 100 },
+  welcomeContainer: {marginTop: (4.92 * height) / 100},
   signInText: {
-    fontFamily: "Gelasio-SemiBold",
+    fontFamily: 'Gelasio-SemiBold',
     fontSize: 43,
-    color: "#303030",
+    color: '#303030',
     marginTop: size.h14,
   },
   welcomeText: {
-    fontFamily: "Gelasio-SemiBold",
+    fontFamily: 'Gelasio-SemiBold',
     fontSize: 27,
-    color: "#606060",
+    color: '#606060',
   },
   buttonText: {
-    fontFamily: "NunitoSans-Regular",
+    fontFamily: 'NunitoSans-Regular',
     fontSize: (1.97 * height) / 100,
-    width: "100%",
-    textAlign: "center",
-    color: "#ffffff",
+    width: '100%',
+    textAlign: 'center',
+    color: '#ffffff',
   },
   button: {
     width: (width * 89.06) / 100,
-    alignSelf: "center",
-    justifyContent: "center",
+    alignSelf: 'center',
+    justifyContent: 'center',
 
     height: (height * 5.54) / 100,
     borderRadius: 4,
   },
   signInButton: {
-    backgroundColor: "#212121",
+    backgroundColor: '#212121',
   },
   signUpButton: {
     marginTop: (height * 1.35) / 100,
-    backgroundColor: "#767676",
+    backgroundColor: '#767676',
   },
   orText: {
     marginVertical: (2.8 * height) / 100,
     fontSize: (1.6 * height) / 100,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
   signInWithButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderColor: "#212121",
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: '#212121',
     borderWidth: 3,
     marginBottom: (1.35 * height) / 100,
   },

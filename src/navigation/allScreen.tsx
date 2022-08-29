@@ -31,7 +31,7 @@ const Tab = createMaterialTopTabNavigator();
 export const allScreens = (Stack: any) => {
   return (
     <>
-       <Stack.Screen
+       {/* <Stack.Screen
         name="ShippingUnitScreen"
         component={ShippingUnitScreen}
         options={{
@@ -44,7 +44,7 @@ export const allScreens = (Stack: any) => {
         options={{
           headerShown: false,
         }}
-      />
+      /> */}
       <Stack.Screen
         name="BoardingScreen"
         component={BoardingScreen}
@@ -60,7 +60,7 @@ export const allScreens = (Stack: any) => {
           gestureEnabled: false,
         }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="CameraScreen"
         component={CameraScreen}
         options={{
@@ -222,7 +222,7 @@ const allTabScreens = (Tab: any) => {
             return <Ionicons size={24} name={iconName} color={color} />;
           },
         }}
-      />
+      /> */}
     </>
   );
 };

@@ -20,8 +20,38 @@
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.870321759178-f257u8o2jeo4bkf4n8laji9t2nshpl2a</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb600246601082072</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>FacebookAppID</key>
+	<string>600246601082072</string>
+	<key>FacebookClientToken</key>
+	<string>ed54994ef5ede5fc301fd44bd2a81574</string>
+	<key>FacebookDisplayName</key>
+	<string>eCommercialApp</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -37,6 +67,47 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Gelasio-Bold.ttf</string>
+		<string>Gelasio-BoldItalic.ttf</string>
+		<string>Gelasio-Italic.ttf</string>
+		<string>Gelasio-Medium.ttf</string>
+		<string>Gelasio-MediumItalic.ttf</string>
+		<string>Gelasio-Regular.ttf</string>
+		<string>Gelasio-SemiBold.ttf</string>
+		<string>Gelasio-SemiBoldItalic.ttf</string>
+		<string>NunitoSans-Black.ttf</string>
+		<string>NunitoSans-BlackItalic.ttf</string>
+		<string>NunitoSans-Bold.ttf</string>
+		<string>NunitoSans-BoldItalic.ttf</string>
+		<string>NunitoSans-ExtraBold.ttf</string>
+		<string>NunitoSans-ExtraBoldItalic.ttf</string>
+		<string>NunitoSans-ExtraLight.ttf</string>
+		<string>NunitoSans-ExtraLightItalic.ttf</string>
+		<string>NunitoSans-Italic.ttf</string>
+		<string>NunitoSans-Light.ttf</string>
+		<string>NunitoSans-LightItalic.ttf</string>
+		<string>NunitoSans-Regular.ttf</string>
+		<string>NunitoSans-SemiBold.ttf</string>
+		<string>NunitoSans-SemiBoldItalic.ttf</string>
+		<string>AntDesign.ttf</string>
+		<string>Entypo.ttf</string>
+		<string>EvilIcons.ttf</string>
+		<string>Feather.ttf</string>
+		<string>FontAwesome.ttf</string>
+		<string>FontAwesome5_Brands.ttf</string>
+		<string>FontAwesome5_Regular.ttf</string>
+		<string>FontAwesome5_Solid.ttf</string>
+		<string>Foundation.ttf</string>
+		<string>Ionicons.ttf</string>
+		<string>MaterialIcons.ttf</string>
+		<string>MaterialCommunityIcons.ttf</string>
+		<string>SimpleLineIcons.ttf</string>
+		<string>Octicons.ttf</string>
+		<string>Zocial.ttf</string>
+		<string>Fontisto.ttf</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
