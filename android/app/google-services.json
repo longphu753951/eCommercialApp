@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:870321759178:android:7d887bdd0f78f8aa7fe533",
+        "mobilesdk_app_id": "1:870321759178:android:5d7956ddccdf731d7fe533",
         "android_client_info": {
-          "package_name": "com.phutl.ecommercialapp"
+          "package_name": "com.ecommercialapp"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "870321759178-jjv643kjfmdp7tmf9ctjnreichfmviii.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ecommercialapp",
+            "certificate_hash": "9b7d9172827de9240e1a8ce74eaa608fbb715fc7"
+          }
+        },
         {
           "client_id": "870321759178-9s7h92gjrs66tobc4clb043ia48eagmk.apps.googleusercontent.com",
           "client_type": 3

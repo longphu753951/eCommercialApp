@@ -5,6 +5,7 @@ import {
   Image,
   StyleSheet,
   Dimensions,
+  Platform,
   TouchableOpacity,
 } from 'react-native';
 import size from 'config/size';
@@ -68,11 +69,13 @@ export const LoginScreen = () => {
 
   useEffect(() => {
     // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
-    return appleAuth.onCredentialRevoked(async () => {
-      console.warn(
-        'If this function executes, User Credentials have been Revoked',
-      );
-    });
+    if(Platform.OS === "ios") {
+      return appleAuth.onCredentialRevoked(async () => {
+        console.warn(
+          'If this function executes, User Credentials have been Revoked',
+        );
+      });
+    }
   }, []);
 
   const {
@@ -206,7 +209,8 @@ export const LoginScreen = () => {
           </View>
           <Text style={styles.orText}>OR</Text>
           <View>
-            <AppleButton
+            {
+              Platform.OS === "ios" && <AppleButton
               buttonStyle={AppleButton.Style.WHITE_OUTLINE}
               buttonType={AppleButton.Type.SIGN_IN}
               style={{
@@ -222,6 +226,7 @@ export const LoginScreen = () => {
                 )
               }
             />
+            }
             
             <TouchableOpacity
               style={[styles.button, styles.signInWithButton]}
