@@ -24,7 +24,7 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import {LoginButton, AccessToken} from 'react-native-fbsdk-next';
+import {LoginManager, LoginResult} from 'react-native-fbsdk-next';
 
 GoogleSignin.configure();
 
@@ -88,6 +88,22 @@ export const LoginScreen = () => {
       password: '',
     },
   });
+
+  const handleFacebookLogin = () => {
+    LoginManager.logInWithPermissions(['public_profile', 'email', 'user_friends']).then(
+      function (result: LoginResult) {
+        if (result.isCancelled) {
+          console.log('Login cancelled')
+        } else {
+          console.log('Login success with permissions: ' + result.grantedPermissions?.toString());
+          console.log(result)
+        }
+      },
+      function (error) {
+        console.log('Login fail with error: ' + error)
+      }
+    )
+  }
 
   const onAppleButtonPress = async () => {
     // Start the sign-in request
@@ -206,20 +222,10 @@ export const LoginScreen = () => {
                 )
               }
             />
-            <GoogleSigninButton
-              style={{
-                width: (width * 89.06) / 100,
-
-                marginBottom: (1.35 * height) / 100,
-                height: (height * 5.54) / 100,
-              }}
-              size={GoogleSigninButton.Size.Wide}
-              color={GoogleSigninButton.Color.Dark}
-              onPress={signIn}
-            />
-            {/* <TouchableOpacity
+            
+            <TouchableOpacity
               style={[styles.button, styles.signInWithButton]}
-              onPress={() => console.log('google')}>
+              onPress={signIn}>
               <Image
                 resizeMode="contain"
                 style={{width: 18, height: 18, marginRight: 10}}
@@ -234,7 +240,7 @@ export const LoginScreen = () => {
                 }}>
                 Sign in with Google
               </Text>
-            </TouchableOpacity> */}
+            </TouchableOpacity>
             {/* <LoginButton
               onLoginFinished={(error, result) => {
                 if (error) {
@@ -249,9 +255,9 @@ export const LoginScreen = () => {
               }}
               onLogoutFinished={() => console.log('logout.')}
             /> */}
-            {/* <TouchableOpacity
+            <TouchableOpacity
               style={[styles.button, styles.signInWithButton]}
-              onPress={() => console.log('facebook')}>
+              onPress={handleFacebookLogin}>
               <Image
                 resizeMode="contain"
                 style={{width: 18, height: 18, marginRight: 10}}
@@ -266,28 +272,8 @@ export const LoginScreen = () => {
                 }}>
                 Sign in with Facebook
               </Text>
-            </TouchableOpacity> */}
-            <LoginButton
-              style={{
-                width: (width * 89.06) / 100,
-                borderWidth: 0,
-                borderRadius: 4,
-                marginBottom: (1.35 * height) / 100,
-                height: (height * 5.54) / 100,
-              }}
-              onLoginFinished={(error, result) => {
-                if (error) {
-                  console.log('login has error: ' + result.error);
-                } else if (result.isCancelled) {
-                  console.log('login is cancelled.');
-                } else {
-                  AccessToken.getCurrentAccessToken().then(data => {
-                    console.log(data.accessToken.toString());
-                  });
-                }
-              }}
-              
-            />
+            </TouchableOpacity>
+            
           </View>
         </View>
       </View>
