@@ -12,6 +12,10 @@ const rrfProps = {
   dispatch: store.dispatch,
   createFirestoreInstance, // <- needed if using firestore
 };
+import { Settings } from 'react-native-fbsdk-next';
+
+Settings.setAppID('600246601082072');
+
 
 const App = () => {
 

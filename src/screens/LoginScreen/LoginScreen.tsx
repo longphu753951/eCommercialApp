@@ -24,7 +24,7 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-//import {LoginButton, AccessToken} from 'react-native-fbsdk-next';
+import {LoginButton, AccessToken} from 'react-native-fbsdk-next';
 
 GoogleSignin.configure();
 
@@ -217,7 +217,7 @@ export const LoginScreen = () => {
               color={GoogleSigninButton.Color.Dark}
               onPress={signIn}
             />
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={[styles.button, styles.signInWithButton]}
               onPress={() => console.log('google')}>
               <Image
@@ -234,7 +234,7 @@ export const LoginScreen = () => {
                 }}>
                 Sign in with Google
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             {/* <LoginButton
               onLoginFinished={(error, result) => {
                 if (error) {
@@ -249,7 +249,7 @@ export const LoginScreen = () => {
               }}
               onLogoutFinished={() => console.log('logout.')}
             /> */}
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={[styles.button, styles.signInWithButton]}
               onPress={() => console.log('facebook')}>
               <Image
@@ -266,7 +266,28 @@ export const LoginScreen = () => {
                 }}>
                 Sign in with Facebook
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+            <LoginButton
+              style={{
+                width: (width * 89.06) / 100,
+                borderWidth: 0,
+                borderRadius: 4,
+                marginBottom: (1.35 * height) / 100,
+                height: (height * 5.54) / 100,
+              }}
+              onLoginFinished={(error, result) => {
+                if (error) {
+                  console.log('login has error: ' + result.error);
+                } else if (result.isCancelled) {
+                  console.log('login is cancelled.');
+                } else {
+                  AccessToken.getCurrentAccessToken().then(data => {
+                    console.log(data.accessToken.toString());
+                  });
+                }
+              }}
+              
+            />
           </View>
         </View>
       </View>
