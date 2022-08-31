@@ -5,7 +5,6 @@ import {
   Image,
   StyleSheet,
   Dimensions,
-  Platform,
   TouchableOpacity,
 } from 'react-native';
 import size from 'config/size';
@@ -14,43 +13,27 @@ import {useSelector, useDispatch} from 'react-redux';
 import {useForm} from 'react-hook-form';
 import {FCKeyBoardAvoidingView, TextField} from 'components';
 import {loginRoutine} from 'reducers/auth';
-import {useFirestoreConnect} from 'react-redux-firebase';
+import {useFirestoreConnect, useFirebase} from 'react-redux-firebase';
 import {
   AppleButton,
   appleAuth,
 } from '@invertase/react-native-apple-authentication';
-
+import auth from '@react-native-firebase/auth';
 import {
   GoogleSignin,
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
-import {LoginManager, LoginResult} from 'react-native-fbsdk-next';
+import {AccessToken, LoginManager, LoginResult} from 'react-native-fbsdk-next';
 
 GoogleSignin.configure();
-
-const signIn = async () => {
-  try {
-    await GoogleSignin.hasPlayServices();
-    const userInfo = await GoogleSignin.signIn();
-    console.log(userInfo);
-  } catch (error: any) {
-    if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-      // user cancelled the login flow
-    } else if (error.code === statusCodes.IN_PROGRESS) {
-      // operation (e.g. sign in) is in progress already
-    } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-      // play services not available or outdated
-    } else {
-      // some other error happened
-    }
-  }
-};
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 export const LoginScreen = () => {
+  const firebase = useFirebase();
+
   const navigation = useNavigation();
   const dispatch = useDispatch();
   // const loading = useSelector((state) => state.auth.loading);
@@ -69,7 +52,7 @@ export const LoginScreen = () => {
 
   useEffect(() => {
     // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
-    if(Platform.OS === "ios") {
+    if (Platform.OS === 'ios') {
       return appleAuth.onCredentialRevoked(async () => {
         console.warn(
           'If this function executes, User Credentials have been Revoked',
@@ -92,21 +75,57 @@ export const LoginScreen = () => {
     },
   });
 
+  const signIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log(userInfo);
+      const credential = auth.GoogleAuthProvider.credential(
+        userInfo.idToken,
+      );
+      await firebase.login({credential});
+      
+    } catch (error: any) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+      } else {
+        // some other error happened
+      }
+    }
+  };
+
   const handleFacebookLogin = () => {
-    LoginManager.logInWithPermissions(['public_profile', 'email', 'user_friends']).then(
+    LoginManager.logInWithPermissions([
+      'public_profile',
+      'email',
+      'user_friends',
+    ]).then(
       function (result: LoginResult) {
         if (result.isCancelled) {
-          console.log('Login cancelled')
+          console.log('Login cancelled');
         } else {
-          console.log('Login success with permissions: ' + result.grantedPermissions?.toString());
-          console.log(result)
+          console.log(
+            'Login success with permissions: ' +
+              result.grantedPermissions?.toString(),
+          );
+          AccessToken.getCurrentAccessToken().then(async data => {
+            console.log(data.accessToken.toString());
+            const credential = auth.FacebookAuthProvider.credential(
+              data.accessToken,
+            );
+            await firebase.login({credential});
+          });
         }
       },
       function (error) {
-        console.log('Login fail with error: ' + error)
-      }
-    )
-  }
+        console.log('Login fail with error: ' + error);
+      },
+    );
+  };
 
   const onAppleButtonPress = async () => {
     // Start the sign-in request
@@ -123,6 +142,8 @@ export const LoginScreen = () => {
     // Create a Firebase credential from the response
     const {identityToken, nonce} = appleAuthRequestResponse;
     console.log(identityToken);
+    const credential = auth.AppleAuthProvider.credential(identityToken);
+    await firebase.login({credential});
   };
 
   // useEffect(async () => {
@@ -209,25 +230,25 @@ export const LoginScreen = () => {
           </View>
           <Text style={styles.orText}>OR</Text>
           <View>
-            {
-              Platform.OS === "ios" && <AppleButton
-              buttonStyle={AppleButton.Style.WHITE_OUTLINE}
-              buttonType={AppleButton.Type.SIGN_IN}
-              style={{
-                width: (width * 89.06) / 100,
-                borderWidth: 3,
-                borderRadius: 4,
-                marginBottom: (1.35 * height) / 100,
-                height: (height * 5.54) / 100,
-              }}
-              onPress={() =>
-                onAppleButtonPress().then(() =>
-                  console.log('Apple sign-in complete!'),
-                )
-              }
-            />
-            }
-            
+            {Platform.OS === 'ios' && (
+              <AppleButton
+                buttonStyle={AppleButton.Style.WHITE_OUTLINE}
+                buttonType={AppleButton.Type.SIGN_IN}
+                style={{
+                  width: (width * 89.06) / 100,
+                  borderWidth: 3,
+                  borderRadius: 4,
+                  marginBottom: (1.35 * height) / 100,
+                  height: (height * 5.54) / 100,
+                }}
+                onPress={() =>
+                  onAppleButtonPress().then(() =>
+                    console.log('Apple sign-in complete!'),
+                  )
+                }
+              />
+            )}
+
             <TouchableOpacity
               style={[styles.button, styles.signInWithButton]}
               onPress={signIn}>
@@ -278,7 +299,6 @@ export const LoginScreen = () => {
                 Sign in with Facebook
               </Text>
             </TouchableOpacity>
-            
           </View>
         </View>
       </View>
