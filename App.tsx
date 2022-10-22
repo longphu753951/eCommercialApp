@@ -4,23 +4,21 @@ import {store} from 'store';
 import {ReactReduxFirebaseProvider} from 'react-redux-firebase';
 import {firebase, rrfConfig} from 'services/firebase';
 import {createFirestoreInstance} from 'redux-firestore';
-import Navigation from 'navigation';
-console.log(store);
+import Navigation from "navigation";
+console.log(store)
 const rrfProps = {
   firebase,
   config: rrfConfig,
   dispatch: store.dispatch,
   createFirestoreInstance, // <- needed if using firestore
 };
-import {Settings} from 'react-native-fbsdk-next';
+import { Settings } from 'react-native-fbsdk-next';
 
 Settings.setAppID('600246601082072');
-import {persistStore} from 'redux-persist';
-import {PersistGate} from 'redux-persist/integration/react';
 
-let persistor = persistStore(store);
 
 const App = () => {
+
   // const registerForPushNotificationsAsync = async() => {
   //   let token;
   //   if (Device.isDevice) {
@@ -39,7 +37,7 @@ const App = () => {
   //   } else {
   //     alert('Must use physical device for Push Notifications');
   //   }
-
+  
   //   if (Platform.OS === 'android') {
   //     await Notifications.setNotificationChannelAsync('default', {
   //       name: 'default',
@@ -48,18 +46,16 @@ const App = () => {
   //       lightColor: '#FF231F7C',
   //     });
   //   }
-
+  
   //   return token;
   // }
 
   return (
     <Provider store={store}>
       {/* <PersistGate loading={null} persistor={persistor}> */}
-      <ReactReduxFirebaseProvider {...rrfProps}>
-        <PersistGate loading={null} persistor={persistor}>
+        <ReactReduxFirebaseProvider {...rrfProps}>
           <Navigation />
-        </PersistGate>
-      </ReactReduxFirebaseProvider>
+        </ReactReduxFirebaseProvider>
       {/* </PersistGate> */}
     </Provider>
   );

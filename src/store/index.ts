@@ -1,33 +1,24 @@
 import {configureStore} from '@reduxjs/toolkit';
 import {getFirebase, actionTypes as rrfActionTypes} from 'react-redux-firebase';
 import {constants as rfConstants} from 'redux-firestore';
-import { persistStore, persistReducer, FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import rootReducer from 'reducers';
-
-const persistConfig = {
-  key: 'root',
-  storage: AsyncStorage
-}
-
-const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 
 
 export const store = configureStore({
-  reducer: persistedReducer,
+  reducer: rootReducer,
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [
-          FLUSH,
-          REHYDRATE,
-          PAUSE,
-          PERSIST,
-          PURGE,
-          REGISTER,
-          //just ignore every redux-firebase and react-redux-firebase action type
+          // FLUSH,
+          // REHYDRATE,
+          // PAUSE,
+          // PERSIST,
+          // PURGE,
+          // REGISTER,
+          // just ignore every redux-firebase and react-redux-firebase action type
           ...Object.keys(rfConstants.actionTypes).map(
             type => `${rfConstants.actionsPrefix}/${type}`,
           ),
