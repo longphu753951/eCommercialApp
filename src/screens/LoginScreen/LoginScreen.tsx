@@ -25,6 +25,7 @@ import {
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 import {AccessToken, LoginManager, LoginResult} from 'react-native-fbsdk-next';
+import {Platform} from 'react-native';
 
 GoogleSignin.configure();
 
@@ -33,7 +34,6 @@ const height = Dimensions.get('window').height;
 
 export const LoginScreen = () => {
   const firebase = useFirebase();
-
   const navigation = useNavigation();
   const dispatch = useDispatch();
   // const loading = useSelector((state) => state.auth.loading);
@@ -42,7 +42,6 @@ export const LoginScreen = () => {
     {collection: 'todos'}, // or 'todos'
   ]);
 
-  const todos = useSelector(state => state?.firestore?.ordered?.todos);
   const timeOfDay = () => {
     const today = new Date();
     const curHr = today.getHours();
@@ -80,11 +79,8 @@ export const LoginScreen = () => {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       console.log(userInfo);
-      const credential = auth.GoogleAuthProvider.credential(
-        userInfo.idToken,
-      );
+      const credential = auth.GoogleAuthProvider.credential(userInfo.idToken);
       await firebase.login({credential});
-      
     } catch (error: any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow

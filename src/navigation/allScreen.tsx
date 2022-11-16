@@ -1,5 +1,4 @@
 import React from 'react';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import {BoardingScreen} from 'screens/BoardingScreen/BoardingScreen';
 import {LoginScreen} from 'screens/LoginScreen/LoginScreen';
 import {HomeScreen} from 'screens/HomeScreen/HomeScreen';

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">eCommercialApp</string>
+     <string name="facebook_app_id">600246601082072</string>
+    <string name="facebook_client_token">ed54994ef5ede5fc301fd44bd2a81574</string>
 </resources>

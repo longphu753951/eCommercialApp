@@ -4,8 +4,6 @@ import {constants as rfConstants} from 'redux-firestore';
 
 import rootReducer from 'reducers';
 
-
-
 export const store = configureStore({
   reducer: rootReducer,
   middleware: getDefaultMiddleware =>
