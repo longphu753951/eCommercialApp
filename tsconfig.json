@@ -5,22 +5,22 @@
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 
     /* Completeness */
-    "skipLibCheck": true /* Skip type checking all .d.ts files. */,
+    "skipLibCheck": true,                                 /* Skip type checking all .d.ts files. */
     "jsx": "react",
     "strict": true,
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
-      "screens/*": ["./screens/*"],
-      "navigation/*": ["./navigation/*"],
-      "assets/*": ["./assets/*"],
-      "config/*": ["./config/*"],
-      "components/*": ["./components/*"],
-      "reducers/*": ["./reducers/*"],
-      "store/*": ["./store/*"],
-      "middlewares/*": ["./middlewares/*"],
-      "utils/*": ["./utils/*"],
-      "services/*": ["./services/*"],
+      "screens/*": ["./src/screens/*"],
+      "navigation/*": ["./src/navigation/*"],
+      "assets/*": ["./src/assets/*"],
+      "config/*": ["./src/config/*"],
+      "components/*": ["./src/components/*"],
+      "reducers/*": ["./src/reducers/*"],
+      "store/*": ["./src/store/*"],
+      "middlewares/*": ["./src/middlewares/*"],
+      "utils/*": ["./src/utils/*"],
+      "services/*": ["./src/services/*"],
       "underscore": ["lodash"]
-    } /* Skip type checking all .d.ts files. */
+    }
   }
 }

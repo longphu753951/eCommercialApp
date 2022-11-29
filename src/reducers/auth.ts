@@ -97,7 +97,7 @@
 //       state.loading = "TRIGGER";
 //     })
 //     .addCase(loginRoutine.SUCCESS, (state, action) => {
-     
+
 //       state.loading = "SUCCESS";
 //       state.token = action.payload;
 //     })
@@ -105,7 +105,7 @@
 //       state.loading = "";
 //     })
 //     .addCase(logoutRoutine.TRIGGER, (state) => {
-     
+
 //       state.token ={};
 //       state.user= {
 //         id: 0,

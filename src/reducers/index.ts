@@ -5,4 +5,6 @@ const rootReducer = combineReducers({
   firebase: firebaseReducer,
   firestore: firestoreReducer,
 });
+
+export type RootState = ReturnType<typeof rootReducer>;
 export default rootReducer;

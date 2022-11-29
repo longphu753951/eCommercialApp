@@ -13,10 +13,15 @@ import {useSelector, useDispatch} from 'react-redux';
 import {useForm} from 'react-hook-form';
 import {FCKeyBoardAvoidingView, TextField} from 'components';
 import {loginRoutine} from 'reducers/auth';
-import {useFirestoreConnect, useFirebase} from 'react-redux-firebase';
+import {
+  useFirestoreConnect,
+  useFirebase,
+  useFirestore,
+} from 'react-redux-firebase';
 import {
   AppleButton,
   appleAuth,
+  appleAuthAndroid,
 } from '@invertase/react-native-apple-authentication';
 import auth from '@react-native-firebase/auth';
 import {
@@ -26,6 +31,7 @@ import {
 } from '@react-native-google-signin/google-signin';
 import {AccessToken, LoginManager, LoginResult} from 'react-native-fbsdk-next';
 import {Platform} from 'react-native';
+import {RootState} from 'reducers/index';
 
 GoogleSignin.configure();
 
@@ -34,6 +40,7 @@ const height = Dimensions.get('window').height;
 
 export const LoginScreen = () => {
   const firebase = useFirebase();
+  const firestore = useFirestore();
   const navigation = useNavigation();
   const dispatch = useDispatch();
   // const loading = useSelector((state) => state.auth.loading);
@@ -41,6 +48,7 @@ export const LoginScreen = () => {
   useFirestoreConnect([
     {collection: 'todos'}, // or 'todos'
   ]);
+  const todos = useSelector((state: RootState) => state.firestore.data.todos);
 
   const timeOfDay = () => {
     const today = new Date();
@@ -50,6 +58,11 @@ export const LoginScreen = () => {
   };
 
   useEffect(() => {
+    console.log(todos);
+  }, [todos]);
+
+  useEffect(() => {
+    console.log('is support', appleAuthAndroid.isSupported);
     // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
     if (Platform.OS === 'ios') {
       return appleAuth.onCredentialRevoked(async () => {
@@ -156,8 +169,14 @@ export const LoginScreen = () => {
 
   // }, [loading]);
 
-  const onSubmit = async data => {
-    await dispatch({type: loginRoutine.TRIGGER, data: data});
+  const onSubmit = async (data: any) => {
+    firestore.add(
+      {collection: 'todos'},
+      {
+        title: 'aswdeaqwdeaweqweqwe1231231231231231232',
+        description: 'qweqeqweqweqweqw',
+      },
+    );
   };
 
   return (
@@ -226,7 +245,7 @@ export const LoginScreen = () => {
           </View>
           <Text style={styles.orText}>OR</Text>
           <View>
-            {Platform.OS === 'ios' && (
+            {appleAuthAndroid.isSupported && (
               <AppleButton
                 buttonStyle={AppleButton.Style.WHITE_OUTLINE}
                 buttonType={AppleButton.Type.SIGN_IN}
