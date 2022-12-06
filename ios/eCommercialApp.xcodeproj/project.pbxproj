@@ -29,9 +29,9 @@
 		C20C5658AC0545EAB338BA0D /* Gelasio-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22E1FB83B2A94D24A9F6B76C /* Gelasio-SemiBoldItalic.ttf */; };
 		C2F64DE8704C4BC1BDDEA174 /* NunitoSans-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 70369C4764C24909A8B18D5A /* NunitoSans-LightItalic.ttf */; };
 		CAD7B53776CF40AC9E336386 /* Gelasio-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E8E93E0A3CB24E8699737FC6 /* Gelasio-Bold.ttf */; };
-		CE4D19EE29247DC5000AED0F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE4D19ED29247DC5000AED0F /* GoogleService-Info.plist */; };
 		CE4D19F12924D4BD000AED0F /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = CE4D19F02924D4BD000AED0F /* FacebookCore */; };
 		CE4D19F32924D4BD000AED0F /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = CE4D19F22924D4BD000AED0F /* FacebookLogin */; };
+		CE5B818A293F34F5002F34A3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE5B8189293F34F5002F34A3 /* GoogleService-Info.plist */; };
 		CF536D40A5ED4BA1AE0C7AD8 /* NunitoSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0C8086C52BD74DEA91B05C31 /* NunitoSans-Italic.ttf */; };
 		DBED78E346246C62D11FED82 /* Pods_eCommercialApp_eCommercialAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F6DB8D4580F46E54CB61CF8 /* Pods_eCommercialApp_eCommercialAppTests.framework */; };
 		DD31AAC346EA4EF38F65409A /* Gelasio-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 96734A6CDBE04E7F9F037BF0 /* Gelasio-BoldItalic.ttf */; };
@@ -89,7 +89,9 @@
 		B49F126ADB6C4D6AACF60CBA /* NunitoSans-SemiBoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NunitoSans-SemiBoldItalic.ttf"; path = "../src/assets/fonts/NunitoSans-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
 		C561A99AD6734F51BE0E01FD /* Gelasio-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Gelasio-MediumItalic.ttf"; path = "../src/assets/fonts/Gelasio-MediumItalic.ttf"; sourceTree = "<group>"; };
 		C838C1727DCD4570B72E64C7 /* Gelasio-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Gelasio-Medium.ttf"; path = "../src/assets/fonts/Gelasio-Medium.ttf"; sourceTree = "<group>"; };
-		CE4D19ED29247DC5000AED0F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
+		CE5B8188293F16A7002F34A3 /* eCommercialAppDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = eCommercialAppDebug.entitlements; path = eCommercialApp/eCommercialAppDebug.entitlements; sourceTree = "<group>"; };
+		CE5B8189293F34F5002F34A3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../GoogleService-Info.plist"; sourceTree = "<group>"; };
+		CEB151812937570B00F9F461 /* eCommercialApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = eCommercialApp.entitlements; path = eCommercialApp/eCommercialApp.entitlements; sourceTree = "<group>"; };
 		E8E93E0A3CB24E8699737FC6 /* Gelasio-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Gelasio-Bold.ttf"; path = "../src/assets/fonts/Gelasio-Bold.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -136,7 +138,8 @@
 		13B07FAE1A68108700A75B9A /* eCommercialApp */ = {
 			isa = PBXGroup;
 			children = (
-				CE4D19ED29247DC5000AED0F /* GoogleService-Info.plist */,
+				CE5B8188293F16A7002F34A3 /* eCommercialAppDebug.entitlements */,
+				CEB151812937570B00F9F461 /* eCommercialApp.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -196,6 +199,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				CE5B8189293F34F5002F34A3 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* eCommercialApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* eCommercialAppTests */,
@@ -333,7 +337,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				CE4D19EE29247DC5000AED0F /* GoogleService-Info.plist in Resources */,
+				CE5B818A293F34F5002F34A3 /* GoogleService-Info.plist in Resources */,
 				CAD7B53776CF40AC9E336386 /* Gelasio-Bold.ttf in Resources */,
 				DD31AAC346EA4EF38F65409A /* Gelasio-BoldItalic.ttf in Resources */,
 				98D7427A2DCA4D8C808F3AB0 /* Gelasio-Italic.ttf in Resources */,
@@ -610,8 +614,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = eCommercialApp/eCommercialAppDebug.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9528W3ASAT;
+				DEVELOPMENT_TEAM = 46UMBACQ4A;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = eCommercialApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -637,8 +642,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = eCommercialApp/eCommercialApp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9528W3ASAT;
+				DEVELOPMENT_TEAM = 46UMBACQ4A;
 				INFOPLIST_FILE = eCommercialApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

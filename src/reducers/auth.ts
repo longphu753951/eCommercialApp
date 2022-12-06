@@ -1,22 +1,21 @@
-// import axios from "axios";
-// import { createRoutine } from "redux-saga-routines";
-// import { createReducer } from "@reduxjs/toolkit";
-// import { all, takeEvery, call, put, takeLatest } from "redux-saga/effects";
-// import API from "config/API";
-// import { Alert } from "react-native";
-// import { Bookmark, User, UserRegister } from "config/types";
-// import _ from "lodash";
+import axios from 'axios';
+import {createRoutine} from 'redux-saga-routines';
+import {createReducer} from '@reduxjs/toolkit';
+import {all, takeEvery, call, put, takeLatest} from 'redux-saga/effects';
+import API from 'config/API';
+import {Alert} from 'react-native';
+import {Bookmark, User, UserRegister} from 'config/types';
+import _ from 'lodash';
 
-// interface authState {
-//   loading: string;
-//   token: any;
-//   user: User;
-//   bookmark: Bookmark;
-// }
+interface authState {
+  loading: string;
+  initializing: boolean;
+  user: any;
+}
 // // =========================================================
 // // =========================================================
 // // TYPES
-// export const loginRoutine = createRoutine("AUTH/LOGIN");
+export const setCurrentUserRoutine = createRoutine('AUTH/SET_CURRENT_USER');
 // export const logoutRoutine = createRoutine("AUTH/LOGOUT");
 // export const signupRoutine = createRoutine("AUTH/SIGNUP");
 
@@ -73,23 +72,11 @@
 // // =========================================================
 // // REDUCER
 
-// const INITIAL_STATE: authState = {
-//   loading: "",
-//   token: {},
-//   user: {
-//     id: 0,
-//     first_name: "",
-//     last_name: "",
-//     email: "",
-//     telephone: "",
-//     avatar_path: "empty",
-//     payment_info: {}
-//   },
-//   bookmark: {
-//     id: 0,
-//     bookmarkDetail: [],
-//   },
-// };
+const INITIAL_STATE: authState = {
+  loading: '',
+
+  user: null,
+};
 
 // export default createReducer(INITIAL_STATE, (builder) => {
 //   builder

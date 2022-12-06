@@ -32,6 +32,7 @@ import {
 import {AccessToken, LoginManager, LoginResult} from 'react-native-fbsdk-next';
 import {Platform} from 'react-native';
 import {RootState} from 'reducers/index';
+import {AppleSigninButtonIOS} from './components';
 
 GoogleSignin.configure();
 
@@ -60,18 +61,6 @@ export const LoginScreen = () => {
   useEffect(() => {
     console.log(todos);
   }, [todos]);
-
-  useEffect(() => {
-    console.log('is support', appleAuthAndroid.isSupported);
-    // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
-    if (Platform.OS === 'ios') {
-      return appleAuth.onCredentialRevoked(async () => {
-        console.warn(
-          'If this function executes, User Credentials have been Revoked',
-        );
-      });
-    }
-  }, []);
 
   const {
     register,
@@ -245,6 +234,7 @@ export const LoginScreen = () => {
           </View>
           <Text style={styles.orText}>OR</Text>
           <View>
+            {Platform.OS === 'ios' && <AppleSigninButtonIOS />}
             {appleAuthAndroid.isSupported && (
               <AppleButton
                 buttonStyle={AppleButton.Style.WHITE_OUTLINE}
