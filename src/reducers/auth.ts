@@ -1,11 +1,17 @@
 import axios from 'axios';
 import {createRoutine} from 'redux-saga-routines';
-import {createReducer} from '@reduxjs/toolkit';
+import {
+  createAction,
+  createAsyncThunk,
+  createReducer,
+  createSlice,
+} from '@reduxjs/toolkit';
 import {all, takeEvery, call, put, takeLatest} from 'redux-saga/effects';
 import API from 'config/API';
 import {Alert} from 'react-native';
 import {Bookmark, User, UserRegister} from 'config/types';
 import _ from 'lodash';
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 
 interface authState {
   loading: string;
@@ -15,13 +21,23 @@ interface authState {
 // // =========================================================
 // // =========================================================
 // // TYPES
-export const setCurrentUserRoutine = createRoutine('AUTH/SET_CURRENT_USER');
 // export const logoutRoutine = createRoutine("AUTH/LOGOUT");
 // export const signupRoutine = createRoutine("AUTH/SIGNUP");
 
 // // =========================================================
 // // =========================================================
-// // SAGAS
+// THUNK
+
+const getUserByCredential = createAsyncThunk(
+  'auth/getUserByCredential',
+  async (credential: FirebaseAuthTypes.AuthCredential) => {
+    try {
+      await auth().signInWithCredential(credential);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+);
 
 // function* loginSaga(action: any): Promise<void> {
 //   try {
@@ -72,11 +88,20 @@ export const setCurrentUserRoutine = createRoutine('AUTH/SET_CURRENT_USER');
 // // =========================================================
 // // REDUCER
 
-const INITIAL_STATE: authState = {
+const initialState: authState = {
   loading: '',
 
   user: null,
+  initializing: false,
 };
+
+const authSlice = createSlice({
+  name: 'auth',
+  initialState,
+  reducers: {
+    [getUserByCredential.fulfilled]: (state, action) => {},
+  },
+});
 
 // export default createReducer(INITIAL_STATE, (builder) => {
 //   builder

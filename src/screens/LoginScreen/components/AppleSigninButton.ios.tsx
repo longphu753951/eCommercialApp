@@ -7,12 +7,13 @@ import {
 } from '@invertase/react-native-apple-authentication';
 import auth from '@react-native-firebase/auth';
 import {useFirebase} from 'react-redux-firebase';
+import {useDispatch} from 'react-redux';
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 const AppleSigninButton = () => {
-  const firebase = useFirebase();
+  const dispatch = useDispatch();
   useEffect(() => {
     // onCredentialRevoked returns a function that will remove the event listener. useEffect will call this function when the component unmounts
     return appleAuth.onCredentialRevoked(async () => {
@@ -38,7 +39,6 @@ const AppleSigninButton = () => {
     const {identityToken, nonce} = appleAuthRequestResponse;
     console.log(identityToken);
     const credential = auth.AppleAuthProvider.credential(identityToken, nonce);
-    console.log(auth().signInWithCredential(credential));
   };
 
   return (
@@ -52,12 +52,7 @@ const AppleSigninButton = () => {
         marginBottom: (1.35 * height) / 100,
         height: (height * 5.54) / 100,
       }}
-      onPress={() =>
-        firebase.login({
-          provider: 'apple.com',
-          type: 'redirect',
-        })
-      }
+      onPress={() => onAppleButtonPress()}
     />
   );
 };

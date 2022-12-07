@@ -12,7 +12,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
 import {useForm} from 'react-hook-form';
 import {FCKeyBoardAvoidingView, TextField} from 'components';
-import {loginRoutine} from 'reducers/auth';
+
 import {
   useFirestoreConnect,
   useFirebase,

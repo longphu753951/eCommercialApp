@@ -24,6 +24,7 @@ import {AddShippingContactScreen} from 'screens/AddShippingContactScreen/AddShip
 import {EditShippingContactScreen} from 'screens/EditShippingContactScreen/EditShippingContactScreen';
 import {CongratulationScreen} from 'screens/CongratulationScreen/CongratulationScreen';
 import {ShippingUnitScreen} from 'screens/ShippingUnitScreen/ShippingUnitScreen';
+import TestScreen from 'screens/TestScreen/TestScreen';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -54,6 +55,14 @@ export const allScreens = (Stack: any) => {
       <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
+        options={{
+          headerShown: false,
+          gestureEnabled: false,
+        }}
+      />
+      <Stack.Screen
+        name="TestScreen"
+        component={TestScreen}
         options={{
           headerShown: false,
           gestureEnabled: false,
